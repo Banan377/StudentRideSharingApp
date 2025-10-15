@@ -20,17 +20,34 @@
              <div class="input-field">
                 <i class="fa-solid fa-at"></i>
 
-           <input type="email" id="Email" placeholder="example@sm.imamu.edu.sa" required >
+            <input type="email" id="Email" placeholder="Enter Email" required >
+
 
             </div>
         </div>
         <div class="btn-field">
-            <button>إنشاء حساب</button>
-            <button>تسجيل دخول</button>
+            <button onclick="checkEmail('إنشاء حساب')"> إنشاء حساب</button>
+            <button type="button">تسجيل دخول</button>
         </div>
     </form>
 
     </div>
     </div>
+
+    <script>
+        function checkEmail(){
+var Email=document.getElementById('Email').value;
+
+if(Email.endsWith('@sm.imamu.edu.sa')){
+    alert(' Done successfully !')
+}
+else{
+   alert('User must be a student of Imam Muhammad Ibn Saud Islamic University ') 
+}
+
+        }
+
+
+    </script>
 </body>
-</html>
+</html
