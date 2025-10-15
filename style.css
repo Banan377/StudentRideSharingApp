@@ -55,9 +55,12 @@ i{
 .btn-field{
     width: 100%;
     display: flex;
-   justify-content: space-between;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
 }
 .btn-field button{
+    width: 100%;
     flex-basis: 48%;
     background: rgb(162, 114, 162) ;
     color: rgb(255, 255, 255);
@@ -67,6 +70,7 @@ i{
     outline: 0;
     cursor: pointer;
     transition: background 1s;
+    padding: 18px 15px;
 }.input-group{
     height: 90px;
 }
