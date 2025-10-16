@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="login-container">
+    <h1>تسجيل الدخول</h1>
+    <form>
+      <label for="email">البريد الإلكتروني</label>
+      <input type="email" id="email" placeholder="example@imamuedu.sa" required>
+
+      <label for="password">كلمة المرور</label>
+      <input type="password" id="password" placeholder="••••••••" required>
+
+      <a href="#" class="forgot-password">نسيت كلمة المرور؟</a>
+
+      <button button onclick="checkEmail('دخول')"  type="submit">دخول</button>
+    </form>
+  </div>
+
+    <script>
+        function checkEmail(){
+var email=document.getElementById('email').value;
+var password=document.getElementById('password').value;
+var passwordPattern=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\w_]).{8,}$/;
+
+if(email.endsWith('@sm.imamu.edu.sa') && passwordPattern.test(password) ){
+    alert('!تم بنجاح ');
+}
+else if(email.endsWith('@sm.imamu.edu.sa') && !passwordPattern.test(password) ) {
+     alert('كلمة المرور يجب أن تحتوي على 8 خانات على الأقل، وحرف كبير، وحرف صغير،و رقم، و رمز واحد على الأقل');
+
+}
+else if(!email.endsWith('@sm.imamu.edu.sa') && passwordPattern.test(password)){
+  alert('!يجب أن يكون المستخدم من أعضاء جامعة الإمام محمد بن سعود الإسلامية')
+}
+else{
+alert('البريد الإلكتروني و كلمة المرور غير مطابقة للشروط')
+}
+}
+
+    </script>
+</body>
+</html>
+
+        
