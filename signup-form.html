@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إنشاء حساب</title>
+  <link rel="stylesheet" href="Signup.css">
+</head>
+
+<body>
+  <div class="container">
+    <form id="signupForm">
+      <h1>إنشاء حساب</h1>
+
+      <label for="firstName">الاسم الأول:</label>
+      <input type="text" id="firstName" required><br><br>
+
+      <label for="lastName">الاسم الأخير:</label>
+      <input type="text" id="lastName" required><br><br>
+
+      <label for="college">الكلية:</label>
+      <input type="text" id="college"><br><br>
+
+      <p>الجنس:</p>
+      <input type="radio" id="male" name="gender" value="male">
+      <label for="male">ذكر</label>
+
+      <input type="radio" id="female" name="gender" value="female">
+      <label for="female">أنثى</label><br><br>
+
+      <label for="password">كلمة المرور:</label>
+      <input type="password" id="password" required><br><br>
+
+      <label for="confirmPassword">تأكيد كلمة المرور:</label>
+      <input type="password" id="confirmPassword" required><br><br>
+
+      <!-- ✅ خيار السائق -->
+      <label>
+        <input type="checkbox" id="isDriver"> أريد أن أكون سائقًا
+      </label><br><br>
+
+      <!-- 🚗 خانات السائق (تظهر فقط عند الاختيار) -->
+      <div class="driver-section" id="driverSection">
+        <label for="license">رخصة القيادة:</label>
+        <input type="file" id="license" accept="image/*"><br><br>
+
+        <label for="registration">الاستمارة:</label>
+        <input type="file" id="registration" accept="image/*"><br><br>
+      </div>
+
+      <button type="submit">إنشاء الحساب</button>
+    </form>
+  </div>
+
+  <!-- 🔸 سكربت بسيط لإظهار/إخفاء خانات السائق -->
+  <script>
+    const isDriverCheckbox = document.getElementById('isDriver');
+    const driverSection = document.getElementById('driverSection');
+
+    isDriverCheckbox.addEventListener('change', function() {
+      driverSection.style.display = this.checked ? 'block' : 'none';
+    });
+  </script>
+</body>
+</html>
