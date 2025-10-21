@@ -1,0 +1,89 @@
+/* إعدادات عامة */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Tajawal', sans-serif;
+  direction: rtl;
+}
+
+body {
+  background: linear-gradient(135deg, #c7a4ff, #a18cd1);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* الصندوق الرئيسي */
+.login-container {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px;
+}
+
+/* العنوان */
+.login-container h1 {
+  text-align: center;
+  color: #4b0082;
+  margin-bottom: 25px;
+  font-size: 28px;
+}
+
+/* التنسيقات للعناصر داخل الفورم */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+}
+
+input {
+  margin-bottom: 20px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border 0.3s;
+}
+
+input:focus {
+  border-color: #a18cd1;
+}
+
+/* رابط "نسيت كلمة المرور" */
+.forgot-password {
+  text-align: left;
+  font-size: 14px;
+  color: rgb(162, 114, 162);
+  text-decoration: none;
+  margin-bottom: 20px;
+  transition: color 0.3s;
+}
+
+.forgot-password:hover {
+  color: #4b0082;
+}
+
+/* زر الدخول */
+button {
+  background-color: #a18cd1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #7e57c2;
+}

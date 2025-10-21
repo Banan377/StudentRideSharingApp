@@ -1,0 +1,151 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body{
+   background: linear-gradient(135deg, #c7a4ff, #a18cd1);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:60px 20px;
+}
+
+.container {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px;
+}
+
+.form-box{
+  width:100%;
+  max-width:520px;
+  background:#ffffff;
+  padding:30px;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  text-align:right;
+  direction: rtl;
+}
+
+h1{
+  color: #4b0082;
+  font-size:26px;
+  font-weight:600;
+  margin-bottom:20px;
+  text-align: center;
+
+}
+
+.row{
+  display:flex;
+  gap:16px;
+  margin-bottom:16px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.field{
+  flex:1 1 200px;
+  min-width:140px;
+  display:flex;
+  flex-direction:column;
+}
+
+label{
+  font-size:14px;
+  color:#444;
+  margin-bottom:8px;
+}
+
+input[type="text"],
+input[type="password"],
+select{
+  width:100%;
+  padding:11px 12px;
+  border-radius:8px;
+  border:1px solid #dcd7df;
+  font-size:14px;
+  background: #fff;
+}
+
+.gender-row{
+  display:flex;
+  gap:18px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.gender-option{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  font-size:15px;
+  color:#333;
+}
+
+input[type="radio"]{
+  width:18px;
+  height:18px;
+  accent-color: rgb(162,114,162);
+}
+
+.actions{
+  margin-top:18px;
+}
+
+input[type="submit"]{
+  width:100%;
+  background:  #a18cd1;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  padding:13px;
+  font-size:16px;
+  cursor:pointer;
+  transition: background .25s ease;
+}
+
+input[type="submit"]:hover{
+  background: #4b0082;
+}
+
+.helper{
+  font-size:13px;
+  color:#777;
+  margin-top:10px;
+  text-align:right;
+}
+
+button {
+  width: 100%;
+  background-color: #a18cd1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #7e57c2;
+}
+
+
+@media (max-width:420px){
+  .row{
+    flex-direction:column;
+    gap:12px;
+  }
+  .gender-row{
+    justify-content:flex-start;
+  }
+}

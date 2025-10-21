@@ -1,0 +1,42 @@
+*{
+    margin: 0;
+    padding: 0;
+    border:none;
+    outline:none;
+    box-sizing: border-box;
+    font-family: "Poppins" , sans-serif;
+}
+body{
+    display: flex;
+
+}
+.sidebar{
+    position:sticky;
+    top: 0;
+    left:0;
+    bottom:0;
+    width: 240px;
+    height: 100vh;
+    padding:0 1.7rem;
+    color:#fff;
+    overflow: hidden;
+    transition: all 0.5s linear;
+    background: #a18cd1;
+}
+
+.logo{
+    height: 80px;
+    padding: 16px;
+}
+.menue{
+    height: 88%;
+    position: relative;
+    list-style: none;
+    padding: 0;
+}
+.menue li{
+    padding: 1rem;
+    margin: 8px 0;
+    border-radius: 8px;
+    transition: all 0.5s ease-in-out;
+}
