@@ -15,13 +15,17 @@ body{
     top: 0;
     left:0;
     bottom:0;
-    width: 240px;
+    width: 110px;
     height: 100vh;
     padding:0 1.7rem;
     color:#fff;
     overflow: hidden;
     transition: all 0.5s linear;
-    background: #a18cd1;
+    background: rgba(113,99,186,255);
+}
+.sidebar:hover{
+    width: 240px;
+    transition: 0.5s;
 }
 
 .logo{
@@ -35,8 +39,35 @@ body{
     padding: 0;
 }
 .menue li{
-    padding: 1rem;
+    padding: 10px;
     margin: 8px 0;
     border-radius: 8px;
     transition: all 0.5s ease-in-out;
+    
 }
+.menue li:hover,
+ .active{
+    background: #e0e0e058;
+    
+}
+.menue a{
+    color:#fff;
+    font-size: 15px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;    
+}
+
+.menue a span{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.menue a i{
+    font-size: 1rem;
+}
+
+
+
+
