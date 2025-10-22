@@ -58,6 +58,65 @@
 
           </div>
         </div>
+
+        
+
+        <div class="container-form">
+            <div class="form-box">
+    <form>
+      <h2>املأ بيانات الرحلة</h2>
+  
+   
+    <div class="row">
+      <div class="field">
+        <label for="from">نقطة الانطلاق</label>
+        <input type="text" id="from" >
+      </div>
+      <div class="field">
+        <label for="to">الوجهة</label>
+        <input type="text" id="to" >
+      </div>
+    </div>
+
+    
+    <div class="row">
+      <div class="field">
+        <label for="date">تاريخ الرحلة</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+      <div class="field">
+        <label for="time">وقت الانطلاق</label>
+        <input type="time" id="time" name="time" required>
+      </div>
+    </div>
+
+     <div class="row">
+      <div class="field">
+    <label for="seats">عدد المقاعد المتاحة</label>
+        <input type="number" id="seats" name="seats" min="1" max="6" placeholder="" required>
+
+      </div>
+      <div class="field">
+        <label for="gender">تفضيل الجنس</label>
+    <select id="gender" name="gender">
+        <option value="any">الكل</option>
+       <option value="male">ذكور فقط</option>
+       <option value="female">إناث فقط</option>
+    </select>
+        
+      </div>
+    </div>
+
+    
+
+    <button type="submit">إنشاء الرحلة</button>
+  </form>
+</div>
+
+            
+        </div>
+        
+        
         
 
         

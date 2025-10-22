@@ -8,6 +8,7 @@
 }
 body{
     display: flex;
+    background: #f3f3f5;
 
 }
 .sidebar{
@@ -22,6 +23,7 @@ body{
     overflow: hidden;
     transition: all 0.5s linear;
     background: rgba(113,99,186,255);
+    border-bottom-left-radius: 8px;
 }
 .sidebar:hover{
     width: 240px;
@@ -37,6 +39,7 @@ body{
     position: relative;
     list-style: none;
     padding: 0;
+   
 }
 .menue li{
     padding: 10px;
@@ -65,9 +68,130 @@ body{
     text-overflow: ellipsis;
 }
 .menue a i{
-    font-size: 1rem;
+    min-width: 24px;       
+    text-align: center;   
+    font-size: 16px;
 }
 
 
+
+.main-content {
+  flex: 1; 
+  background: #f8f8fc;
+  position: relative;
+}
+
+
+
+.container {
+    background: #f8f8fc ;
+    display: flex;
+    align-items: center;
+    width: 90%;
+    height: 70px;
+    border-radius: 9px;
+    right: 3px;
+    padding-right:0 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;   
+    padding-right:0 10px;
+
+}
+.search-box {
+    position: relative;
+    flex: 1;
+    
+}
+.search-box input {
+    width: 70%;
+    height: 35px;
+    border-radius: 8px;
+    border: 1px solid  #ebebeb;
+    padding: 0 40px 0 10px; 
+    font-size: 14px;
+    background: #f3f3f5;
+    margin-right: 12px;
+}
+.search-box i {
+    position: absolute;
+    top: 50%;
+    right: 20px; 
+    transform: translateY(-50%);
+    color: #7163ba;
+    font-size: 16px;
+    pointer-events: none; 
+}
+
+/*creat form*/
+.container-form {
+  flex: 1;
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+  background: #f3f3f5;
+ 
+}
+
+.form-box {
+  background: #ffffff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 420px;
+  text-align: right;
+}
+
+.form-box h2 {
+  margin-bottom: 20px;
+  color: #7163ba;
+  font-size: 18px;
+}
+
+.form-box label {
+  display: block;
+  margin-bottom: 5px;
+  text-align: right;
+  color: #333;
+  font-weight: 100;
+}
+
+.form-box input,
+.form-box select {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+button {
+  width: 100%;
+  background-color: #a18cd1;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #7e57c2;
+}
+.row {
+  display: flex;
+  gap: 10px; 
+  margin-bottom: 15px;
+}
+
+.row .field {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+}
 
 

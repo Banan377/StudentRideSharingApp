@@ -1,9 +1,9 @@
 body {
-  font-family: "Tajawal", sans-serif;
-  background-color: #f3e8ff; /* بنفسجي فاتح */
-  direction: rtl;
-  margin: 0;
-  padding: 0;
+  background: linear-gradient(135deg, #c7a4ff, #a18cd1);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
@@ -12,16 +12,16 @@ body {
   background-color: #fff;
   padding: 25px;
   border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(128, 0, 255, 0.15);
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
 }
 
 h1 {
   text-align: center;
-  color: #6b21a8; /* بنفسجي متوسط */
+  color: #4b0082; 
 }
 
 label {
-  color: #4b0082;
+  color: #020003;
   font-weight: 500;
 }
 
@@ -30,20 +30,20 @@ input[type="password"],
 input[type="file"] {
   width: 100%;
   padding: 8px;
-  border: 1px solid #d8b4fe;
+  border: 1px solid #4b0082;
   border-radius: 8px;
   margin-top: 5px;
   box-sizing: border-box;
 }
 
 input:focus {
-  border-color: #9333ea;
+  border-color: #a18cd1;
   outline: none;
 }
 
 button {
   width: 100%;
-  background-color: #8b5cf6;
+  background-color: #a18cd1;
   color: white;
   border: none;
   padding: 10px;
@@ -54,7 +54,7 @@ button {
 }
 
 button:hover {
-  background-color: #7c3aed;
+  background-color: #7e57c2;
 }
 
 .driver-section {
