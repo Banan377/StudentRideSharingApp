@@ -1,52 +1,54 @@
-body{
-     background: linear-gradient(135deg, #c7a4ff, #a18cd1);
-    
+body {
+    background: linear-gradient(135deg, #c7a4ff, #a18cd1);
+
 }
 
-*{
+* {
     margin: 0;
     padding: 0;
-    font-family:'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
 
 }
-.container{
+
+.container {
     width: 100%;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 40px;
-   
-    
+
+
 }
 
-.form-box{
+.form-box {
     width: 90%;
     max-width: 400px;
-   
+
     background: rgb(252, 252, 252);
     padding: 35px;
     text-align: center;
     border-radius: 10px;
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-}   
+}
 
 /*sign up*/
 
-i{
+i {
     color: black;
 }
-.form-box h1{
+
+.form-box h1 {
     font-size: 28px;
-    color:#4b0082;
+    color: #4b0082;
     margin-top: 25px;
     margin-bottom: 20px;
 
 }
 
-.input-field{
-   
+.input-field {
+
     margin: 15px 0;
     border-radius: 8px;
     display: flex;
@@ -54,13 +56,15 @@ i{
     border: 1px solid #ccc;
 
 
-}.input-field input{
+}
+
+.input-field input {
     width: 100%;
     background: transparent;
     border: 0;
     outline: 0;
     padding: 12px;
-    
+
 }
 
 
@@ -68,14 +72,16 @@ i{
     margin-left: 20px;
     color: #999;
 }
-.btn-field{
+
+.btn-field {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 4px;
     align-items: center;
 }
-.btn-field button{
+
+.btn-field button {
     width: 100%;
     flex-basis: 48%;
     background: #a18cd1;
@@ -90,36 +96,40 @@ i{
     padding: 12px;
 
 }
-.input-group{
+
+.input-group {
     height: auto;
     margin-bottom: 10px;
 }
-button.disable{
+
+button.disable {
     background: #eaeaea;
     color: #555;
 }
 
 
 /*otp*/
-:where(.otp-page .container,.otp-page form, .otp-input-field){
+:where(.otp-page .container, .otp-page form, .otp-input-field) {
     display: flex;
     flex-direction: column;
-    align-items:center ;
+    align-items: center;
     justify-content: center;
 
 }
-.otp-page .container h1{
+
+.otp-page .container h1 {
     font-size: 1.75rem;
     color: #4b0082;
     margin-bottom: 25px;
-    
+
 }
- 
- form .otp-input-field{
+
+form .otp-input-field {
     flex-direction: row;
     column-gap: 11px;
 }
-.otp-input-field input{
+
+.otp-input-field input {
     height: 45px;
     width: 45px;
     border-radius: 6px;
@@ -128,25 +138,27 @@ button.disable{
     text-align: center;
     border: 1px solid #ddd;
 }
+
 .otp-input-field input::-webkit-inner-spin-button,
-.otp-input-field input::-webkit-outer-spin-button{
+.otp-input-field input::-webkit-outer-spin-button {
     display: none;
 }
- form button{
+
+form button {
     margin-top: 25px;
     width: 100%;
     height: 45px;
     color: rgb(255, 255, 255);
     font-size: 16px;
-    border:none;
+    border: none;
     padding: 9px 0;
     cursor: pointer;
     border-radius: 6px;
-   
-    background:  #a18cd1;
+
+    background: #a18cd1;
     transition: all 0.2s ease;
 }
 
-form button:hover{
+form button:hover {
     background: #7e57c2;
 }

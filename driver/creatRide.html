@@ -1,124 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Driver Interface</title>
-        <link rel="stylesheet" href="driver.css">
 
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    </head>
-    <body dir="rtl">
-        <div class="sidebar">
-          
+<head>
+  <meta charset="UTF-8">
+  <title>Driver Interface</title>
+  <link rel="stylesheet" href="driver.css">
 
-        <div class="logo"></div>
-        <ul class="menue">
-            <li class="active">
-              <a href="#" >
-                <i class="fas fa-home"></i>
-                <span>الصفحة الرئيسية</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="fas fa-car"></i>
-                <span>إنشاء رحلة</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <i class="fas fa-history"></i>
-                <span>سجل الرحلات</span>
-              </a>
-            </li>
-             <li>
-              <a href="#">
-                <i class="fas fa-bell"></i>
-                <span>الإشعارات</span>
-              </a>
-            </li>
-             <li>
-              <a href="#">
-                <i class="fas fa-school"></i>
-                <span>أنشطة الجامعة</span>
-              </a>
-            </li>         
-        </ul>   
-        </div>
-        <div class="container">
-         <div class="search-box">
-              <input type="text" placeholder="ابحث هنا">
-             <i class="fas fa-search"></i>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="../js/script.js" defer></script>
+
+</head>
+
+<body dir="rtl">
+  <div class="sidebar">
+    <div class="logo"></div>
+    <ul class="menue">
+      <li class="active">
+        <a href="#">
+          <i class="fas fa-home"></i>
+          <span>الصفحة الرئيسية</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-car"></i>
+          <span>إنشاء رحلة</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-history"></i>
+          <span>سجل الرحلات</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-bell"></i>
+          <span>الإشعارات</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-school"></i>
+          <span>أنشطة الجامعة</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <div class="container">
+
+
+
+    </div>
+
+    <div class="container-form">
+      <div class="form-box">
+        <form>
+          <h2>املأ بيانات الرحلة</h2>
+
+          <div class="row">
+            <div class="field">
+              <label>نقطة الانطلاق</label>
+              <iframe src="https://www.google.com/maps/embed?pb=...from-location..." width="100%" height="120"
+                style="border:0; border-radius:6px;" allowfullscreen="" loading="lazy">
+              </iframe>
+            </div>
+
+            <div class="field">
+              <label>الوجهة</label>
+              <iframe src="https://www.google.com/maps/embed?pb=...to-location..." width="100%" height="120"
+                style="border:0; border-radius:6px;" allowfullscreen="" loading="lazy">
+              </iframe>
+            </div>
           </div>
-          <div class="profile">
-            <nav>
-              <img src="images/profile.jpg" class="logo">
-            </nav>
 
-          </div>
-        </div>
 
-        
 
-        <div class="container-form">
-            <div class="form-box">
-    <form>
-      <h2>املأ بيانات الرحلة</h2>
-  
-   
-    <div class="row">
-      <div class="field">
-        <label for="from">نقطة الانطلاق</label>
-        <input type="text" id="from" >
-      </div>
-      <div class="field">
-        <label for="to">الوجهة</label>
-        <input type="text" id="to" >
-      </div>
-    </div>
+          <div class="row">
+            <div class="field">
+              <label for="date">تاريخ الرحلة</label>
+              <input type="date" id="date" name="date" required />
+            </div>
 
-    
-    <div class="row">
-      <div class="field">
-        <label for="date">تاريخ الرحلة</label>
-        <input type="date" id="date" name="date" required>
-      </div>
-      <div class="field">
-        <label for="time">وقت الانطلاق</label>
-        <input type="time" id="time" name="time" required>
+            <div class="row">
+              <div class="field">
+                <label for="seats">عدد المقاعد</label>
+                <input type="number" id="seats" name="seats" min="1" max="6" required />
+              </div>
+              <div class="field">
+                <label for="gender">تفضيل الجنس</label>
+                <select id="gender" name="gender">
+                  <option value="any">الكل</option>
+                  <option value="male">ذكور فقط</option>
+                  <option value="female">إناث فقط</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit">نشر</button>
+        </form>
       </div>
     </div>
+  </div>
+</body>
 
-     <div class="row">
-      <div class="field">
-    <label for="seats">عدد المقاعد المتاحة</label>
-        <input type="number" id="seats" name="seats" min="1" max="6" placeholder="" required>
-
-      </div>
-      <div class="field">
-        <label for="gender">تفضيل الجنس</label>
-    <select id="gender" name="gender">
-        <option value="any">الكل</option>
-       <option value="male">ذكور فقط</option>
-       <option value="female">إناث فقط</option>
-    </select>
-        
-      </div>
-    </div>
-
-    
-
-    <button type="submit">إنشاء الرحلة</button>
-  </form>
-</div>
-
-            
-        </div>
-        
-        
-        
-
-        
-    </body>
 </html>

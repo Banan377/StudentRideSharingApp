@@ -99,6 +99,31 @@ body {
   padding: 0 10px;
 }
 
+.search-box {
+    position: relative;
+    flex: 1;
+    
+}
+.search-box input {
+    width: 70%;
+    height: 35px;
+    border-radius: 8px;
+    border: 1px solid  #ebebeb;
+    padding: 0 40px 0 10px; 
+    font-size: 14px;
+    background: #f3f3f5;
+    margin-right: 12px;
+}
+.search-box i {
+    position: absolute;
+    top: 50%;
+    right: 20px; 
+    transform: translateY(-50%);
+    color: #7163ba;
+    font-size: 16px;
+    pointer-events: none; 
+}
+
 /* Button */
 button {
   width: 100%;
@@ -107,8 +132,7 @@ button {
   border: none;
   padding: 8px;
   border-radius: 8px;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 16px;
   cursor: pointer;
   transition: background 0.2s ease-in-out;
 }
@@ -118,21 +142,6 @@ button:hover {
   
 }
 
-/* Create button */
-.create-btn {
-  width: 45%;
-  background: #7E70C3;
-  padding: 10px;
-  border-radius: 10px;
-  font-size: 17px;
-  font-weight: bold;
-  transition: background 0.2s ease-in-out;
-  margin-right: 1rem;
-}
-
-.create-btn:hover {
-  background: rgba(95, 82, 150, 255);
-}
 
 
 .container-form {
@@ -205,11 +214,3 @@ input[type="number"] {
   flex-direction: column;
 }
 
-/* Map inside form */
-.map-embed {
-  width: 100%;
-  height: 150px;
-  margin-bottom: 15px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
