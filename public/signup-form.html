@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
   <meta charset="UTF-8">
   <title>إنشاء حساب</title>
   <link rel="stylesheet" href="Signup.css">
 </head>
-
 <body>
   <div class="container">
     <form id="signupForm">
@@ -15,43 +13,46 @@
       <div class="row">
         <div class="field">
           <label for="firstName">الاسم الأول:</label>
-          <input type="text" id="firstName" required><br><br>
+          <input type="text" id="firstName" required>
         </div>
         <div class="field">
           <label for="lastName">الاسم الأخير:</label>
-          <input type="text" id="lastName" required><br><br>
+          <input type="text" id="lastName" required>
         </div>
       </div>
 
-
       <label for="college">الكلية:</label>
-      <input type="text" id="college"><br><br>
+      <input type="text" id="college">
 
       <div class="gender-row">
-        </p>الجنس:</p>
-
-        <label><input type="radio" name="gender" value="male"> ذكر</label>
-        <label><input type="radio" name="gender" value="female"> أنثى</label>
+        <p>الجنس:</p>
+        <label><input type="radio" id="male" name="gender" value="male"> ذكر</label>
+        <label><input type="radio" id="female" name="gender" value="female"> أنثى</label>
       </div>
 
-      <label for="password">كلمة المرور:</label>
-      <input type="password" id="password" required><br><br>
+      <div class="row">
+  <div class="field">
+    <label for="password" place>كلمة المرور:</label>
+    <input type="password" id="password" required>
+  </div>
+  <div class="field">
+    <label for="confirmPassword">تأكيد كلمة المرور:</label>
+    <input type="password" id="confirmPassword" required>
+  </div>
+</div>
 
-      <label for="confirmPassword">تأكيد كلمة المرور:</label>
-      <input type="password" id="confirmPassword" required><br><br>
 
-
-      <div class="emergncy-section">
+      <h2>بيانات الطوارئ</h2>
+      <div class="emergency-section">
         <label for="emergency1">رقم الطوارئ (إجباري):</label>
         <input type="tel" id="emergency1" required>
 
-        <label for="emergency2">رقم طوارئ إضافي (اختياري):</label>
+        <label for="emergency2">رقم إضافي (اختياري):</label>
         <input type="tel" id="emergency2">
       </div>
 
-      <!--  خيار السائق -->
       <label>
-        <input type="checkbox" id="isDriver"> أود أن أكون سائقًا
+        <input type="checkbox" id="isDriver"> أريد أن أكون سائقًا
       </label>
 
       <div class="driver-section" id="driverSection">
@@ -67,20 +68,18 @@
         </div>
       </div>
 
-
-
       <button type="submit">إنشاء الحساب</button>
     </form>
   </div>
 
   <script>
-    const isDriverCheckbox = document.getElementById('isDriver');
-    const driverSection = document.getElementById('driverSection');
+  const isDriverCheckbox = document.getElementById('isDriver');
+  const driverSection = document.getElementById('driverSection');
 
-    isDriverCheckbox.addEventListener('change', function () {
-      driverSection.style.display = this.checked ? 'block' : 'none';
-    });
-  </script>
+  isDriverCheckbox.addEventListener('change', function() {
+    driverSection.classList.toggle('show', this.checked);
+  });
+</script>
+
 </body>
-
 </html>
