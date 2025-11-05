@@ -1,60 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 
 <head>
   <meta charset="UTF-8">
-  <title>Driver Interface</title>
-  <link rel="stylesheet" href="driver.css">
+  <title>إنشاء رحلة</title>
 
+  <link rel="stylesheet" href="driver.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  
+  <style>
+    .container-form {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f3f3f5;
+      padding-top: 20px;
+      width: 100%;
+    }
+
+    .form-box {
+      background: #ffffff;
+      padding: 35px 45px;
+      border-radius: 12px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 520px;
+      text-align: center;
+    }
+
+    .form-box h2 {
+      margin-bottom: 20px;
+      color: #7163ba;
+      font-size: 20pt;
+      font-weight: bold;
+    }
+
+    .form-box label {
+      display: block;
+      margin-bottom: 5px;
+      text-align: right;
+      color: #333;
+      font-weight: 100;
+    }
+
+    .form-box input,
+    .form-box select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    input[type="date"],
+    input[type="number"] {
+      direction: ltr !important;
+      text-align: right;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .row .field {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    iframe {
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 100%;
+      height: 150px;
+    }
+
+    button {
+      width: 100%;
+      background: #7E70C3;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background: rgba(95, 82, 150, 255);
+    }
+  </style>
 </head>
 
-<body dir="rtl">
+<body>
   <div class="sidebar">
     <div class="logo"></div>
     <ul class="menue">
-      <li class="active">
-        <a href="#">
-          <i class="fas fa-home"></i>
-          <span>الصفحة الرئيسية</span>
-        </a>
+      <li>
+        <a href="driverUI.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a>
       </li>
       <li>
-        <a href="#">
-          <i class="fas fa-car"></i>
-          <span>إنشاء رحلة</span>
-        </a>
+        <a href="#"><i class="fas fa-history"></i><span>سجل الرحلات</span></a>
       </li>
       <li>
-        <a href="#">
-          <i class="fas fa-history"></i>
-          <span>سجل الرحلات</span>
-        </a>
+        <a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a>
       </li>
       <li>
-        <a href="#">
-          <i class="fas fa-bell"></i>
-          <span>الإشعارات</span>
-        </a>
-      </li>
-      <li>
-        <a href="#">
-          <i class="fas fa-school"></i>
-          <span>أنشطة الجامعة</span>
-        </a>
+        <a href="#"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a>
       </li>
     </ul>
   </div>
 
   <div class="main-content">
-    <div class="container">
-
-
-
-    </div>
-
     <div class="container-form">
       <div class="form-box">
         <form>
@@ -63,47 +129,46 @@
           <div class="row">
             <div class="field">
               <label>نقطة الانطلاق</label>
-              <iframe src="https://www.google.com/maps/embed?pb=...from-location..." width="100%" height="120"
-                style="border:0; border-radius:6px;" allowfullscreen="" loading="lazy">
-              </iframe>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3623.9023029394794!2d46.675295215002004!3d24.71355158411983!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f0fa3bca3b6f1%3A0x5e86d6c5a2d88b1b!2sRiyadh!5e0!3m2!1sar!2ssa!4v1698856484476!5m2!1sar!2ssa"
+                allowfullscreen="" loading="lazy"></iframe>
             </div>
 
             <div class="field">
               <label>الوجهة</label>
-              <iframe src="https://www.google.com/maps/embed?pb=...to-location..." width="100%" height="120"
-                style="border:0; border-radius:6px;" allowfullscreen="" loading="lazy">
-              </iframe>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.5901550334483!2d46.71263111499533!3d24.782277084085617!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2ef1a51b8c9a4d%3A0x72f19e5d64efc1b1!2sKing%20Saud%20University!5e0!3m2!1sar!2ssa!4v1698856501543!5m2!1sar!2ssa"
+                allowfullscreen="" loading="lazy"></iframe>
             </div>
           </div>
-
-
 
           <div class="row">
             <div class="field">
               <label for="date">تاريخ الرحلة</label>
-              <input type="date" id="date" name="date" required />
+              <input type="date" id="date" name="date" required>
             </div>
-
-            <div class="row">
-              <div class="field">
-                <label for="seats">عدد المقاعد</label>
-                <input type="number" id="seats" name="seats" min="1" max="6" required />
-              </div>
-              <div class="field">
-                <label for="gender">تفضيل الجنس</label>
-                <select id="gender" name="gender">
-                  <option value="any">الكل</option>
-                  <option value="male">ذكور فقط</option>
-                  <option value="female">إناث فقط</option>
-                </select>
-              </div>
+            <div class="field">
+              <label for="seats">عدد المقاعد</label>
+              <input type="number" id="seats" name="seats" min="1" max="6" required>
             </div>
+          </div>
 
-            <button type="submit">نشر</button>
+          <div class="row">
+            <div class="field">
+              <label for="gender">تفضيل الجنس</label>
+              <select id="gender" name="gender">
+                <option value="any">الكل</option>
+                <option value="male">ذكور فقط</option>
+                <option value="female">إناث فقط</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit">نشر</button>
         </form>
       </div>
     </div>
   </div>
 </body>
-
 </html>
+
