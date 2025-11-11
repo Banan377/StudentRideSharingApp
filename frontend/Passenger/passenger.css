@@ -9,7 +9,7 @@
 
 body {
   display: flex;
-  background: #f3f3f5;
+  background: #ccddea;
 }
 
 
@@ -25,8 +25,9 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   transition: all 0.5s linear;
-  background: rgba(113, 99, 186, 255);
+  background: #265262;
   border-bottom-left-radius: 8px;
+  z-index: 1000;
 }
 
 .sidebar:hover {
@@ -87,21 +88,18 @@ body {
 }
 
 .container {
-  background: #f8f8fc;
+  width: 100%;
+  height: 70px;
+  background: #f9fbfb;
   display: flex;
   align-items: center;
-  width: 100%;
-  height: 80px;
-  border-radius: 9px;
-  margin: 10px;
-  padding: 0 10px;
-
+  z-index: 100;
 }
 
 
 button {
   width: 100%;
-  background: #7E70C3;
+  background: #487788;
   color: white;
   border: none;
   padding: 8px;
@@ -114,8 +112,9 @@ button {
 }
 
 button:hover {
-  background: rgba(95, 82, 150, 255);
+  background: #265262;
 }
+
 .button:focus,
 .button:active {
   color: white;
@@ -123,10 +122,9 @@ button:hover {
 }
 
 
-
 .book-btn {
   width: 80%;
-  background: #7E70C3;
+  background: #487788;
   color: white;
   padding: 10px;
   border-radius: 10px;
@@ -138,7 +136,7 @@ button:hover {
 }
 
 .book-btn:hover {
-  background: rgba(95, 82, 150, 255);
+  background: #265262;
 }
 
 .book-btn:focus,
@@ -153,7 +151,7 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f3f3f5;
+  background: #f9fbfb;
   padding-top: 20px;
   width: 100%;
 }
@@ -170,7 +168,7 @@ button:hover {
 
 .form-box h2 {
   margin-bottom: 20px;
-  color: #7163ba;
+  color: #265262;
   font-size: 18px;
   align-items: center;
   font-size: 20pt;
@@ -232,7 +230,7 @@ input[type="number"] {
 }
 
 .profile-btn {
-  background: #7E70C3;
+  background: #85828258;
   color: white;
   border: none;
   padding: 10px;
@@ -243,11 +241,13 @@ input[type="number"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  position: fixed;
+  top: 10px;
+  left: 62px;
   font-size: 22px;
   transition: background 0.2s ease-in-out;
-  margin-top: 1.21rem;
-  margin-left: 0.4rem;
+  z-index: 900;
+  margin: 0;
 }
 
 .profile-btn i {
@@ -262,13 +262,13 @@ input[type="number"] {
 
 
 .profile-btn:hover {
-  background: rgba(95, 82, 150, 255);
+  background: #85828258;
 }
 
 .dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
+  position: fixed;
+  top: 85px;
+  left: 62px;
   background: white;
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -305,6 +305,7 @@ input[type="number"] {
   background: #f5f5f5;
 }
 
+
 .hidden {
   display: none !important;
 }
@@ -313,7 +314,7 @@ input[type="number"] {
   position: fixed;
   top: 0;
   right: 0;
-  width: calc(100% - 110px);
+  width: calc(100% - 20px);
   height: 100vh;
   background: #f3f3f5;
   z-index: 2000;
@@ -337,7 +338,7 @@ input[type="number"] {
 }
 
 .back-btn {
-  background: #7E70C3;
+  background: #487788;
   border: none;
   padding: 8px 12px;
   border-radius: 6px;
@@ -348,8 +349,15 @@ input[type="number"] {
 }
 
 .back-btn:hover {
-  background: #e0e0e0;
+  background: #265262;
 }
+
+.back-btn:focus,
+.back-btn:active {
+  color: white;
+  outline: none;
+}
+
 
 .rating-history,
 .settings-form {
@@ -373,7 +381,7 @@ input[type="number"] {
 .rating-number {
   font-size: 48px;
   font-weight: bold;
-  color: #7163ba;
+  color: #265262;
 }
 
 .stars-display {
@@ -430,7 +438,7 @@ input[type="number"] {
 
 .reviewer-info i {
   font-size: 20px;
-  color: #7163ba;
+  color: #265262;
 }
 
 .reviewer-name {
@@ -516,7 +524,7 @@ textarea {
 
 .submit-btn,
 .update-btn {
-  background: #7E70C3;
+  background: #487788;
   color: white;
   border: none;
   padding: 12px 20px;
@@ -531,7 +539,7 @@ textarea {
 
 .submit-btn:hover,
 .update-btn:hover {
-  background: rgba(95, 82, 150, 255);
+  background: #265262;
 }
 
 .logout-overlay {
@@ -575,7 +583,7 @@ textarea {
 
 .logout-icon {
   font-size: 48px;
-  color: #7163ba;
+  color: #265262;
   margin-bottom: 15px;
 }
 
@@ -661,4 +669,46 @@ textarea {
 
 .success-btn:hover {
   background: #218838;
+}
+
+
+.booked-rides-container {
+  width: calc(100% - 20px);
+  max-width: 1280px; 
+  height: 85%; 
+  background:#ccddea ;
+  display: flex;
+  flex-direction: column; 
+  justify-content: flex-start; 
+  align-items: center; 
+  padding-top: 15px;
+  border-radius: 9px;
+  position: absolute;
+  top: 56%;
+  left: 47.2%;
+  transform: translate(-50%, -50%); 
+}
+
+.emergency-btn {
+  width: 20%; 
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+  margin-top: 0;
+}
+
+.emergency-btn:hover {
+  background: #c82333;
+}
+
+.emergency-btn:focus,
+.emergency-bon:active {
+  color: white;
+  outline: none;
 }

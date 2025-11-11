@@ -8,7 +8,7 @@
 }
 
 body {
-  background: linear-gradient(135deg, #c7a4ff, #a18cd1);
+  background: #ccddea;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -17,7 +17,7 @@ body {
 
 /* الصندوق الرئيسي */
 .login-container {
-  background-color: #fff;
+  background-color: #f9fbfb;
   padding: 40px;
   border-radius: 15px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
@@ -28,7 +28,7 @@ body {
 /* العنوان */
 .login-container h1 {
   text-align: center;
-  color: #4b0082;
+  color: #265262;
   margin-bottom: 25px;
   font-size: 28px;
 }
@@ -55,26 +55,26 @@ input {
 }
 
 input:focus {
-  border-color: #a18cd1;
+  border-color: #487788;
 }
 
 /* رابط "نسيت كلمة المرور" */
 .forgot-password {
   text-align: left;
   font-size: 14px;
-  color: rgb(162, 114, 162);
+  color:#487788;
   text-decoration: none;
   margin-bottom: 20px;
   transition: color 0.3s;
 }
 
 .forgot-password:hover {
-  color: #4b0082;
+  color: #265262;
 }
 
 /* زر الدخول */
 button {
-  background-color: #a18cd1;
+  background-color: #487788;
   color: white;
   border: none;
   border-radius: 8px;
@@ -85,5 +85,5 @@ button {
 }
 
 button:hover {
-  background-color: #7e57c2;
+  background-color:#265262;
 }

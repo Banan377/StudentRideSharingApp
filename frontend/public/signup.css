@@ -1,5 +1,5 @@
 body {
-  background: linear-gradient(135deg, #c7a4ff, #a18cd1);
+  background: #ccddea;
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -9,7 +9,7 @@ body {
 .container {
   width: 340px;
   margin: 50px auto;
-  background-color: #fff;
+  background-color: #f9fbfb;
   padding: 25px;
   border-radius: 15px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
@@ -17,13 +17,13 @@ body {
 
 h1 {
   text-align: center;
-  color: #4b0082; 
+  color: #265262; 
   margin-bottom: 20px;
 }
 
 h2 {
   font-size: 16px;
-  color: #4b0082;
+  color: #265262;
   margin-top: 20px;
 }
 
@@ -40,20 +40,20 @@ input[type="file"],
 input[type="tel"] {
   width: 100%;
   padding: 7px;
-  border: 1px solid #4b0082;
+  border: 1px solid #487788;
   border-radius: 8px;
   margin-top: 5px;
   box-sizing: border-box;
 }
 
 input:focus {
-  border-color: #a18cd1;
+  border-color: #265262;
   outline: none;
 }
 
 button {
   width: 100%;
-  background-color: #a18cd1;
+  background-color: #487788;
   color: white;
   border: none;
   padding: 10px;
@@ -65,7 +65,7 @@ button {
 }
 
 button:hover {
-  background-color: #7e57c2;
+  background-color: #265262;
 }
 
 .row {
@@ -79,8 +79,8 @@ button:hover {
 
 .gender-row {
   display: flex;
-  align-items: center; /* يخلي العناصر بنفس الارتفاع */
-  gap: 8px; /* مسافة صغيرة بين الجنس والاختيارات */
+  align-items: center; 
+  gap: 8px; 
   margin-top: 10px;
 }
 
@@ -95,7 +95,7 @@ button:hover {
   margin: 0;
   font-weight: 500;
   color: #020003;
-  transform: translateY(1px); /* يرفع النص شوي */
+  transform: translateY(1px); 
 }
 
 
@@ -112,8 +112,8 @@ button:hover {
 }
 
 .emergency-section {
-  background-color: #f9f4ff;
-  border: 1px solid #e1bee7;
+  background-color: #dcf1f9;
+  border: 1px solid #487788;
   border-radius: 10px;
   padding: 10px;
   margin-top: 15px;
