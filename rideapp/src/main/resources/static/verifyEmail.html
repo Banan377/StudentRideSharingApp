@@ -136,15 +136,15 @@
       successDiv.style.display = 'none';
 
       if (!email.endsWith(allowedSuffix)) {
-        errorDiv.textContent = '❌ البريد غير صحيح، يجب أن ينتهي بـ @sm.imamu.edu.sa';
+        errorDiv.textContent = ' البريد غير صحيح، يجب أن ينتهي بـ @sm.imamu.edu.sa';
         errorDiv.style.display = 'block';
         return;
       }
 
-      successDiv.textContent = `📩 تم إرسال رمز التحقق إلى ${email}`;
+      successDiv.textContent = ` تم إرسال رمز التحقق إلى ${email}`;
       successDiv.style.display = 'block';
       sendBtn.disabled = true;
-      sendBtn.textContent = 'تم الإرسال ✔️';
+      sendBtn.textContent = 'تم الإرسال';
       setTimeout(() => {
         sendBtn.disabled = false;
         sendBtn.textContent = 'أرسل رمز التحقق';
