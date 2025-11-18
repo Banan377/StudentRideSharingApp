@@ -1,15 +1,17 @@
 package com.example.rideapp.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "otp")
 public class OTPModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long otpID;
 
-    private String email;
+    @Id
+    private String email;      
     private String otpCode;
     private LocalDateTime expirationTime;
 
@@ -20,9 +22,6 @@ public class OTPModel {
         this.otpCode = otpCode;
         this.expirationTime = expirationTime;
     }
-
-    public Long getOtpID() { return otpID; }
-    public void setOtpID(Long otpID) { this.otpID = otpID; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }

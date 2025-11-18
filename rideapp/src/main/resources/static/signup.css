@@ -26,12 +26,24 @@ h2 {
   color: #265262;
   margin-top: 20px;
 }
+.input{
+
+}
 
 label {
   display: block;
   color: #020003;
   font-weight: 500;
   margin-top: 10px;
+}
+input[type="Email"]{
+  width: 100%;
+  padding: 7px;
+  border: 1px solid #487788;
+  border-radius: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+
 }
 
 input[type="text"],
@@ -55,6 +67,8 @@ button {
   width: 100%;
   background-color: #487788;
   color: white;
+  font-size: 26px;
+  font: bold;
   border: none;
   padding: 10px;
   border-radius: 10px;
@@ -119,3 +133,36 @@ button:hover {
   margin-top: 15px;
 }
 
+.select .row{
+  display: fl;
+
+}
+
+/* تنسيق رسائل تحقق الباسوورد */
+#passwordHelp, #confirmHelp {
+    font-size: 0.5em;
+    margin-top: 5px;
+    line-height: 1.4;
+    transition: all 0.3s ease;
+}
+
+#passwordHelp br {
+    margin-bottom: 2px;
+}
+
+/* تحسين ظهور قسم السائق */
+.driver-section {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease, padding 0.3s ease;
+    padding: 0 10px;
+}
+
+.driver-section.show {
+    max-height: 800px; /* تكبير علشان يظهر كل المحتوى */
+    padding: 15px;
+    border: 1px solid #487788;
+    border-radius: 8px;
+    margin-top: 10px;
+    background-color: #f8fbfc;
+}

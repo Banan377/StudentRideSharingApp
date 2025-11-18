@@ -1,8 +1,6 @@
 const signupForm = document.getElementById('signupForm');
 const emailInput = document.getElementById('Email');
 
-
-
 signupForm.addEventListener('submit', async (e) => {
     e.preventDefault(); 
     const email = emailInput.value.trim();

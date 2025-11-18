@@ -1,9 +1,18 @@
 package com.example.rideapp.services;
 
-import com.example.rideapp.models.UserModel;
-import com.example.rideapp.repositories.UserRepository;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.example.rideapp.models.DriverModel;
+import com.example.rideapp.models.PassengerModel;
+import com.example.rideapp.models.UserModel;
+import com.example.rideapp.repositories.DriverRepository;
+import com.example.rideapp.repositories.PassengerRepository;
+import com.example.rideapp.repositories.StudentRepository;
+import com.example.rideapp.repositories.UserRepository;
 
 @Service
 public class AuthService {
@@ -11,19 +20,60 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
-    // إنشاء حساب جديد
-    public UserModel createAccount(UserModel user) {
-        return userRepository.save(user);
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private DriverRepository driverRepository;
+
+    @Autowired
+    private PassengerRepository passengerRepository;
+
+    @Autowired
+    private DriverService driverService;
+
+    public boolean isUserRegistered(String email) {
+        return userRepository.existsByEmail(email);
     }
 
-    // التحقق من البريد وكلمة المرور
-    public boolean login(String email, String password) {
-        UserModel user = userRepository.findByEmail(email);
-        if (user != null && user.getPassword().equals(password)) {
-            return true;
+    public boolean isStudentEmailValid(String email) {
+        return studentRepository.existsByEmail(email);
+    }
+
+    public void createAccount(UserModel user, Map<String, Object> driverData) {
+        // 1) تحقق أن الإيميل موجود في جدول الجامعة
+        if (!isStudentEmailValid(user.getEmail())) {
+            throw new RuntimeException("هذا الإيميل غير مسجّل في قاعدة بيانات الجامعة");
         }
-        return false;
+
+        // 2) تأكد أنه غير مسجل مسبقاً
+        if (isUserRegistered(user.getEmail())) {
+            throw new RuntimeException("هذا الإيميل مسجل مسبقاً!");
+        }
+
+        // 3) حفظ مع تشفير الباسورد
+        String encodedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
+        user.setPassword(encodedPassword);
+
+        // 4) حفظ المستخدم
+        userRepository.save(user);
+        // 5) إنشاء سجل في جدول الركاب للجميع
+        PassengerModel passenger = new PassengerModel(user.getEmail());
+        passengerRepository.save(passenger);
+        // 7) إذا كان سائق، إنشاء سجل في جدول السائقين
+        if (driverData != null && !driverData.isEmpty()) {
+            DriverModel driver = new DriverModel(
+                    user.getEmail(),
+                    (String) driverData.get("licenseNumber"),
+                    "", // سيتم تعبئتها لاحقاً
+                    "", // سيتم تعبئتها لاحقاً
+                    (String) driverData.get("carModel"),
+                    (String) driverData.get("carColor"),
+                    (String) driverData.get("carPlate"),
+                    (int) driverData.get("seatsAvailable"));
+            driver.setStatus("pending"); // في انتظار الموافقة
+            driverRepository.save(driver);
+        }
     }
 
 }
-

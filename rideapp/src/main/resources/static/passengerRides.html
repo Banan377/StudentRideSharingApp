@@ -4,8 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <title>واجهة الركاب</title>
-
-
   <link rel="stylesheet" href="passenger.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -21,18 +19,16 @@
       <li><a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a></li>
       <li><a href="#"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
     </ul>
-
   </div>
 
   <div class="booked-rides-container">
-    <button type="emergency-btn" class="emergency-btn">زر الطوارئ</button>
+    <button type="button" class="emergency-btn">زر الطوارئ</button>
   </div>
+
   <!-- الملف الشخصي -->
   <div class="container">
     <div class="header">
       <button type="button" class="book-btn">احجز الآن</button>
-
-
 
       <div class="profile-section">
         <button onclick="toggleProfileDropdown()" class="profile-btn">
@@ -48,6 +44,7 @@
       </div>
     </div>
   </div>
+
   <!-- صفحة سجل التقييمات -->
   <div id="rating-page" class="full-page hidden">
     <div class="container-form">
@@ -72,7 +69,7 @@
 
           <div class="reviews-list">
             <div class="no-reviews">
-              <i class="fas fa-star-o"></i>
+              <i class="fas fa-star"></i>
               <p>لا توجد تقييمات بعد</p>
               <span>ستظهر تقييمات الركاب هنا بعد إكمال الرحلات</span>
             </div>
@@ -113,8 +110,43 @@
     </div>
   </div>
 
+  <div id="logout-modal" class="hidden">
+    <div class="logout-overlay">
+      <div class="logout-modal">
+        <div class="logout-content">
+          <i class="fas fa-sign-out-alt logout-icon"></i>
+          <h3>تسجيل الخروج</h3>
+          <p>هل أنت متأكد من تسجيل الخروج؟</p>
+          <div class="logout-buttons">
+            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم، تسجيل الخروج</button>
+            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const userData = JSON.parse(localStorage.getItem('currentUser'));
+
+      if (!userData) {
+        alert('يجب تسجيل الدخول أولاً');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      console.log('مرحباً بك', userData.name, 'الدور:', userData.role);
+      
+      document.querySelector('.emergency-btn').addEventListener('click', function () {
+        alert('تم تنبيه جهات الاتصال الطارئة');
+      });
+
+      document.querySelector('.book-btn').addEventListener('click', function () {
+        window.location.href = 'bookingPage.html';
+      });
+    });
+
     function toggleProfileDropdown() {
       document.getElementById('profile-dropdown').classList.toggle('hidden');
     }
@@ -132,7 +164,7 @@
     }
 
     function closePage() {
-      document.querySelectorAll('.full-page').forEach(page => page.classList.add('hidden'));
+      document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
       document.body.style.overflow = 'auto';
     }
 
@@ -140,16 +172,17 @@
       const name = document.getElementById('name').value;
       const password = document.getElementById('password').value;
       const contact = document.getElementById('emergency-contact').value;
-
+      
       if (!name && !password && !contact) {
         alert('يرجى ملء حقل واحد على الأقل');
         return;
       }
-
+      
       alert('تم تحديث المعلومات بنجاح');
       closePage();
     }
 
+    // وظائف تسجيل الخروج
     function logout() {
       document.getElementById('profile-dropdown').classList.add('hidden');
       showLogoutConfirmation();
@@ -169,45 +202,39 @@
               <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
             </div>
           </div>
-        </div>`;
+        </div>
+      `;
       document.body.appendChild(overlay);
     }
 
     function confirmLogout() {
-      document.querySelector('.logout-overlay').remove();
-      showLogoutSuccess();
+      // مسح بيانات المستخدم
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('userEmail');
+      
+      // إغلاق النافذة المنبثقة
+      const overlay = document.querySelector('.logout-overlay');
+      if (overlay) overlay.remove();
+      
+      // التوجيه لصفحة Login
+      window.location.href = 'login.html';
     }
 
     function cancelLogout() {
-      document.querySelector('.logout-overlay').remove();
-    }
-
-    function showLogoutSuccess() {
-      const overlay = document.createElement('div');
-      overlay.className = 'logout-overlay';
-      overlay.innerHTML = `
-        <div class="logout-modal">
-          <div class="logout-content success">
-            <i class="fas fa-check-circle success-icon"></i>
-            <h3>تم تسجيل الخروج بنجاح</h3>
-            <p>شكراً لاستخدام التطبيق</p>
-            <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
-          </div>
-        </div>`;
-      document.body.appendChild(overlay);
-    }
-
-    function closeLogoutSuccess() {
-      document.querySelector('.logout-overlay').remove();
+      const overlay = document.querySelector('.logout-overlay');
+      if (overlay) overlay.remove();
     }
 
     document.addEventListener('click', function (event) {
       const profileSection = document.querySelector('.profile-section');
+      const dropdown = document.getElementById('profile-dropdown');
+      
       if (!profileSection.contains(event.target)) {
-        document.getElementById('profile-dropdown').classList.add('hidden');
+        dropdown.classList.add('hidden');
       }
     });
   </script>
+
 </body>
 
 </html>

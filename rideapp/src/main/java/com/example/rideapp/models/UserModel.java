@@ -1,29 +1,27 @@
 package com.example.rideapp.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")  
+@Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class UserModel {
-
     @Id
-    private String email;       
-    private String name;        
-    private String password;
-    private String role;       
-    private String college;
-    private String gender;
-    private String emergencyContacts;
-    private double rateAverage;
-    private String status;
+    protected String email;
+    
+    protected String name;
+    protected String password;
+    protected String role;
+    protected String college;
+    protected String gender;
+    protected String emergencyContacts;
+    protected double rateAverage;
+    protected String status;
 
     public UserModel() {}
 
-    
     public UserModel(String email, String name, String password, String role, String college,
-                String gender, String emergencyContacts, double rateAverage, String status) {
+                    String gender, String emergencyContacts, double rateAverage, String status) {
         this.email = email;
         this.name = name;
         this.password = password;
@@ -35,7 +33,7 @@ public class UserModel {
         this.status = status;
     }
 
-    
+    // Getters and Setters
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 

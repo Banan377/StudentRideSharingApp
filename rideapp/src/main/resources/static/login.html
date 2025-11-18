@@ -11,7 +11,7 @@
 <body>
   <div class="login-container">
     <h1>تسجيل الدخول</h1>
-    <form>
+    <form id="loginForm">
 
       <label for="email">البريد الإلكتروني</label>
       <input type="email" id="email" placeholder="example@sm.imamu.edu.sa" required>
@@ -19,34 +19,99 @@
       <label for="password">كلمة المرور</label>
       <input type="password" id="password" placeholder="••••••••" required>
 
-      <a href="#" class="forgot-password">نسيت كلمة المرور؟</a>
+      <a href="forgotPassword.html" class="forgot-password">نسيت كلمة المرور؟</a>
 
-      <button button onclick="checkEmail('دخول')" type="submit">دخول</button>
-      <p class="signup-link">ليس لديك حساب؟ <a href="signup.html">العودة لصفحة انشاء الحساب</a></p>
+      <button type="submit">دخول</button>
+      <p class="signup-link">ليس لديك حساب؟ <a href="signup.html">إنشاء حساب جديد</a></p>
     </form>
   </div>
 
   <script>
-    function checkEmail() {
-      var email = document.getElementById('email').value;
-      var password = document.getElementById('password').value;
-      var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\w_]).{8,}$/;
+    const loginForm = document.getElementById('loginForm');
 
-      if (email.endsWith('@sm.imamu.edu.sa') && passwordPattern.test(password)) {
-        alert('!تم بنجاح ');
-      }
-      else if (email.endsWith('@sm.imamu.edu.sa') && !passwordPattern.test(password)) {
-        alert('كلمة المرور يجب أن تحتوي على 8 خانات على الأقل، وحرف كبير، وحرف صغير،و رقم، و رمز واحد على الأقل');
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-      }
-      else if (!email.endsWith('@sm.imamu.edu.sa') && passwordPattern.test(password)) {
-        alert('!يجب أن يكون المستخدم من أعضاء جامعة الإمام محمد بن سعود الإسلامية')
-      }
-      else {
-        alert('البريد الإلكتروني و كلمة المرور غير مطابقة للشروط')
-      }
-    }
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
+      if (!email.endsWith('@sm.imamu.edu.sa')) {
+        alert('يجب أن يكون المستخدم من أعضاء جامعة الإمام محمد بن سعود الإسلامية');
+        return;
+      }
+
+      if (!password) {
+        alert('يرجى إدخال كلمة المرور');
+        return;
+      }
+
+      try {
+        console.log(' إرسال طلب تسجيل دخول...');
+
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        console.log(' حالة الرد:', response.status, response.statusText);
+
+        const responseText = await response.text();
+        console.log(' محتوى الرد:', responseText);
+
+        if (!responseText) {
+          throw new Error('الخادم أرجع رداً فارغاً - قد يكون هناك خطأ في السيرفر');
+        }
+
+        let result;
+        try {
+          result = JSON.parse(responseText);
+        } catch (jsonError) {
+          console.error(' خطأ في تحويل JSON:', jsonError);
+          throw new Error('رد غير صالح من الخادم: ' + responseText);
+        }
+
+        console.log(' نتيجة التسجيل:', result);
+
+        if (result.success) {
+          alert('تم تسجيل الدخول بنجاح!');
+
+          localStorage.setItem('currentUser', JSON.stringify(result.user));
+          localStorage.setItem('userEmail', email);
+
+          if (result.redirectUrl) {
+            console.log('➡️ التوجيه إلى:', result.redirectUrl);
+            window.location.href = result.redirectUrl;
+          } else {
+            if (result.user && result.user.role === 'driver') {
+              window.location.href = 'driverUI.html';
+            } else {
+              window.location.href = 'passengerRides.html';
+            }
+          }
+        } else {
+          alert('خطأ: ' + result.message);
+        }
+      } catch (error) {
+        console.error(' Error:', error);
+        alert('حدث خطأ أثناء تسجيل الدخول: ' + error.message);
+
+        console.log('🔍 تفاصيل الخطأ:', {
+          email: email,
+          time: new Date().toLocaleString(),
+          error: error.message
+        });
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const savedEmail = localStorage.getItem('userEmail');
+      if (savedEmail) {
+        document.getElementById('email').value = savedEmail;
+      }
+    });
   </script>
 </body>
 

@@ -1,10 +1,8 @@
-// اختيار عناصر النموذج وحقول الإدخال
 const otpForm = document.getElementById("otpForm");
 const inputs = document.querySelectorAll(".otp-input-field input");
-const email = localStorage.getItem("userEmail"); // استرجاع الإيميل من localStorage
+const email = localStorage.getItem("userEmail");
 const verifyBtn = document.getElementById("verifyBtn");
 
-// أول حقل مفعل والباقي معطّل
 inputs.forEach((input, index) => {
   if (index !== 0) input.disabled = true;
 
@@ -12,30 +10,23 @@ inputs.forEach((input, index) => {
     const nextInput = input.nextElementSibling;
     const prevInput = input.previousElementSibling;
 
-    // منع أكثر من رقم
     if (input.value.length > 1) input.value = "";
 
-    // الانتقال للحقل التالي تلقائيًا
     if (nextInput && nextInput.disabled && input.value !== "") {
       nextInput.removeAttribute("disabled");
       nextInput.focus();
     }
 
-    // الرجوع للحقل السابق عند Backspace
     if (e.key === "Backspace" && prevInput) {
       input.value = "";
       prevInput.focus();
     }
 
-    // تفعيل الزر فقط بعد ملئ كل الحقول
-    const allFilled = Array.from(inputs).every(inp => inp.value !== "");
-    verifyBtn.disabled = !allFilled;
+    verifyBtn.disabled = !Array.from(inputs).every(inp => inp.value !== "");
   });
 });
 
-
 window.addEventListener("load", () => inputs[0].focus());
-
 
 otpForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -54,12 +45,30 @@ otpForm.addEventListener("submit", async (e) => {
       body: JSON.stringify({ email, otpCode }),
     });
 
-    const result = await response.text();
-    alert(result);
+  
+    const contentType = response.headers.get("content-type");
+    let result;
 
-    if (result.toLowerCase().includes("success")) {
-      window.location.href = "signup-form.html"; 
+    if (contentType && contentType.includes("application/json")) {
+      result = await response.json();
+    } else {
+      result = await response.text();
     }
+
+    if (response.ok) {
+      if (result.success || (typeof result === 'string' && result.toLowerCase().includes("نجاح")) ||
+        (result.message && result.message.toLowerCase().includes("نجاح"))) {
+
+        localStorage.setItem("userEmail", email);
+        alert("تم التحقق بنجاح");
+        window.location.href = "signup-form.html";
+      } else {
+        alert(result.message || result);
+      }
+    } else {
+      alert(result.message || result || "حدث خطأ أثناء التحقق");
+    }
+
   } catch (err) {
     console.error(err);
     alert("حدث خطأ أثناء التحقق من الكود.");
