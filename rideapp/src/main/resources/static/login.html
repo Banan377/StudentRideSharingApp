@@ -19,7 +19,7 @@
       <label for="password">كلمة المرور</label>
       <input type="password" id="password" placeholder="••••••••" required>
 
-      <a href="forgotPassword.html" class="forgot-password">نسيت كلمة المرور؟</a>
+      <a href="verifyEmail.html" class="forgot-password">نسيت كلمة المرور؟</a>
 
       <button type="submit">دخول</button>
       <p class="signup-link">ليس لديك حساب؟ <a href="signup.html">إنشاء حساب جديد</a></p>
@@ -82,7 +82,7 @@
           localStorage.setItem('userEmail', email);
 
           if (result.redirectUrl) {
-            console.log('➡️ التوجيه إلى:', result.redirectUrl);
+            console.log(' التوجيه إلى:', result.redirectUrl);
             window.location.href = result.redirectUrl;
           } else {
             if (result.user && result.user.role === 'driver') {
@@ -98,7 +98,7 @@
         console.error(' Error:', error);
         alert('حدث خطأ أثناء تسجيل الدخول: ' + error.message);
 
-        console.log('🔍 تفاصيل الخطأ:', {
+        console.log(' تفاصيل الخطأ:', {
           email: email,
           time: new Date().toLocaleString(),
           error: error.message
