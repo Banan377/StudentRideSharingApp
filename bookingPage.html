@@ -2,213 +2,643 @@
 <html lang="ar" dir="rtl">
 
 <head>
-  <meta charset="UTF-8">
-  <title>صفحة الحجز</title>
-
-
-  <link rel="stylesheet" href="passenger.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8" />
+    <title>صفحة الحجز</title>
+    <link rel="stylesheet" href="passenger.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
-  <!-- القائمة الجانبية -->
-  <div class="sidebar">
-    <div class="logo"></div>
-    <ul class="menue">
-      <li><a href="bookingPage.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a></li>
-      <li><a href="#"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
-      <li><a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a></li>
-      <li><a href="#"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
-    </ul>
 
-  </div>
-
-
-  <!-- الملف الشخصي -->
-  <div class="container">
-    <div class="header">
-      <div class="search-box">
-              <input type="text" placeholder="ابحث هنا">
-             <i class="fas fa-search"></i>
-          </div>
-
-
-
-      <div class="profile-section">
-        <button onclick="toggleProfileDropdown()" class="profile-btn">
-          <i class="fas fa-user-circle"></i>
-        </button>
-        <div id="profile-dropdown" class="dropdown-menu hidden">
-          <ul>
-            <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل التقييمات</span></a></li>
-            <li><a href="#" onclick="showSettingsPage()"><i class="fas fa-cog"></i><span>الإعدادات</span></a></li>
-            <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
-          </ul>
-        </div>
-      </div>
+    <div class="sidebar">
+        <div class="logo"></div>
+        <ul class="menue">
+            <li><a href="bookingPage.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a></li>
+            <li><a href="#"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
+            <li><a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a></li>
+            <li><a href="#"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
+        </ul>
     </div>
-  </div>
-  <!-- صفحة سجل التقييمات -->
-  <div id="rating-page" class="full-page hidden">
-    <div class="container-form">
-      <div class="form-box">
-        <div class="page-header">
-          <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
-          <h2>سجل التقييمات</h2>
+
+    <main class="main-content">
+
+        <div class="container">
+            <div class="header">
+                <div class="search-box">
+                    <input type="text" placeholder="ابحث هنا" />
+                    <i class="fas fa-search"></i>
+                </div>
+
+                <div class="profile-section">
+                    <button onclick="toggleProfileDropdown()" class="profile-btn">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+
+                    <div id="profile-dropdown" class="dropdown-menu hidden" aria-hidden="true">
+                        <ul>
+                            <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل
+                                        التقييمات</span></a></li>
+                            <li><a href="#" onclick="showSettingsPage()"><i
+                                        class="fas fa-cog"></i><span>الإعدادات</span></a></li>
+                            <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل
+                                        الخروج</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="rating-history">
-          <div class="rating-summary">
-            <div class="average-rating">
-              <span class="rating-number">0.0</span>
-              <div class="stars-display">
-                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
-              </div>
-              <span class="total-reviews">(0 تقييم)</span>
-              <p>ستظهر تقييماتك هنا بعد إكمال الرحلات</p>
+        <!-- صفحات كاملة (مخفية افتراضياً) -->
+        <div id="rating-page" class="full-page hidden">
+            <div class="container-form">
+                <div class="form-box">
+                    <div class="page-header">
+                        <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
+                        <h2>سجل التقييمات</h2>
+                    </div>
+                    <div class="rating-history">
+                        <div class="rating-summary">
+                            <div class="average-rating">
+                                <span class="rating-number">0.0</span>
+                                <div class="stars-display">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                                <span class="total-reviews">(0 تقييم)</span>
+                                <p>ستظهر تقييماتك هنا بعد إكمال الرحلات</p>
+                            </div>
+                        </div>
+                        <div class="reviews-list">
+                            <div class="no-reviews">
+                                <i class="fas fa-star"></i>
+                                <p>لا توجد تقييمات بعد</p>
+                                <span>ستظهر تقييمات الركاب هنا بعد إكمال الرحلات</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <div class="reviews-list">
-            <div class="no-reviews">
-              <i class="fas fa-star-o"></i>
-              <p>لا توجد تقييمات بعد</p>
-              <span>ستظهر تقييمات الركاب هنا بعد إكمال الرحلات</span>
-            </div>
-          </div>
         </div>
+
+        <div id="settings-page" class="full-page hidden">
+            <div class="container-form">
+                <div class="form-box">
+                    <div class="page-header">
+                        <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
+                        <h2>الإعدادات</h2>
+                    </div>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label for="name">الاسم</label>
+                            <input type="text" id="name" placeholder="أدخل اسمك" />
+                        </div>
+                        <div class="form-group">
+                            <label for="password">كلمة المرور</label>
+                            <input type="password" id="password" placeholder="أدخل كلمة المرور الجديدة" />
+                        </div>
+                        <div class="form-group">
+                            <label for="emergency-contact">جهة الاتصال الطارئة</label>
+                            <input type="tel" id="emergency-contact" placeholder="رقم الهاتف للطوارئ" />
+                        </div>
+                        <button onclick="updateSettings()" class="update-btn">تحديث المعلومات</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+<button class="switch-role-btn" id="switchRoleBtn" onclick="showUploadModal()">
+    <i class="fas fa-car"></i>
+    <span>كن سائقاً</span>
+</button>   </div>
+  </div><!-- Upload Modal -->
+  <div class="upload-modal hidden" id="uploadModal">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h2>طلب أن تصبح سائقاً</h2><button class="close-btn" onclick="closeUploadModal()"> <i class="fas fa-times"></i> </button>
+    </div><!-- Requirements -->
+    <div class="requirements">
+     <h4><i class="fas fa-info-circle"></i> المتطلبات المطلوبة:</h4>
+     <ul>
+      <li>رخصة قيادة سارية المفعول</li>
+      <li>استمارة تسجيل المركبة</li>
+      <li>يجب أن تكون الوثائق واضحة ومقروءة</li>
+      <li>صيغ الملفات المقبولة: JPG, PNG, PDF (حد أقصى 5 ميجابايت)</li>
+     </ul>
+    </div><!-- Upload Form -->
+    <form id="uploadForm"><!-- License Upload -->
+     <div class="upload-section"><label for="licenseUpload"> <i class="fas fa-id-card"></i> رخصة القيادة * </label>
+      <div class="file-upload-area" onclick="document.getElementById('licenseUpload').click()"><input type="file" id="licenseUpload" accept=".jpg,.jpeg,.png,.pdf" required>
+       <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i>
+       </div>
+       <div class="upload-text">
+        اضغط هنا لرفع رخصة القيادة
+       </div>
+       <div class="upload-subtext">
+        أو اسحب الملف هنا
+       </div>
       </div>
-    </div>
-  </div>
-
-  <!-- صفحة الإعدادات -->
-  <div id="settings-page" class="full-page hidden">
-    <div class="container-form">
-      <div class="form-box">
-        <div class="page-header">
-          <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
-          <h2>الإعدادات</h2>
-        </div>
-
-        <div class="settings-form">
-          <div class="form-group">
-            <label for="name">الاسم</label>
-            <input type="text" id="name" placeholder="أدخل اسمك">
-          </div>
-
-          <div class="form-group">
-            <label for="password">كلمة المرور</label>
-            <input type="password" id="password" placeholder="أدخل كلمة المرور الجديدة">
-          </div>
-
-          <div class="form-group">
-            <label for="emergency-contact">جهة الاتصال الطارئة</label>
-            <input type="tel" id="emergency-contact" placeholder="رقم الهاتف للطوارئ">
-          </div>
-
-          <button onclick="updateSettings()" class="update-btn">تحديث المعلومات</button>
-        </div>
+      <div class="file-info" id="licenseInfo"><i class="fas fa-check-circle"></i> <span class="file-name"></span> <button type="button" class="remove-file" onclick="removeFile('license')"> <i class="fas fa-times"></i> </button>
       </div>
-    </div>
+     </div><!-- Vehicle Registration Upload -->
+     <div class="upload-section"><label for="registrationUpload"> <i class="fas fa-file-alt"></i> استمارة تسجيل المركبة * </label>
+      <div class="file-upload-area" onclick="document.getElementById('registrationUpload').click()"><input type="file" id="registrationUpload" accept=".jpg,.jpeg,.png,.pdf" required>
+       <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i>
+       </div>
+       <div class="upload-text">
+        اضغط هنا لرفع استمارة تسجيل المركبة
+       </div>
+       <div class="upload-subtext">
+        أو اسحب الملف هنا
+       </div>
+      </div>
+      <div class="file-info" id="registrationInfo"><i class="fas fa-check-circle"></i> <span class="file-name"></span> <button type="button" class="remove-file" onclick="removeFile('registration')"> <i class="fas fa-times"></i> </button>
+      </div>
+     </div><!-- Submit Button --> <button type="submit" class="submit-btn" id="submitBtn" disabled> <i class="fas fa-paper-plane"></i> إرسال الطلب </button> <!-- Success Message -->
+     <div class="success-message" id="successMessage">
+      <h4><i class="fas fa-check-circle"></i> تم إرسال طلبك بنجاح!</h4>
+      <p>سيتم مراجعة طلبك خلال 24-48 ساعة وسنقوم بإشعارك بالنتيجة</p>
+     </div>
+    </form>
+   </div>
   </div>
 
-
-  <script>
-    function toggleProfileDropdown() {
-      document.getElementById('profile-dropdown').classList.toggle('hidden');
-    }
-
-    function showRatingPage() {
-      document.getElementById('profile-dropdown').classList.add('hidden');
-      document.getElementById('rating-page').classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function showSettingsPage() {
-      document.getElementById('profile-dropdown').classList.add('hidden');
-      document.getElementById('settings-page').classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closePage() {
-      document.querySelectorAll('.full-page').forEach(page => page.classList.add('hidden'));
-      document.body.style.overflow = 'auto';
-    }
-
-    function updateSettings() {
-      const name = document.getElementById('name').value;
-      const password = document.getElementById('password').value;
-      const contact = document.getElementById('emergency-contact').value;
-
-      if (!name && !password && !contact) {
-        alert('يرجى ملء حقل واحد على الأقل');
-        return;
-      }
-
-      alert('تم تحديث المعلومات بنجاح');
-      closePage();
-    }
-
-    function logout() {
-      document.getElementById('profile-dropdown').classList.add('hidden');
-      showLogoutConfirmation();
-    }
-
-    function showLogoutConfirmation() {
-      const overlay = document.createElement('div');
-      overlay.className = 'logout-overlay';
-      overlay.innerHTML = `
-        <div class="logout-modal">
-          <div class="logout-content">
-            <i class="fas fa-sign-out-alt logout-icon"></i>
-            <h3>تسجيل الخروج</h3>
-            <p>هل أنت متأكد من تسجيل الخروج؟</p>
-            <div class="logout-buttons">
-              <button onclick="confirmLogout()" class="confirm-logout-btn">نعم، تسجيل الخروج</button>
-              <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
+        <!-- TRIPS SECTION (مثال) -->
+        <section class="trips-section">
+            <div class="trips-grid">
+                <!-- البطاقة 1 -->
+                <article class="trip-card" data-driver-name="أحمد محمد" data-driver-rating="4.8">
+                    <div>
+                        <div class="card-header">
+                            <h3>رحلة متاحة</h3>
+                            <div class="chat-icon"><i class="fas fa-comment"></i></div>
+                        </div>
+                        <div class="trip-info">
+                            <div class="location-row">
+                                <div class="location-item"> <i class="fas fa-map-marker-alt"></i>
+                                    <div><span class="label">نقطة الانطلاق:</span><span class="value">حي النخيل</span>
+                                    </div>
+                                </div>
+                                <div class="location-item"> <i class="fas fa-flag"></i>
+                                    <div><span class="label">نقطة الوصول:</span><span class="value">كلية الشريعة</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="details-row">
+                                <div class="detail-item"><i class="fas fa-calendar"></i>
+                                    <div><span class="label">اليوم:</span><span class="value">الاثنين</span></div>
+                                </div>
+                                <div class="detail-item"><i class="fas fa-clock"></i>
+                                    <div><span class="label">الوقت:</span><span class="value">08:00 ص</span></div>
+                                </div>
+                                <div class="detail-item"><i class="fas fa-users"></i>
+                                    <div><span class="label">المقاعد:</span><span class="value">3/4</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="driver-section">
+                        <div class="driver-info">
+                            <div class="default-avatar driver-avatar"><i class="fas fa-user"></i></div>
+                            <div class="driver-details">
+                                <div class="driver-name">أحمد محمد</div>
+                                <div class="driver-rating" tabindex="0" role="button" title="عرض بروفايل السائق">
+                                    <div class="stars"> <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star-half-alt"></i> </div> <span
+                                        class="rating-text">4.8</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-profile-btn">عرض البروفايل</div>
+                        <div class="book-btn">حجز</div>
+                    </div>
+                </article> <!-- البطاقة 2 -->
+                <article class="trip-card" data-driver-name="محمد علي" data-driver-rating="4.9">
+                    <div>
+                        <div class="card-header">
+                            <h3>رحلة متاحة</h3>
+                            <div class="chat-icon active"><i class="fas fa-comment"></i></div>
+                        </div>
+                        <div class="trip-info">
+                            <div class="location-row">
+                                <div class="location-item"><i class="fas fa-map-marker-alt"></i>
+                                    <div><span class="label">نقطة الانطلاق:</span><span class="value">حي الورود</span>
+                                    </div>
+                                </div>
+                                <div class="location-item"><i class="fas fa-flag"></i>
+                                    <div><span class="label">نقطة الوصول:</span><span class="value">كلية العلوم</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="details-row">
+                                <div class="detail-item"><i class="fas fa-calendar"></i>
+                                    <div><span class="label">اليوم:</span><span class="value">الثلاثاء</span></div>
+                                </div>
+                                <div class="detail-item"><i class="fas fa-clock"></i>
+                                    <div><span class="label">الوقت:</span><span class="value">10:30 ص</span></div>
+                                </div>
+                                <div class="detail-item"><i class="fas fa-users"></i>
+                                    <div><span class="label">المقاعد:</span><span class="value">2/4</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="driver-section">
+                        <div class="driver-info">
+                            <div class="default-avatar driver-avatar"><i class="fas fa-user"></i></div>
+                            <div class="driver-details">
+                                <div class="driver-name">محمد علي</div>
+                                <div class="driver-rating" tabindex="0" role="button" title="عرض بروفايل السائق">
+                                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i></div> <span class="rating-text">4.9</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-profile-btn">عرض البروفايل</div>
+                        <div class="book-btn">حجز</div>
+                    </div>
+                </article> <!-- البطاقة 3 -->
+                <article class="trip-card" data-driver-name="عبدالله إبراهيم" data-driver-rating="4.6">
+                    <div>
+                        <div class="card-header">
+                            <h3>رحلة متاحة</h3>
+                            <div class="chat-icon"><i class="fas fa-comment"></i></div>
+                        </div>
+                        <div class="trip-info">
+                            <div class="location-row">
+                                <div class="location-item"><i class="fas fa-map-marker-alt"></i>
+                                    <div><span class="label">نقطة الانطلاق:</span><span class="value">حي السلام</span>
+                                    </div>
+                                </div>
+                                <div class="location-item"><i class="fas fa-flag"></i>
+                                    <div><span class="label">نقطة الوصول:</span><span class="value">كلية الطب</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="details-row">
+                                <div class="detail-item"><i class="fas fa-calendar"></i>
+                                    <div><span class="label">اليوم:</span><span class="value">الأربعاء</span></div>
+                                </div>
+                                <div class="detail-item"><i class="fas fa-clock"></i>
+                                    <div><span class="label">الوقت:</span><span class="value">02:00 م</span></div>
+                                </div>
+                                <div class="detail-item"><i class="fas fa-users"></i>
+                                    <div><span class="label">المقاعد:</span><span class="value">4/4</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="driver-section">
+                        <div class="driver-info">
+                            <div class="default-avatar driver-avatar"><i class="fas fa-user"></i></div>
+                            <div class="driver-details">
+                                <div class="driver-name">عبدالله إبراهيم</div>
+                                <div class="driver-rating" tabindex="0" role="button" title="عرض بروفايل السائق">
+                                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i></div> <span class="rating-text">4.6</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-profile-btn">عرض البروفايل</div>
+                        <div class="book-btn">حجز</div>
+                    </div>
+                </article>
             </div>
-          </div>
-        </div>`;
-      document.body.appendChild(overlay);
-    }
+        </section>
+    </main>
 
-    function confirmLogout() {
-      document.querySelector('.logout-overlay').remove();
-      showLogoutSuccess();
-    }
 
-    function cancelLogout() {
-      document.querySelector('.logout-overlay').remove();
-    }
+    <div id="driver-modal-root"></div>
 
-    function showLogoutSuccess() {
-      const overlay = document.createElement('div');
-      overlay.className = 'logout-overlay';
-      overlay.innerHTML = `
-        <div class="logout-modal">
-          <div class="logout-content success">
-            <i class="fas fa-check-circle success-icon"></i>
-            <h3>تم تسجيل الخروج بنجاح</h3>
-            <p>شكراً لاستخدام التطبيق</p>
-            <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
-          </div>
-        </div>`;
-      document.body.appendChild(overlay);
-    }
+    <script>
+        // Profile dropdown
+        function toggleProfileDropdown() {
+            document.getElementById('profile-dropdown').classList.toggle('hidden');
+        }
 
-    function closeLogoutSuccess() {
-      document.querySelector('.logout-overlay').remove();
-    }
+        function showRatingPage() {
+            document.getElementById('profile-dropdown').classList.add('hidden');
+            document.getElementById('rating-page').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        function showSettingsPage() {
+            document.getElementById('profile-dropdown').classList.add('hidden');
+            document.getElementById('settings-page').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        function closePage() {
+            document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
+            document.body.style.overflow = 'auto';
+        }
+        function updateSettings() {
+            const name = document.getElementById('name').value;
+            const password = document.getElementById('password').value;
+            const contact = document.getElementById('emergency-contact').value;
+            if (!name && !password && !contact) { alert('يرجى ملء حقل واحد على الأقل'); return; }
+            alert('تم تحديث المعلومات بنجاح');
+            closePage();
+        }
 
-    document.addEventListener('click', function (event) {
-      const profileSection = document.querySelector('.profile-section');
-      if (!profileSection.contains(event.target)) {
-        document.getElementById('profile-dropdown').classList.add('hidden');
-      }
-    });
-  </script>
+        // Logout functions
+        function logout() {
+            document.getElementById('profile-dropdown').classList.add('hidden');
+            showLogoutConfirmation();
+        }
+
+        function showLogoutConfirmation() {
+            const overlay = document.createElement('div');
+            overlay.className = 'logout-overlay';
+            overlay.innerHTML = `
+                <div class="logout-modal">
+                    <div class="logout-content">
+                        <i class="fas fa-sign-out-alt logout-icon"></i>
+                        <h3>تسجيل الخروج</h3>
+                        <p>هل أنت متأكد من تسجيل الخروج؟</p>
+                        <div class="logout-buttons">
+                            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم، تسجيل الخروج</button>
+                            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+
+        function confirmLogout() {
+            document.querySelector('.logout-overlay').remove();
+            showLogoutSuccess();
+        }
+
+        function cancelLogout() {
+            document.querySelector('.logout-overlay').remove();
+        }
+
+        function showLogoutSuccess() {
+            const overlay = document.createElement('div');
+            overlay.className = 'logout-overlay';
+            overlay.innerHTML = `
+                <div class="logout-modal">
+                    <div class="logout-content success">
+                        <i class="fas fa-check-circle success-icon"></i>
+                        <h3>تم تسجيل الخروج بنجاح</h3>
+                        <p>شكراً لاستخدام التطبيق</p>
+                        <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+
+        function closeLogoutSuccess() {
+            document.querySelector('.logout-overlay').remove();
+        }
+
+
+        document.addEventListener('click', function (event) {
+            const profileSection = document.querySelector('.profile-section');
+            const dropdown = document.getElementById('profile-dropdown');
+            if (!profileSection.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Driver modal
+        function openDriverModal(driverName, driverRating) {
+            const root = document.getElementById('driver-modal-root');
+            root.innerHTML = `
+                <div class="driver-modal-overlay" id="driver-modal-overlay">
+                    <div class="driver-modal" role="dialog" aria-modal="true" aria-label="ملف السائق">
+                        <div class="driver-header">
+                            <div class="driver-avatar"><i class="fas fa-user"></i></div>
+                            <div>
+                                <h4>${driverName}</h4>
+                                <p>التقييم: ${driverRating}</p>
+                            </div>
+                        </div>
+                        <p>معلومات إضافية عن السائق يمكن وضعها هنا.</p>
+                        <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">
+                            <button onclick="closeDriverModal()" class="cancel-logout-btn">إغلاق</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('driver-modal-overlay').addEventListener('click', function (e) {
+                if (e.target.id === 'driver-modal-overlay') closeDriverModal();
+            });
+        }
+        function closeDriverModal() { document.getElementById('driver-modal-root').innerHTML = ''; }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.driver-rating').forEach(el => {
+                el.addEventListener('click', function () {
+                    const card = el.closest('.trip-card');
+                    const name = card.getAttribute('data-driver-name') || card.querySelector('.driver-name')?.textContent.trim();
+                    const rating = card.getAttribute('data-driver-rating') || card.querySelector('.rating-text')?.textContent.trim();
+                    openDriverModal(name, rating);
+                });
+            });
+
+            document.querySelectorAll('.card-profile-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const card = btn.closest('.trip-card');
+                    const name = card.getAttribute('data-driver-name') || card.querySelector('.driver-name')?.textContent.trim();
+                    const rating = card.getAttribute('data-driver-rating') || card.querySelector('.rating-text')?.textContent.trim();
+                    openDriverModal(name, rating);
+                });
+            });
+        });
+        
+         let isDriver = false;
+        let uploadedFiles = {
+            license: null,
+            registration: null
+        };
+
+        // Show upload modal
+        function showUploadModal() {
+            if (isDriver) {
+                // Switch back to passenger
+                switchToPassenger();
+            } else {
+                // Show upload modal to become driver
+                document.getElementById('uploadModal').classList.remove('hidden');
+            }
+        }
+
+        // Close upload modal
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.add('hidden');
+            resetForm();
+        }
+
+        // Switch to driver mode
+        function switchToDriver() {
+            isDriver = true;
+            const switchBtn = document.getElementById('switchRoleBtn');
+            const statusDot = document.getElementById('statusDot');
+            const roleText = document.getElementById('roleText');
+
+            switchBtn.className = 'switch-role-btn driver-mode';
+            switchBtn.innerHTML = '<i class="fas fa-user"></i><span>كن راكباً</span>';
+            statusDot.classList.add('driver');
+            roleText.textContent = 'سائق';
+        }
+
+        // Switch to passenger mode
+        function switchToPassenger() {
+            isDriver = false;
+            const switchBtn = document.getElementById('switchRoleBtn');
+            const statusDot = document.getElementById('statusDot');
+            const roleText = document.getElementById('roleText');
+
+            switchBtn.className = 'switch-role-btn';
+            switchBtn.innerHTML = '<i class="fas fa-car"></i><span>كن سائقاً</span>';
+            statusDot.classList.remove('driver');
+            roleText.textContent = 'راكب';
+        }
+
+        // File upload handling
+        function setupFileUpload(inputId, infoId, type) {
+            const input = document.getElementById(inputId);
+            const info = document.getElementById(infoId);
+            const uploadArea = input.parentElement;
+
+            input.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    if (validateFile(file)) {
+                        uploadedFiles[type] = file;
+                        info.querySelector('.file-name').textContent = file.name;
+                        info.classList.add('show');
+                        uploadArea.style.borderColor = '#4CAF50';
+                        uploadArea.style.background = '#f0fff0';
+                        checkFormCompletion();
+                    } else {
+                        input.value = '';
+                    }
+                }
+            });
+
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    input.files = files;
+                    input.dispatchEvent(new Event('change'));
+                }
+            });
+        }
+
+        // Validate file
+        function validateFile(file) {
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+            const maxSize = 5 * 1024 * 1024; // 5MB
+
+            if (!allowedTypes.includes(file.type)) {
+                alert('نوع الملف غير مدعوم. يرجى رفع ملف JPG أو PNG أو PDF');
+                return false;
+            }
+
+            if (file.size > maxSize) {
+                alert('حجم الملف كبير جداً. يرجى رفع ملف أصغر من 5 ميجابايت');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Remove file
+        function removeFile(type) {
+            uploadedFiles[type] = null;
+            const input = document.getElementById(type + 'Upload');
+            const info = document.getElementById(type + 'Info');
+            const uploadArea = input.parentElement;
+
+            input.value = '';
+            info.classList.remove('show');
+            uploadArea.style.borderColor = '#ddd';
+            uploadArea.style.background = '#f9f9f9';
+            checkFormCompletion();
+        }
+
+        // Check form completion
+        function checkFormCompletion() {
+            const submitBtn = document.getElementById('submitBtn');
+            const hasLicense = uploadedFiles.license !== null;
+            const hasRegistration = uploadedFiles.registration !== null;
+
+            submitBtn.disabled = !(hasLicense && hasRegistration);
+        }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('uploadForm').reset();
+            uploadedFiles = { license: null, registration: null };
+            document.querySelectorAll('.file-info').forEach(info => {
+                info.classList.remove('show');
+            });
+            document.querySelectorAll('.file-upload-area').forEach(area => {
+                area.style.borderColor = '#ddd';
+                area.style.background = '#f9f9f9';
+            });
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('successMessage').classList.remove('show');
+        }
+
+        // Handle form submission
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Show loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+            submitBtn.disabled = true;
+            
+            // Simulate upload process
+            setTimeout(() => {
+                successMessage.classList.add('show');
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> تم الإرسال بنجاح';
+                
+                // Switch to driver mode and close modal after 2 seconds
+                setTimeout(() => {
+                    switchToDriver();
+                    closeUploadModal();
+                }, 2000);
+            }, 2000);
+        });
+
+        // Initialize file upload handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFileUpload('licenseUpload', 'licenseInfo', 'license');
+            setupFileUpload('registrationUpload', 'registrationInfo', 'registration');
+        });
+            // Close modal when clicking outside
+            document.getElementById('uploadModal').addEventListener('click', function(e){
+                if (e.target === this) {
+                    closeUploadModal();
+                };
+                });
+              
+
+    </script>
+
 </body>
 
 </html>
