@@ -61,12 +61,6 @@
       text-align: left;
     }
 
-    input[type="email"]:focus {
-      border-color: #487788;
-      box-shadow: 0 4px 14px rgba(113,99,186,0.06);
-      outline: none;
-    }
-
     .error-msg, .success-msg {
       margin-top: 10px;
       padding: 10px 12px;
@@ -78,13 +72,11 @@
     .error-msg {
       background: #f8d7da;
       color: #721c24;
-      border: 1px solid #f5c6cb;
     }
 
     .success-msg {
       background: #e6f7e9;
       color: #216b39;
-      border: 1px solid #b5e0b9;
     }
 
     .btn {
@@ -97,15 +89,14 @@
       cursor: pointer;
       background: #265262;
       color: #fff;
-      transition: background .18s ease, transform .06s ease;
+      transition: background .18s ease;
       margin-top: 14px;
     }
 
-    .btn:hover:not([disabled]) { background: #265262; transform: translateY(-1px); }
-    .btn[disabled] { opacity: 0.6; cursor: not-allowed; }
-
+    .btn:hover { background: #1e414d; }
   </style>
 </head>
+
 <body>
   <div class="card">
     <h2>التحقق من البريد الإلكتروني</h2>
@@ -113,9 +104,10 @@
 
     <form id="emailForm" novalidate>
       <label for="email">البريد الإلكتروني الجامعي</label>
-      <input id="email" type="email" placeholder="name@sm.imamu.edu.sa" autocomplete="email" required>
+      <input id="email" type="email" placeholder="name@sm.imamu.edu.sa" required>
+
       <div id="error" class="error-msg"></div>
-      <div id="success" class="success-msg"></div>
+
       <button id="sendBtn" type="button" class="btn">أرسل رمز التحقق</button>
     </form>
   </div>
@@ -124,32 +116,47 @@
     const emailInput = document.getElementById('email');
     const sendBtn = document.getElementById('sendBtn');
     const errorDiv = document.getElementById('error');
-    const successDiv = document.getElementById('success');
 
-    const allowedSuffix = '@sm.imamu.edu.sa';
-
-    sendBtn.addEventListener('click', () => {
+    sendBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim().toLowerCase();
 
-      // إخفاء الرسائل القديمة أولاً
-      errorDiv.style.display = 'none';
-      successDiv.style.display = 'none';
+      errorDiv.style.display = "none";
 
-      if (!email.endsWith(allowedSuffix)) {
-        errorDiv.textContent = '❌ البريد غير صحيح، يجب أن ينتهي بـ @sm.imamu.edu.sa';
-        errorDiv.style.display = 'block';
+      if (!email.endsWith("@sm.imamu.edu.sa")) {
+        errorDiv.textContent = " البريد غير صحيح، يجب أن ينتهي بـ @sm.imamu.edu.sa";
+        errorDiv.style.display = "block";
         return;
       }
 
-      successDiv.textContent = `📩 تم إرسال رمز التحقق إلى ${email}`;
-      successDiv.style.display = 'block';
-      sendBtn.disabled = true;
-      sendBtn.textContent = 'تم الإرسال ✔️';
-      setTimeout(() => {
-        sendBtn.disabled = false;
-        sendBtn.textContent = 'أرسل رمز التحقق';
-      }, 4000);
+      try {
+        const response = await fetch('/api/auth/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            resetPasswordMode: true
+          })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          errorDiv.textContent = result.message;
+          errorDiv.style.display = "block";
+          return;
+        }
+
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("resetPasswordMode", "true");
+
+        window.location.href = "otp.html";
+
+      } catch (err) {
+        errorDiv.textContent = "خطأ أثناء إرسال رمز التحقق";
+        errorDiv.style.display = "block";
+      }
     });
   </script>
+
 </body>
 </html>

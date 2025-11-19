@@ -2,6 +2,7 @@ package com.example.rideapp.services;
 
 import java.util.Map;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -74,6 +75,19 @@ public class AuthService {
             driver.setStatus("pending"); // في انتظار الموافقة
             driverRepository.save(driver);
         }
+    }
+
+    public void updatePassword(String email, String newPassword) {
+        Optional<UserModel> userOpt = userRepository.findById(email);
+
+        if (userOpt.isEmpty()) {
+            throw new RuntimeException("المستخدم غير موجود");
+        }
+
+        UserModel user = userOpt.get();
+        String encoded = new BCryptPasswordEncoder().encode(newPassword);
+        user.setPassword(encoded);
+        userRepository.save(user);
     }
 
 }
