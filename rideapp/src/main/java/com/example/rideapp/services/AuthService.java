@@ -66,13 +66,13 @@ public class AuthService {
             DriverModel driver = new DriverModel(
                     user.getEmail(),
                     (String) driverData.get("licenseNumber"),
-                    "", // سيتم تعبئتها لاحقاً
-                    "", // سيتم تعبئتها لاحقاً
+                    "", 
+                    "", 
                     (String) driverData.get("carModel"),
                     (String) driverData.get("carColor"),
                     (String) driverData.get("carPlate"),
                     (int) driverData.get("seatsAvailable"));
-            driver.setStatus("pending"); // في انتظار الموافقة
+            driver.setStatus("pending"); 
             driverRepository.save(driver);
         }
     }

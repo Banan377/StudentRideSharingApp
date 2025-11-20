@@ -27,9 +27,7 @@ public class AuthController {
     private StudentRepository studentRepository;
 
 
-    // ===========================================================
-    //                إرسال كود التحقق (OTP)
-    // ===========================================================
+    
     @PostMapping("/send-otp")
     public ResponseEntity<?> sendOtp(@RequestBody Map<String, String> request) {
         String email = request.get("email");
