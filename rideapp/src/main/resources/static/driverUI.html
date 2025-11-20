@@ -31,23 +31,27 @@
         إنشاء رحلة
       </button>
 
-      <!-- الملف الشخصي -->
-      <div class="profile-section">
-        <button onclick="toggleProfileDropdown()" class="profile-btn">
-          <i class="fas fa-user-circle"></i>
-        </button>
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <!-- زر التبديل بين الأدوار -->
+        <button class="switch-role-btn" onclick="switchRole()">تبديل إلى راكب</button>
+
+        <!-- الملف الشخصي -->
+        <div class="profile-section">
+          <button onclick="toggleProfileDropdown()" class="profile-btn">
+            <i class="fas fa-user-circle"></i>
+          </button>
 
           <!-- قائمة البروفايل المنسدلة -->
-        <div id="profile-dropdown" class="dropdown-menu hidden">
-          <ul>
-            <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل التقييمات</span></a></li>
-            <li><a href="#" onclick="showSettingsPage()"><i class="fas fa-cog"></i><span>الإعدادات</span></a></li>
-            <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
-          </ul>
+          <div id="profile-dropdown" class="dropdown-menu hidden">
+            <ul>
+              <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل التقييمات</span></a></li>
+              <li><a href="#" onclick="showSettingsPage()"><i class="fas fa-cog"></i><span>الإعدادات</span></a></li>
+              <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
     <!-- منطقة المحتوى (الإحصائيات + كارد الرحلة والركاب) -->
     <div class="content-area">
@@ -139,69 +143,69 @@
     </div>
 
     <!-- صفحة التقييمات -->
-  <div id="rating-page" class="full-page hidden">
-    <div class="container-form">
-      <div class="form-box">
-        <div class="page-header">
-          <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
-          <h2>سجل التقييمات</h2>
-        </div>
+    <div id="rating-page" class="full-page hidden">
+      <div class="container-form">
+        <div class="form-box">
+          <div class="page-header">
+            <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
+            <h2>سجل التقييمات</h2>
+          </div>
 
-        <div class="rating-history">
-          <div class="rating-summary">
-            <div class="average-rating">
-              <span class="rating-number">0.0</span>
-              <div class="stars-display">
-                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <div class="rating-history">
+            <div class="rating-summary">
+              <div class="average-rating">
+                <span class="rating-number">0.0</span>
+                <div class="stars-display">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <span class="total-reviews">(0 تقييم)</span>
+                <p>ستظهر تقييماتك هنا بعد إكمال الرحلات</p>
               </div>
-              <span class="total-reviews">(0 تقييم)</span>
-              <p>ستظهر تقييماتك هنا بعد إكمال الرحلات</p>
             </div>
-          </div>
 
-          <div class="reviews-list">
-            <div class="no-reviews">
-              <i class="fas fa-star-o"></i>
-              <p>لا توجد تقييمات بعد</p>
-              <span>ستظهر تقييمات الركاب هنا بعد إكمال الرحلات</span>
+            <div class="reviews-list">
+              <div class="no-reviews">
+                <i class="fas fa-star-o"></i>
+                <p>لا توجد تقييمات بعد</p>
+                <span>ستظهر تقييمات الركاب هنا بعد إكمال الرحلات</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!--  الإعدادات -->
-  <div id="settings-page" class="full-page hidden">
-    <div class="container-form">
-      <div class="form-box">
-        <div class="page-header">
-          <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
-          <h2>الإعدادات</h2>
-        </div>
-
-        <div class="settings-form">
-          <div class="form-group">
-            <label for="name">الاسم</label>
-            <input type="text" id="name" placeholder="أدخل اسمك">
+    <!-- صفحة الإعدادات -->
+    <div id="settings-page" class="full-page hidden">
+      <div class="container-form">
+        <div class="form-box">
+          <div class="page-header">
+            <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
+            <h2>الإعدادات</h2>
           </div>
 
-          <div class="form-group">
-            <label for="password">كلمة المرور</label>
-            <input type="password" id="password" placeholder="أدخل كلمة المرور الجديدة">
-          </div>
+          <div class="settings-form">
+            <div class="form-group">
+              <label for="name">الاسم</label>
+              <input type="text" id="name" placeholder="أدخل اسمك">
+            </div>
 
-          <div class="form-group">
-            <label for="emergency-contact">جهة اتصال الطوارئ</label>
-            <input type="tel" id="emergency-contact" placeholder="رقم الهاتف للطوارئ">
-          </div>
+            <div class="form-group">
+              <label for="password">كلمة المرور</label>
+              <input type="password" id="password" placeholder="أدخل كلمة المرور الجديدة">
+            </div>
 
-          <button onclick="updateSettings()" class="update-btn">تحديث المعلومات</button>
+            <div class="form-group">
+              <label for="emergency-contact">جهة اتصال الطوارئ</label>
+              <input type="tel" id="emergency-contact" placeholder="رقم الهاتف للطوارئ">
+            </div>
+
+            <button onclick="updateSettings()" class="update-btn">تحديث المعلومات</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
     <!-- البوب أب لعرض تفاصيل الراكب -->
     <div id="popup" class="full-page hidden">
@@ -216,51 +220,51 @@
     </div>
 
     <!-- الجافاسكربت -->
-  <script>
-    function toggleProfileDropdown() {
-      document.getElementById('profile-dropdown').classList.toggle('hidden');
-    }
-
-    function showRatingPage() {
-      document.getElementById('profile-dropdown').classList.add('hidden');
-      document.getElementById('rating-page').classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function showSettingsPage() {
-      document.getElementById('profile-dropdown').classList.add('hidden');
-      document.getElementById('settings-page').classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closePage() {
-      document.querySelectorAll('.full-page').forEach(page => page.classList.add('hidden'));
-      document.body.style.overflow = 'auto';
-    }
-
-    function updateSettings() {
-      const name = document.getElementById('name').value;
-      const password = document.getElementById('password').value;
-      const contact = document.getElementById('emergency-contact').value;
-
-      if (!name && !password && !contact) {
-        alert('يرجى ملء حقل واحد على الأقل');
-        return;
+    <script>
+      function toggleProfileDropdown() {
+        document.getElementById('profile-dropdown').classList.toggle('hidden');
       }
 
-      alert('تم تحديث المعلومات بنجاح');
-      closePage();
-    }
+      function showRatingPage() {
+        document.getElementById('profile-dropdown').classList.add('hidden');
+        document.getElementById('rating-page').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
 
-    function logout() {
-      document.getElementById('profile-dropdown').classList.add('hidden');
-      showLogoutConfirmation();
-    }
+      function showSettingsPage() {
+        document.getElementById('profile-dropdown').classList.add('hidden');
+        document.getElementById('settings-page').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
 
-    function showLogoutConfirmation() {
-      const overlay = document.createElement('div');
-      overlay.className = 'logout-overlay';
-      overlay.innerHTML = `
+      function closePage() {
+        document.querySelectorAll('.full-page').forEach(page => page.classList.add('hidden'));
+        document.body.style.overflow = 'auto';
+      }
+
+      function updateSettings() {
+        const name = document.getElementById('name').value;
+        const password = document.getElementById('password').value;
+        const contact = document.getElementById('emergency-contact').value;
+
+        if (!name && !password && !contact) {
+          alert('يرجى ملء حقل واحد على الأقل');
+          return;
+        }
+
+        alert('تم تحديث المعلومات بنجاح');
+        closePage();
+      }
+
+      function logout() {
+        document.getElementById('profile-dropdown').classList.add('hidden');
+        showLogoutConfirmation();
+      }
+
+      function showLogoutConfirmation() {
+        const overlay = document.createElement('div');
+        overlay.className = 'logout-overlay';
+        overlay.innerHTML = `
         <div class="logout-modal">
           <div class="logout-content">
             <i class="fas fa-sign-out-alt logout-icon"></i>
@@ -272,22 +276,22 @@
             </div>
           </div>
         </div>`;
-      document.body.appendChild(overlay);
-    }
+        document.body.appendChild(overlay);
+      }
 
-    function confirmLogout() {
-      document.querySelector('.logout-overlay').remove();
-      showLogoutSuccess();
-    }
+      function confirmLogout() {
+        document.querySelector('.logout-overlay').remove();
+        showLogoutSuccess();
+      }
 
-    function cancelLogout() {
-      document.querySelector('.logout-overlay').remove();
-    }
+      function cancelLogout() {
+        document.querySelector('.logout-overlay').remove();
+      }
 
-    function showLogoutSuccess() {
-      const overlay = document.createElement('div');
-      overlay.className = 'logout-overlay';
-      overlay.innerHTML = `
+      function showLogoutSuccess() {
+        const overlay = document.createElement('div');
+        overlay.className = 'logout-overlay';
+        overlay.innerHTML = `
         <div class="logout-modal">
           <div class="logout-content success">
             <i class="fas fa-check-circle success-icon"></i>
@@ -295,19 +299,19 @@
             <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
           </div>
         </div>`;
-      document.body.appendChild(overlay);
-    }
-
-    function closeLogoutSuccess() {
-      document.querySelector('.logout-overlay').remove();
-    }
-
-    document.addEventListener('click', function (event) {
-      const profileSection = document.querySelector('.profile-section');
-      if (!profileSection.contains(event.target)) {
-        document.getElementById('profile-dropdown').classList.add('hidden');
+        document.body.appendChild(overlay);
       }
-    });
+
+      function closeLogoutSuccess() {
+        document.querySelector('.logout-overlay').remove();
+      }
+
+      document.addEventListener('click', function (event) {
+        const profileSection = document.querySelector('.profile-section');
+        if (!profileSection.contains(event.target)) {
+          document.getElementById('profile-dropdown').classList.add('hidden');
+        }
+      });
 
       function switchRole() {
         window.location.href = "passengerRides.html";
@@ -325,7 +329,8 @@
       function closePopup() {
         document.getElementById("popup").classList.add("hidden");
       }
-  </script>
+    </script>
+
 </body>
 
 </html>
