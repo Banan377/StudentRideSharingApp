@@ -64,9 +64,6 @@ public class AuthController {
     }
 
 
-    // ===========================================================
-    //                  التحقق من كود OTP
-    // ===========================================================
     @PostMapping("/verify-otp")
     public ResponseEntity<?> verifyOtp(@RequestBody Map<String, String> request) {
         String email = request.get("email");
@@ -83,9 +80,7 @@ public class AuthController {
     }
 
 
-    // ===========================================================
-    //                 إنشاء حساب جديد (تسجيل)
-    // ===========================================================
+   
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, Object> requestData) {
         try {
@@ -131,9 +126,7 @@ public class AuthController {
     }
 
 
-    // ===========================================================
-    //             إعادة تعيين كلمة المرور
-    // ===========================================================
+    
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
         String email = request.get("email");

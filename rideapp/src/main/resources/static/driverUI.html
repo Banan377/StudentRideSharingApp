@@ -4,15 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <title>واجهة السائق</title>
-
-
   <link rel="stylesheet" href="driver.css">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
-  <!-- القائمة  -->
+
+  <!-- القائمة الجانبية -->
   <div class="sidebar">
     <div class="logo"></div>
     <ul class="menue">
@@ -21,24 +21,23 @@
       <li><a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a></li>
       <li><a href="#"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
     </ul>
-
-
   </div>
 
-
-
-  <div class="container">
-    <div class="header">
+  <!-- المحتوى الرئيسي -->
+  <div class="main-content">
+    <!-- شريط أعلى الصفحة (زر إنشاء رحلة + البروفايل) -->
+    <div class="top-bar">
       <button type="button" class="create-btn" onclick="window.location.href='creatRide.html'">
         إنشاء رحلة
       </button>
 
       <!-- الملف الشخصي -->
-
       <div class="profile-section">
         <button onclick="toggleProfileDropdown()" class="profile-btn">
           <i class="fas fa-user-circle"></i>
         </button>
+
+          <!-- قائمة البروفايل المنسدلة -->
         <div id="profile-dropdown" class="dropdown-menu hidden">
           <ul>
             <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل التقييمات</span></a></li>
@@ -50,8 +49,96 @@
     </div>
   </div>
 
+    <!-- منطقة المحتوى (الإحصائيات + كارد الرحلة والركاب) -->
+    <div class="content-area">
+      <!-- الإحصائيات -->
+      <div class="stats-card">
+        <div class="stat-box">
+          <p>الطلبات الجديدة</p><span id="new-requests">2</span>
+        </div>
+        <div class="stat-box">
+          <p>المقبولة</p><span id="accepted">0</span>
+        </div>
+        <div class="stat-box">
+          <p>المرفوضة</p><span id="rejected">0</span>
+        </div>
+        <div class="stat-box">
+          <p>المقاعد المتاحة</p><span id="seats-left">1/3</span>
+        </div>
+      </div>
 
-  <!-- التقييمات -->
+      <!-- حاوية الكاردات -->
+      <div class="trips-container">
+
+        <!-- الكارد الرئيسي للرحلة 1 -->
+        <div class="trip-card">
+          <!-- أعلى الكارد: معلومات الرحلة الرئيسية -->
+          <div class="trip-header">
+            <div class="trip-header-text">
+              <h3 class="trip-title">رحلة إلى الجامعة</h3>
+              <p class="trip-subtitle">تفاصيل الرحلة الحالية</p>
+            </div>
+            <div class="trip-seats-box">
+              <span class="trip-seats-label">المقاعد المتبقية</span>
+              <span class="trip-seats-value">1/3</span>
+            </div>
+          </div>
+
+          <!-- بيانات الرحلة (تاريخ، وقت، موقع انطلاق) -->
+          <div class="trip-meta">
+            <div class="trip-meta-item">
+              <span class="trip-meta-label">تاريخ الرحلة</span>
+              <span class="trip-meta-value">2025-11-21</span>
+            </div>
+            <div class="trip-meta-item">
+              <span class="trip-meta-label">وقت الرحلة</span>
+              <span class="trip-meta-value">4:30 مساءً</span>
+            </div>
+            <div class="trip-meta-item">
+              <span class="trip-meta-label">موقع الانطلاق</span>
+              <span class="trip-meta-value">حي الياسمين</span>
+            </div>
+          </div>
+
+          <!-- طلبات الركاب داخل الكارد الرئيسي -->
+          <div class="passengers-list">
+            <!-- طلب راكب 1 -->
+            <div class="passenger-card booking-request"
+              onclick="openPassengerInfo('أحمد محمد','حي الياسمين','جامعة الملك سعود','4:30 مساءً')">
+              <div class="passenger-info">
+                <p class="passenger-name">أحمد محمد</p>
+                <p class="passenger-location">موقع الركوب: حي الياسمين</p>
+              </div>
+              <div class="passenger-actions">
+                <button class="accept-btn action-button">قبول</button>
+                <button class="reject-btn action-button">رفض</button>
+              </div>
+            </div>
+
+            <!-- طلب راكب 2 -->
+            <div class="passenger-card booking-request"
+              onclick="openPassengerInfo('فاطمة علي','الملز','جامعة نورة','6:00 صباحًا')">
+              <div class="passenger-info">
+                <p class="passenger-name">فاطمة علي</p>
+                <p class="passenger-location">موقع الركوب: حي الملز</p>
+              </div>
+              <div class="passenger-actions">
+                <button class="accept-btn action-button">قبول</button>
+                <button class="reject-btn action-button">رفض</button>
+              </div>
+            </div>
+          </div>
+          <!-- نهاية طلبات الركاب داخل الكارد -->
+        </div>
+        <!-- نهاية الكارد الرئيسي للرحلة 1 -->
+
+
+      </div>
+      <!-- نهاية منطقة المحتوى -->
+
+    </div>
+
+    <!-- صفحة التقييمات -->
   <div id="rating-page" class="full-page hidden">
     <div class="container-form">
       <div class="form-box">
@@ -116,7 +203,19 @@
     </div>
   </div>
 
+    <!-- البوب أب لعرض تفاصيل الراكب -->
+    <div id="popup" class="full-page hidden">
+      <div class="form-box">
+        <h2 id="popup-name"></h2>
+        <p>موقع الانطلاق: <span id="popup-start"></span></p>
+        <p>الوجهة: <span id="popup-end"></span></p>
+        <p>الوقت: <span id="popup-time"></span></p>
 
+        <button class="update-btn" onclick="closePopup()">إغلاق</button>
+      </div>
+    </div>
+
+    <!-- الجافاسكربت -->
   <script>
     function toggleProfileDropdown() {
       document.getElementById('profile-dropdown').classList.toggle('hidden');
@@ -209,6 +308,23 @@
         document.getElementById('profile-dropdown').classList.add('hidden');
       }
     });
+
+      function switchRole() {
+        window.location.href = "passengerRides.html";
+      }
+
+      function openPassengerInfo(name, start, end, time) {
+        document.getElementById("popup-name").textContent = name;
+        document.getElementById("popup-start").textContent = start;
+        document.getElementById("popup-end").textContent = end;
+        document.getElementById("popup-time").textContent = time;
+
+        document.getElementById("popup").classList.remove("hidden");
+      }
+
+      function closePopup() {
+        document.getElementById("popup").classList.add("hidden");
+      }
   </script>
 </body>
 
