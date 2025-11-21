@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إعدادات السائق</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: #ccddea;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: #265262;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      margin: 0;
+    }
+
+    .form-content {
+      padding: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      background: white;
+    }
+
+    input:focus, select:focus {
+      border-color: #487788;
+      outline: none;
+    }
+
+    .readonly-field {
+      background-color: #f5f5f5;
+      color: #666;
+      cursor: not-allowed;
+    }
+
+    .field-note {
+      font-size: 12px;
+      color: #888;
+      margin-top: 5px;
+      font-style: italic;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 20px;
+      margin-top: 5px;
+    }
+
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: normal;
+      cursor: pointer;
+    }
+
+    .radio-group input[type="radio"]:disabled + span {
+      color: #666;
+      cursor: not-allowed;
+    }
+
+    .section-title {
+      background: #f5f5f5;
+      padding: 10px 15px;
+      margin: 25px 0 15px 0;
+      border-right: 3px solid #487788;
+      font-weight: 600;
+      color: #265262;
+      font-size: 16px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .submit-btn {
+      background: #487788;
+      color: white;
+      border: none;
+    }
+
+    .submit-btn:hover {
+      background: #265262;
+    }
+
+    .cancel-btn {
+      background: white;
+      color: #666;
+    }
+
+    .cancel-btn:hover {
+      background: #f5f5f5;
+    }
+
+    .password-toggle {
+      color: #487788;
+      text-decoration: none;
+      font-size: 13px;
+      margin-top: 5px;
+      display: inline-block;
+    }
+
+    .password-toggle:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- الهيدر -->
+    <div class="header">
+      <h1><i class="fas fa-cog"></i> إعدادات الحساب - السائق</h1>
+    </div>
+
+    <!-- محتوى النموذج -->
+    <div class="form-content">
+      <form id="driverSettingsForm">
+        <!-- المعلومات الأساسية -->
+        <div class="section-title">المعلومات الشخصية</div>
+        
+        <div class="form-group">
+          <label for="firstName">الاسم الأول</label>
+          <input type="text" id="firstName" value="أحمد" class="readonly-field" readonly>
+          <div class="field-note">لا يمكن تعديل الاسم الأول</div>
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">الاسم الأخير</label>
+          <input type="text" id="lastName" value="محمد" class="readonly-field" readonly>
+          <div class="field-note">لا يمكن تعديل الاسم الأخير</div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">البريد الإلكتروني الجامعي</label>
+          <input type="email" id="email" value="ahmed.mohamed@university.edu" class="readonly-field" readonly>
+          <div class="field-note">لا يمكن تعديل البريد الإلكتروني</div>
+        </div>
+
+        <div class="form-group">
+          <label for="college">الكلية</label>
+          <input type="text" id="college" value="كلية علوم الحاسب">
+        </div>
+
+        <div class="form-group">
+          <label>الجنس</label>
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="gender" value="male" checked disabled>
+              <span>ذكر</span>
+            </label>
+            <label>
+              <input type="radio" name="gender" value="female" disabled>
+              <span>أنثى</span>
+            </label>
+          </div>
+          <div class="field-note">لا يمكن تعديل الجنس</div>
+        </div>
+
+        <!-- كلمة المرور -->
+        <div class="section-title">كلمة المرور</div>
+        
+        <div class="form-group">
+          <label for="currentPassword">كلمة المرور الحالية</label>
+          <input type="password" id="currentPassword">
+          <a href="verifyEmail.html" class="password-toggle">ترغب بتغيير كلمة المرور؟</a>
+        </div>
+
+    
+
+        <!-- بيانات الطوارئ -->
+        <div class="section-title">بيانات الطوارئ</div>
+        
+        <div class="form-group">
+          <label for="emergency1">رقم هاتف الطوارئ</label>
+          <input type="tel" id="emergency1" value="0551234567">
+        </div>
+
+        <div class="form-group">
+          <label for="emergency2">رقم هاتف إضافي (اختياري)</label>
+          <input type="tel" id="emergency2" value="0557654321">
+        </div>
+
+        <!-- بيانات السيارة -->
+        <div class="section-title">بيانات السيارة</div>
+        
+        <div class="form-group">
+          <label for="licenseNumber">رقم رخصة القيادة</label>
+          <input type="text" id="licenseNumber" value="123456789" class="readonly-field" readonly>
+          <div class="field-note">لا يمكن تعديل رقم الرخصة</div>
+        </div>
+
+        <div class="form-group">
+          <label for="carPlate">رقم لوحة السيارة</label>
+          <input type="text" id="carPlate" value="أ ب ج 1234">
+        </div>
+
+        <div class="form-group">
+          <label for="carModel">طراز السيارة</label>
+          <input type="text" id="carModel" value="كامري 2023">
+        </div>
+
+        <div class="form-group">
+          <label for="carColor">لون السيارة</label>
+          <input type="text" id="carColor" value="أبيض">
+        </div>
+
+        <div class="form-group">
+          <label for="seatsAvailable">عدد المقاعد المتاحة</label>
+          <select id="seatsAvailable">
+            <option value="1">1 مقعد</option>
+            <option value="2">2 مقاعد</option>
+            <option value="3">3 مقاعد</option>
+            <option value="4" selected>4 مقاعد</option>
+            <option value="5">5 مقاعد</option>
+            <option value="6">6 مقاعد</option>
+            <option value="7">7 مقاعد</option>
+          </select>
+        </div>
+
+        <!-- أزرار -->
+        <div class="form-actions">
+          <a href="driverUI.html" class="btn cancel-btn">إلغاء</a>
+          <button type="submit" class="btn submit-btn">حفظ التغييرات</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('driverSettingsForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // التحقق من كلمة المرور
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      if (newPassword && newPassword !== confirmPassword) {
+        alert('كلمات المرور غير متطابقة');
+        return;
+      }
+      
+      // التحقق من الحقول الإجبارية
+      const requiredFields = ['emergency1', 'carPlate', 'carModel', 'carColor'];
+      let isValid = true;
+      
+      requiredFields.forEach(field => {
+        const input = document.getElementById(field);
+        if (!input.value.trim()) {
+          isValid = false;
+          input.style.borderColor = 'red';
+        } else {
+          input.style.borderColor = '#ddd';
+        }
+      });
+      
+      if (!isValid) {
+        alert('يرجى ملء جميع الحقول الإجبارية');
+        return;
+      }
+      
+      alert('تم حفظ الإعدادات بنجاح');
+      window.location.href = 'driverUI.html';
+    });
+  </script>
+</body>
+</html>
