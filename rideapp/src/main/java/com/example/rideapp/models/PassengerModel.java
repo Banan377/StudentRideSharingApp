@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "passengers")
-public class PassengerModel {
+public class PassengerModel extends UserModel {
     @Id
     private String email;
 
