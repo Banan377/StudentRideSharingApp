@@ -176,330 +176,114 @@
     </div>
 
 
-    <script>
-      // Profile dropdown
+     <script>
+
+      /* ---------------- القائمة ---------------- */
       function toggleProfileDropdown() {
         document.getElementById('profile-dropdown').classList.toggle('hidden');
       }
 
+      document.addEventListener('click', function (event) {
+        const profile = document.querySelector('.profile-section');
+        const dropdown = document.getElementById('profile-dropdown');
+        if (!profile.contains(event.target)) dropdown.classList.add('hidden');
+      });
+
+      /* ---------------- الصفحات ---------------- */
       function showRatingPage() {
-        document.getElementById('profile-dropdown').classList.add('hidden');
         document.getElementById('rating-page').classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
       }
+
       function showSettingsPage() {
-        document.getElementById('profile-dropdown').classList.add('hidden');
         document.getElementById('settings-page').classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
       }
+
       function closePage() {
         document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
-        document.body.style.overflow = 'auto';
-      }
-      function updateSettings() {
-        const name = document.getElementById('name').value;
-        const password = document.getElementById('password').value;
-        const contact = document.getElementById('emergency-contact').value;
-        if (!name && !password && !contact) { alert('يرجى ملء حقل واحد على الأقل'); return; }
-        alert('تم تحديث المعلومات بنجاح');
-        closePage();
       }
 
-      // Logout functions
+      /* ---------------- تسجيل الخروج ---------------- */
       function logout() {
         document.getElementById('profile-dropdown').classList.add('hidden');
-        showLogoutConfirmation();
-      }
 
-      function showLogoutConfirmation() {
         const overlay = document.createElement('div');
         overlay.className = 'logout-overlay';
         overlay.innerHTML = `
-                <div class="logout-modal">
-                    <div class="logout-content">
-                        <i class="fas fa-sign-out-alt logout-icon"></i>
-                        <h3>تسجيل الخروج</h3>
-                        <p>هل أنت متأكد من تسجيل الخروج؟</p>
-                        <div class="logout-buttons">
-                            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم، تسجيل الخروج</button>
-                            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
-                        </div>
-                    </div>
-                </div>
-            `;
+        <div class="logout-modal">
+          <div class="logout-content">
+            <i class="fas fa-sign-out-alt logout-icon"></i>
+            <h3>تسجيل الخروج</h3>
+            <p>هل أنت متأكد؟</p>
+            <div class="logout-buttons">
+              <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
+              <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
+            </div>
+          </div>
+        </div>`;
         document.body.appendChild(overlay);
       }
 
       function confirmLogout() {
-        document.querySelector('.logout-overlay').remove();
-        showLogoutSuccess();
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("resetPasswordMode");
+
+        const overlay = document.querySelector('.logout-overlay');
+        overlay.innerHTML = `
+        <div class="logout-modal">
+          <div class="logout-content success">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h3>تم تسجيل الخروج</h3>
+            <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
+          </div>
+        </div>`;
       }
 
       function cancelLogout() {
         document.querySelector('.logout-overlay').remove();
       }
 
-      function showLogoutSuccess() {
-        const overlay = document.createElement('div');
-        overlay.className = 'logout-overlay';
-        overlay.innerHTML = `
-                <div class="logout-modal">
-                    <div class="logout-content success">
-                        <i class="fas fa-check-circle success-icon"></i>
-                        <h3>تم تسجيل الخروج بنجاح</h3>
-                        <p>شكراً لاستخدام التطبيق</p>
-                        <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
-                    </div>
-                </div>
-            `;
-        document.body.appendChild(overlay);
-      }
-
       function closeLogoutSuccess() {
         document.querySelector('.logout-overlay').remove();
+        window.location.href = "login.html";
       }
 
+      /* ---------------- رفع الملفات ---------------- */
 
-      document.addEventListener('click', function (event) {
-        const profileSection = document.querySelector('.profile-section');
-        const dropdown = document.getElementById('profile-dropdown');
-        if (!profileSection.contains(event.target)) {
-          dropdown.classList.add('hidden');
-        }
-      });
+      let uploadedFiles = { license: null, registration: null };
 
-      // Driver modal
-      function openDriverModal(driverName, driverRating) {
-        const root = document.getElementById('driver-modal-root');
-        root.innerHTML = `
-                <div class="driver-modal-overlay" id="driver-modal-overlay">
-                    <div class="driver-modal" role="dialog" aria-modal="true" aria-label="ملف السائق">
-                        <div class="driver-header">
-                            <div class="driver-avatar"><i class="fas fa-user"></i></div>
-                            <div>
-                                <h4>${driverName}</h4>
-                                <p>التقييم: ${driverRating}</p>
-                            </div>
-                        </div>
-                        <p>معلومات إضافية عن السائق يمكن وضعها هنا.</p>
-                        <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">
-                            <button onclick="closeDriverModal()" class="cancel-logout-btn">إغلاق</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        document.getElementById('driver-modal-overlay').addEventListener('click', function (e) {
-          if (e.target.id === 'driver-modal-overlay') closeDriverModal();
-        });
-      }
-      function closeDriverModal() { document.getElementById('driver-modal-root').innerHTML = ''; }
-
-      document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.driver-rating').forEach(el => {
-          el.addEventListener('click', function () {
-            const card = el.closest('.trip-card');
-            const name = card.getAttribute('data-driver-name') || card.querySelector('.driver-name')?.textContent.trim();
-            const rating = card.getAttribute('data-driver-rating') || card.querySelector('.rating-text')?.textContent.trim();
-            openDriverModal(name, rating);
-          });
-        });
-
-        document.querySelectorAll('.card-profile-btn').forEach(btn => {
-          btn.addEventListener('click', function () {
-            const card = btn.closest('.trip-card');
-            const name = card.getAttribute('data-driver-name') || card.querySelector('.driver-name')?.textContent.trim();
-            const rating = card.getAttribute('data-driver-rating') || card.querySelector('.rating-text')?.textContent.trim();
-            openDriverModal(name, rating);
-          });
-        });
-      });
-
-      let isDriver = false;
-      let uploadedFiles = {
-        license: null,
-        registration: null
-      };
-
-      // Show upload modal
       function showUploadModal() {
-        if (isDriver) {
-          // Switch back to passenger
-          switchToPassenger();
-        } else {
-          // Show upload modal to become driver
-          document.getElementById('uploadModal').classList.remove('hidden');
-        }
+        document.getElementById('uploadModal').classList.remove('hidden');
       }
 
-      // Close upload modal
       function closeUploadModal() {
         document.getElementById('uploadModal').classList.add('hidden');
-        resetForm();
       }
 
-      // Switch to driver mode
-      function switchToDriver() {
-        isDriver = true;
-        const switchBtn = document.getElementById('switchRoleBtn');
-        const statusDot = document.getElementById('statusDot');
-        const roleText = document.getElementById('roleText');
-
-        switchBtn.className = 'switch-role-btn driver-mode';
-        switchBtn.innerHTML = '<i class="fas fa-user"></i><span>كن راكباً</span>';
-        statusDot.classList.add('driver');
-        roleText.textContent = 'سائق';
-      }
-
-      // Switch to passenger mode
-      function switchToPassenger() {
-        isDriver = false;
-        const switchBtn = document.getElementById('switchRoleBtn');
-        const statusDot = document.getElementById('statusDot');
-        const roleText = document.getElementById('roleText');
-
-        switchBtn.className = 'switch-role-btn';
-        switchBtn.innerHTML = '<i class="fas fa-car"></i><span>كن سائقاً</span>';
-        statusDot.classList.remove('driver');
-        roleText.textContent = 'راكب';
-      }
-
-      // File upload handling
       function setupFileUpload(inputId, infoId, type) {
         const input = document.getElementById(inputId);
         const info = document.getElementById(infoId);
-        const uploadArea = input.parentElement;
 
         input.addEventListener('change', function (e) {
           const file = e.target.files[0];
-          if (file) {
-            if (validateFile(file)) {
-              uploadedFiles[type] = file;
-              info.querySelector('.file-name').textContent = file.name;
-              info.classList.add('show');
-              uploadArea.style.borderColor = '#4CAF50';
-              uploadArea.style.background = '#f0fff0';
-              checkFormCompletion();
-            } else {
-              input.value = '';
-            }
-          }
-        });
+          if (!file) return;
 
-        // Drag and drop functionality
-        uploadArea.addEventListener('dragover', function (e) {
-          e.preventDefault();
-          uploadArea.classList.add('dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', function (e) {
-          e.preventDefault();
-          uploadArea.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', function (e) {
-          e.preventDefault();
-          uploadArea.classList.remove('dragover');
-
-          const files = e.dataTransfer.files;
-          if (files.length > 0) {
-            input.files = files;
-            input.dispatchEvent(new Event('change'));
-          }
+          uploadedFiles[type] = file;
+          info.querySelector('.file-name').textContent = file.name;
+          info.classList.add('show');
+          checkFormCompletion();
         });
       }
 
-      // Validate file
-      function validateFile(file) {
-        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
-        const maxSize = 5 * 1024 * 1024; // 5MB
-
-        if (!allowedTypes.includes(file.type)) {
-          alert('نوع الملف غير مدعوم. يرجى رفع ملف JPG أو PNG أو PDF');
-          return false;
-        }
-
-        if (file.size > maxSize) {
-          alert('حجم الملف كبير جداً. يرجى رفع ملف أصغر من 5 ميجابايت');
-          return false;
-        }
-
-        return true;
-      }
-
-      // Remove file
-      function removeFile(type) {
-        uploadedFiles[type] = null;
-        const input = document.getElementById(type + 'Upload');
-        const info = document.getElementById(type + 'Info');
-        const uploadArea = input.parentElement;
-
-        input.value = '';
-        info.classList.remove('show');
-        uploadArea.style.borderColor = '#ddd';
-        uploadArea.style.background = '#f9f9f9';
-        checkFormCompletion();
-      }
-
-      // Check form completion
       function checkFormCompletion() {
-        const submitBtn = document.getElementById('submitBtn');
-        const hasLicense = uploadedFiles.license !== null;
-        const hasRegistration = uploadedFiles.registration !== null;
-
-        submitBtn.disabled = !(hasLicense && hasRegistration);
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = !(uploadedFiles.license && uploadedFiles.registration);
       }
 
-      // Reset form
-      function resetForm() {
-        document.getElementById('uploadForm').reset();
-        uploadedFiles = { license: null, registration: null };
-        document.querySelectorAll('.file-info').forEach(info => {
-          info.classList.remove('show');
-        });
-        document.querySelectorAll('.file-upload-area').forEach(area => {
-          area.style.borderColor = '#ddd';
-          area.style.background = '#f9f9f9';
-        });
-        document.getElementById('submitBtn').disabled = true;
-        document.getElementById('successMessage').classList.remove('show');
-      }
-
-      // Handle form submission
-      document.getElementById('uploadForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const submitBtn = document.getElementById('submitBtn');
-        const successMessage = document.getElementById('successMessage');
-
-        // Show loading state
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-        submitBtn.disabled = true;
-
-        // Simulate upload process
-        setTimeout(() => {
-          successMessage.classList.add('show');
-          submitBtn.innerHTML = '<i class="fas fa-check"></i> تم الإرسال بنجاح';
-
-          // Switch to driver mode and close modal after 2 seconds
-          setTimeout(() => {
-            switchToDriver();
-            closeUploadModal();
-          }, 2000);
-        }, 2000);
-      });
-
-      // Initialize file upload handlers
-      document.addEventListener('DOMContentLoaded', function () {
+      document.addEventListener('DOMContentLoaded', () => {
         setupFileUpload('licenseUpload', 'licenseInfo', 'license');
         setupFileUpload('registrationUpload', 'registrationInfo', 'registration');
       });
-      // Close modal when clicking outside
-      document.getElementById('uploadModal').addEventListener('click', function (e) {
-        if (e.target === this) {
-          closeUploadModal();
-        };
-      });
-
 
     </script>
 </body>
