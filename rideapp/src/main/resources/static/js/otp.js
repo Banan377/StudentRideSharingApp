@@ -90,14 +90,21 @@ otpForm.addEventListener("submit", async (e) => {
     const result = await response.json();
     alert(result.message);
 
-    if (response.ok) {
+   if (response.ok) {
+    const resetMode = localStorage.getItem("resetPasswordMode") === "true";
 
-      if (localStorage.getItem("resetPasswordMode") === "true") {
+    // تنظيف
+    localStorage.removeItem("resetPasswordMode");
+    localStorage.removeItem("userEmail");
+
+    if (resetMode) {
         window.location.href = "forgotPassword.html";
-      } else {
+    } else {
         window.location.href = "signup-form.html";
-      }
     }
+}
+
+    
   } catch (err) {
     alert("حدث خطأ أثناء التحقق من الكود.");
   }
