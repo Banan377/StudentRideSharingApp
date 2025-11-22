@@ -19,7 +19,7 @@
       <li><a href="driverUI.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a></li>
       <li><a href="#"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
       <li><a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a></li>
-      <li><a href="#"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
+      <li><a href="driverEvents.html"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
     </ul>
   </div>
 
@@ -32,7 +32,7 @@
 
       <div style="display: flex; align-items: center; gap: 15px;">
         <!-- زر التبديل بين الأدوار -->
-        <button class="switch-role-btn" onclick="switchRole()">تبديل إلى راكب</button>
+        <button class="switch-role-btn" onclick="showSwitchRoleConfirmation()">تبديل إلى راكب</button>
 
         <!-- الملف الشخصي -->
         <div class="profile-section">
@@ -40,7 +40,6 @@
             <i class="fas fa-user-circle"></i>
           </button>
 
-          <!-- قائمة البروفايل المنسدلة -->
           <div id="profile-dropdown" class="dropdown-menu hidden">
             <ul>
               <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل التقييمات</span></a></li>
@@ -52,7 +51,6 @@
       </div>
     </div>
 
-    <!-- منطقة المحتوى (الإحصائيات + كارد الرحلة والركاب) -->
     <div class="content-area">
       <!-- الإحصائيات -->
       <div class="stats-card">
@@ -70,7 +68,6 @@
       <!-- حاوية الكارد -->
       <div class="trips-container">
 
-        <!-- الكارد الرئيسي للرحلة 1 -->
         <div class="trip-card">
           <!-- أعلى الكارد: معلومات الرحلة الرئيسية -->
           <div class="trip-header">
@@ -128,13 +125,11 @@
               </div>
             </div>
           </div>
-          <!-- نهاية طلبات الركاب داخل الكارد -->
         </div>
-        <!-- نهاية الكارد الرئيسي للرحلة 1 -->
 
 
       </div>
-      <!-- نهاية منطقة المحتوى -->
+
 
     </div>
 
@@ -173,7 +168,6 @@
     </div>
 
 
-    <!-- البوب أب لعرض تفاصيل الراكب -->
     <div id="popup" class="full-page hidden">
       <div class="form-box">
         <h2 id="popup-name"></h2>
@@ -185,8 +179,53 @@
       </div>
     </div>
 
-    <!-- الجافاسكربت -->
+    <div id="switch-role-confirmation" class="logout-overlay hidden">
+      <div class="logout-modal">
+        <div class="logout-content">
+          <i class="fas fa-sync-alt logout-icon"></i>
+          <h3>تبديل الدور</h3>
+          <p>هل أنت متأكد من التبديل إلى وضع الراكب؟</p>
+          <div class="logout-buttons">
+            <button onclick="confirmSwitchRole()" class="confirm-logout-btn">نعم</button>
+            <button onclick="cancelSwitchRole()" class="cancel-logout-btn">إلغاء</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const email = localStorage.getItem("userEmail");
+
+        if (!email) {
+          alert("يجب تسجيل الدخول");
+          window.location.href = "login.html";
+          return;
+        }
+
+        try {
+          const res = await fetch(`/api/switch/checkDriverStatus?email=${encodeURIComponent(email)}`);
+          const result = await res.json();
+
+          if (result.status === "pending_driver") {
+            alert("لم تتم الموافقة على حسابك كسائق بعد.");
+            window.location.href = "passengerRides.html";
+          }
+
+          if (result.status === "not_driver") {
+            alert("أنت غير مسجل كسائق.");
+            window.location.href = "passengerRides.html";
+          }
+
+
+        } catch (err) {
+          alert("حدث خطأ في التحقق من حالة الدخول");
+          window.location.href = "login.html";
+        }
+      });
+
+
       function toggleProfileDropdown() {
         document.getElementById('profile-dropdown').classList.toggle('hidden');
       }
@@ -197,31 +236,30 @@
         document.body.style.overflow = 'hidden';
       }
 
-
       function closePage() {
         document.querySelectorAll('.full-page').forEach(page => page.classList.add('hidden'));
         document.body.style.overflow = 'auto';
       }
 
-
-
       function logout() {
         document.getElementById('profile-dropdown').classList.add('hidden');
-
         const overlay = document.createElement('div');
         overlay.className = 'logout-overlay';
+        overlay.id = 'logout-confirmation';
+
         overlay.innerHTML = `
-        <div class="logout-modal">
-          <div class="logout-content">
-            <i class="fas fa-sign-out-alt logout-icon"></i>
-            <h3>تسجيل الخروج</h3>
-            <p>هل أنت متأكد؟</p>
-            <div class="logout-buttons">
-              <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
-              <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
-            </div>
+      <div class="logout-modal">
+        <div class="logout-content">
+          <i class="fas fa-sign-out-alt logout-icon"></i>
+          <h3>تسجيل الخروج</h3>
+          <p>هل أنت متأكد؟</p>
+          <div class="logout-buttons">
+            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
+            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
           </div>
-        </div>`;
+        </div>
+      </div>`;
+
         document.body.appendChild(overlay);
       }
 
@@ -230,27 +268,25 @@
         localStorage.removeItem("userEmail");
         localStorage.removeItem("resetPasswordMode");
 
-        const overlay = document.querySelector('.logout-overlay');
+        const overlay = document.getElementById('logout-confirmation');
         overlay.innerHTML = `
-        <div class="logout-modal">
-          <div class="logout-content success">
-            <i class="fas fa-check-circle success-icon"></i>
-            <h3>تم تسجيل الخروج</h3>
-            <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
-          </div>
-        </div>`;
+      <div class="logout-modal">
+        <div class="logout-content success">
+          <i class="fas fa-check-circle success-icon"></i>
+          <h3>تم تسجيل الخروج</h3>
+          <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
+        </div>
+      </div>`;
       }
 
       function cancelLogout() {
-        document.querySelector('.logout-overlay').remove();
+        const overlay = document.getElementById('logout-confirmation');
+        if (overlay) overlay.remove();
       }
 
       function closeLogoutSuccess() {
-        document.querySelector('.logout-overlay').remove();
         window.location.href = "login.html";
       }
-
-
 
       document.addEventListener('click', function (event) {
         const profileSection = document.querySelector('.profile-section');
@@ -258,10 +294,6 @@
           document.getElementById('profile-dropdown').classList.add('hidden');
         }
       });
-
-      function switchRole() {
-        window.location.href = "passengerRides.html";
-      }
 
       function openPassengerInfo(name, start, end, time) {
         document.getElementById("popup-name").textContent = name;
@@ -275,7 +307,22 @@
       function closePopup() {
         document.getElementById("popup").classList.add("hidden");
       }
+
+      function showSwitchRoleConfirmation() {
+        document.getElementById('switch-role-confirmation').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function confirmSwitchRole() {
+        window.location.href = "passengerRides.html";
+      }
+
+      function cancelSwitchRole() {
+        document.getElementById('switch-role-confirmation').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      }
     </script>
+
 
 </body>
 

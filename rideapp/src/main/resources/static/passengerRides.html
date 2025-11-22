@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>صفحة الحجز</title>
+  <title>صفحة الراكب</title>
   <link rel="stylesheet" href="passenger.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -11,16 +11,18 @@
 
 <body>
 
+  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="logo"></div>
     <ul class="menue">
       <li><a href="bookingPage.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a></li>
       <li><a href="#"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
       <li><a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a></li>
-      <li><a href="#"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
+      <li><a href="passengerEvents.html"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
     </ul>
   </div>
 
+  <!-- MAIN CONTENT -->
   <main class="main-content">
 
     <div class="container">
@@ -28,25 +30,30 @@
         <button type="button" class="book-btn">احجز الآن</button>
       </div>
 
-      <div class="profile-section">
-        <button onclick="toggleProfileDropdown()" class="profile-btn">
-          <i class="fas fa-user-circle"></i>
-        </button>
+      <!-- البروفايل -->
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <!-- زر التبديل بين الأدوار -->
+        <button class="switch-role-btn" onclick="switchRole()">تبديل لسائق</button>
 
-        <div id="profile-dropdown" class="dropdown-menu hidden" aria-hidden="true">
-          <ul>
-            <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل
-                  التقييمات</span></a></li>
-            <li><a href="passengerSetting.html"><i class="fas fa-cog"></i><span>الإعدادات</span></a></li>
-            <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل
-                  الخروج</span></a></li>
-          </ul>
+        <!-- الملف الشخصي -->
+        <div class="profile-section">
+          <button onclick="toggleProfileDropdown()" class="profile-btn">
+            <i class="fas fa-user-circle"></i>
+          </button>
+
+          <!-- قائمة البروفايل المنسدلة -->
+          <div id="profile-dropdown" class="dropdown-menu hidden">
+            <ul>
+              <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل التقييمات</span></a></li>
+              <li><a href="passengerSetting.html"><i class="fas fa-cog"></i><span>الإعدادات</span></a></li>
+              <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-    </div>
 
-    <!-- صفحات كاملة (مخفية افتراضياً) -->
+    <!-- صفحة التقييم -->
     <div id="rating-page" class="full-page hidden">
       <div class="container-form">
         <div class="form-box">
@@ -54,6 +61,7 @@
             <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
             <h2>سجل التقييمات</h2>
           </div>
+
           <div class="rating-history">
             <div class="rating-summary">
               <div class="average-rating">
@@ -66,6 +74,7 @@
                 <p>ستظهر تقييماتك هنا بعد إكمال الرحلات</p>
               </div>
             </div>
+
             <div class="reviews-list">
               <div class="no-reviews">
                 <i class="fas fa-star"></i>
@@ -73,219 +82,397 @@
                 <span>ستظهر تقييمات الركاب هنا بعد إكمال الرحلات</span>
               </div>
             </div>
+
           </div>
         </div>
       </div>
     </div>
 
-    
-    <button class="switch-role-btn" id="switchRoleBtn" onclick="showUploadModal()">
-      <i class="fas fa-car"></i>
-      <span>كن سائقاً</span>
-    </button> </div>
-    </div><!-- Upload Modal -->
+
+
+    <div class="logout-overlay hidden" id="driverCheckModal">
+      <div class="logout-modal">
+        <div class="logout-content">
+          <i class="fas fa-id-card logout-icon"></i>
+          <h3>التسجيل كسائق</h3>
+          <p id="driverCheckMessage">هل ترغب في التسجيل كسائق؟</p>
+          <div class="logout-buttons">
+            <button id="confirmYesBtn" class="confirm-logout-btn">نعم</button>
+            <button onclick="closeDriverCheckModal()" class="cancel-logout-btn">لا</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="logout-overlay hidden" id="confirmedDriverModal">
+      <div class="logout-modal">
+        <div class="logout-content">
+          <i class="fas fa-car logout-icon"></i>
+          <h3>سائق موثق</h3>
+          <p>هل تريد التبديل إلى واجهة السائق؟</p>
+          <div class="logout-buttons">
+            <button onclick="goToDriverUI()" class="confirm-logout-btn">نعم</button>
+            <button onclick="closeConfirmedDriverModal()" class="cancel-logout-btn">لا</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- حالة الطلب تحت المعالجة -->
+    <div class="logout-overlay hidden" id="pendingDriverModal">
+      <div class="logout-modal">
+        <div class="logout-content">
+          <i class="fas fa-clock logout-icon"></i>
+          <h3>طلب تحت المعالجة</h3>
+          <p> تم إرسال طلبك كسائق ويجري الآن التحقق من البيانات.<br>سيتم إشعارك فور الموافقة.</p>
+          <div class="logout-buttons">
+            <button onclick="closePendingDriverModal()" class="confirm-logout-btn">موافق</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- التسجيل كسائق -->
     <div class="upload-modal hidden" id="uploadModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h2>طلب أن تصبح سائقاً</h2><button class="close-btn" onclick="closeUploadModal()"> <i
-              class="fas fa-times"></i> </button>
-        </div><!-- Requirements -->
+          <h2>طلب أن تصبح سائقاً</h2>
+          <button class="close-btn" onclick="closeUploadModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
         <div class="requirements">
           <h4><i class="fas fa-info-circle"></i> المتطلبات المطلوبة:</h4>
           <ul>
-            <li>رخصة قيادة سارية المفعول</li>
-            <li>استمارة تسجيل المركبة</li>
-            <li>يجب أن تكون الوثائق واضحة ومقروءة</li>
-            <li>صيغ الملفات المقبولة: JPG, PNG, PDF (حد أقصى 5 ميجابايت)</li>
+            <li>رخصة قيادة سارية</li>
+            <li>JPG / PNG / PDF</li>
           </ul>
-        </div><!-- Upload Form -->
-        <form id="uploadForm"><!-- License Upload -->
-          <div class="upload-section"><label for="licenseUpload"> <i class="fas fa-id-card"></i> رخصة القيادة * </label>
-            <div class="file-upload-area" onclick="document.getElementById('licenseUpload').click()"><input type="file"
-                id="licenseUpload" accept=".jpg,.jpeg,.png,.pdf" required>
-              <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i>
-              </div>
-              <div class="upload-text">
-                اضغط هنا لرفع رخصة القيادة
-              </div>
-              <div class="upload-subtext">
-                أو اسحب الملف هنا
-              </div>
+        </div>
+
+        <form id="uploadForm">
+          <!-- البيانات المطلوبة -->
+          <div class="form-section">
+            <h4>معلومات السائق والمركبة</h4>
+
+            <div class="form-group">
+              <label>رقم رخصة القيادة *</label>
+              <input type="text" id="licenseNumber" required>
             </div>
-            <div class="file-info" id="licenseInfo"><i class="fas fa-check-circle"></i> <span class="file-name"></span>
-              <button type="button" class="remove-file" onclick="removeFile('license')"> <i class="fas fa-times"></i>
-              </button>
+
+            <div class="form-group">
+              <label>موديل السيارة *</label>
+              <input type="text" id="carModel" required>
             </div>
-          </div><!-- Vehicle Registration Upload -->
-          <div class="upload-section"><label for="registrationUpload"> <i class="fas fa-file-alt"></i> استمارة تسجيل
-              المركبة * </label>
-            <div class="file-upload-area" onclick="document.getElementById('registrationUpload').click()"><input
-                type="file" id="registrationUpload" accept=".jpg,.jpeg,.png,.pdf" required>
-              <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i>
-              </div>
-              <div class="upload-text">
-                اضغط هنا لرفع استمارة تسجيل المركبة
-              </div>
-              <div class="upload-subtext">
-                أو اسحب الملف هنا
-              </div>
+
+            <div class="form-group">
+              <label>لون السيارة *</label>
+              <input type="text" id="carColor" required>
             </div>
-            <div class="file-info" id="registrationInfo"><i class="fas fa-check-circle"></i> <span
-                class="file-name"></span> <button type="button" class="remove-file"
-                onclick="removeFile('registration')"> <i class="fas fa-times"></i> </button>
+
+            <div class="form-group">
+              <label>رقم لوحة السيارة *</label>
+              <input type="text" id="plateNumber" required>
             </div>
-          </div><!-- Submit Button --> <button type="submit" class="submit-btn" id="submitBtn" disabled> <i
-              class="fas fa-paper-plane"></i> إرسال الطلب </button> <!-- Success Message -->
-          <div class="success-message" id="successMessage">
-            <h4><i class="fas fa-check-circle"></i> تم إرسال طلبك بنجاح!</h4>
-            <p>سيتم مراجعة طلبك خلال 24-48 ساعة وسنقوم بإشعارك بالنتيجة</p>
+
+            <div class="form-group">
+              <label>عدد المقاعد المتاحة *</label>
+              <input type="number" id="availableSeats" min="1" max="10" required>
+            </div>
           </div>
+
+          <!-- قسم رفع الملفات -->
+          <div class="upload-section">
+            <label>رخصة القيادة (صورة) *</label>
+            <input type="file" id="licenseUpload" accept=".jpg,.jpeg,.png,.pdf" required>
+          </div>
+          <div class="upload-section">
+            <label>استمارة القيادة (صورة) *</label>
+            <input type="file" id="licenseUpload" accept=".jpg,.jpeg,.png,.pdf" required>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <i class="fas fa-paper-plane"></i> إرسال الطلب والانتقال لواجهة السائق
+          </button>
         </form>
+
       </div>
     </div>
 
-    <!-- صفحة الإعدادات -->
-    <div id="settings-page" class="full-page hidden">
-      <div class="container-form">
-        <div class="form-box">
-          <div class="page-header">
-            <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
-            <h2>الإعدادات</h2>
-          </div>
+  </main>
 
-          <div class="settings-form">
-            <div class="form-group">
-              <label for="name">الاسم</label>
-              <input type="text" id="name" placeholder="أدخل اسمك">
-            </div>
+  <script>
+    function toggleProfileDropdown() {
+      document.getElementById('profile-dropdown').classList.toggle('hidden');
+    }
 
-            <div class="form-group">
-              <label for="password">كلمة المرور</label>
-              <input type="password" id="password" placeholder="أدخل كلمة المرور الجديدة">
-            </div>
+    document.addEventListener('click', function (event) {
+      const profile = document.querySelector('.profile-section');
+      if (!profile.contains(event.target)) {
+        document.getElementById('profile-dropdown').classList.add('hidden');
+      }
+    });
 
-            <div class="form-group">
-              <label for="emergency-contact">جهة الاتصال الطارئة</label>
-              <input type="tel" id="emergency-contact" placeholder="رقم الهاتف للطوارئ">
-            </div>
+    function showRatingPage() {
+      document.getElementById('rating-page').classList.remove('hidden');
+    }
 
-            <button onclick="updateSettings()" class="update-btn">تحديث المعلومات</button>
+    function closePage() {
+      document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
+    }
+    function logout() {
+      document.getElementById('profile-dropdown').classList.add('hidden');
+      const overlay = document.createElement('div');
+      overlay.className = 'logout-overlay';
+      overlay.id = 'logout-confirmation';
+
+      overlay.innerHTML = `
+      <div class="logout-modal">
+        <div class="logout-content">
+          <i class="fas fa-sign-out-alt logout-icon"></i>
+          <h3>تسجيل الخروج</h3>
+          <p>هل أنت متأكد؟</p>
+          <div class="logout-buttons">
+            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
+            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
           </div>
         </div>
-      </div>
-    </div>
+      </div>`;
 
+      document.body.appendChild(overlay);
+    }
 
-     <script>
+    function confirmLogout() {
+      localStorage.removeItem("currentUser");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("resetPasswordMode");
 
-      /* ---------------- القائمة ---------------- */
-      function toggleProfileDropdown() {
-        document.getElementById('profile-dropdown').classList.toggle('hidden');
-      }
+      const overlay = document.getElementById('logout-confirmation');
+      overlay.innerHTML = `
+      <div class="logout-modal">
+        <div class="logout-content success">
+          <i class="fas fa-check-circle success-icon"></i>
+          <h3>تم تسجيل الخروج</h3>
+          <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
+        </div>
+      </div>`;
+    }
 
-      document.addEventListener('click', function (event) {
-        const profile = document.querySelector('.profile-section');
-        const dropdown = document.getElementById('profile-dropdown');
-        if (!profile.contains(event.target)) dropdown.classList.add('hidden');
-      });
+    function cancelLogout() {
+      const overlay = document.getElementById('logout-confirmation');
+      if (overlay) overlay.remove();
+    }
 
-      /* ---------------- الصفحات ---------------- */
-      function showRatingPage() {
-        document.getElementById('rating-page').classList.remove('hidden');
-      }
+    function closeLogoutSuccess() {
+      window.location.href = "login.html";
+    }
 
-      function showSettingsPage() {
-        document.getElementById('settings-page').classList.remove('hidden');
-      }
+    function showPendingDriverModal() {
+      document.getElementById('pendingDriverModal').classList.remove('hidden');
+    }
 
-      function closePage() {
-        document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
-      }
+    function closePendingDriverModal() {
+      document.getElementById('pendingDriverModal').classList.add('hidden');
+    }
 
-      /* ---------------- تسجيل الخروج ---------------- */
-      function logout() {
-        document.getElementById('profile-dropdown').classList.add('hidden');
+    async function switchRole() {
+      const email = localStorage.getItem("userEmail");
 
-        const overlay = document.createElement('div');
-        overlay.className = 'logout-overlay';
-        overlay.innerHTML = `
-        <div class="logout-modal">
-          <div class="logout-content">
-            <i class="fas fa-sign-out-alt logout-icon"></i>
-            <h3>تسجيل الخروج</h3>
-            <p>هل أنت متأكد؟</p>
-            <div class="logout-buttons">
-              <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
-              <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
-            </div>
-          </div>
-        </div>`;
-        document.body.appendChild(overlay);
-      }
-
-      function confirmLogout() {
-        localStorage.removeItem("currentUser");
-        localStorage.removeItem("userEmail");
-        localStorage.removeItem("resetPasswordMode");
-
-        const overlay = document.querySelector('.logout-overlay');
-        overlay.innerHTML = `
-        <div class="logout-modal">
-          <div class="logout-content success">
-            <i class="fas fa-check-circle success-icon"></i>
-            <h3>تم تسجيل الخروج</h3>
-            <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
-          </div>
-        </div>`;
-      }
-
-      function cancelLogout() {
-        document.querySelector('.logout-overlay').remove();
-      }
-
-      function closeLogoutSuccess() {
-        document.querySelector('.logout-overlay').remove();
+      if (!email) {
+        alert("يجب تسجيل الدخول أولاً");
         window.location.href = "login.html";
+        return;
       }
 
-      /* ---------------- رفع الملفات ---------------- */
+      try {
+        console.log(" التحقق من حالة السائق لـ:", email);
 
-      let uploadedFiles = { license: null, registration: null };
+        const response = await fetch(`/api/switch/checkDriverStatus?email=${encodeURIComponent(email)}`);
 
-      function showUploadModal() {
-        document.getElementById('uploadModal').classList.remove('hidden');
+        if (!response.ok) {
+          throw new Error('فشل في التحقق من حالة السائق');
+        }
+
+        const result = await response.json();
+        console.log(" نتيجة التحقق:", result);
+
+        if (result.status === "verified_driver") {
+          console.log(" سائق موثق");
+          showConfirmedDriverModal();
+
+        } else if (result.status === "pending_driver") {
+          console.log("طلب تحت المعالجة");
+          showPendingDriverModal();
+        } else if (result.status === "not_driver") {
+          console.log(" غير مسجل كسائق");
+          showDriverCheckModal(
+            "هل ترغب في التسجيل كسائق؟",
+            () => openDriverRegistrationForm()
+          );
+
+        } else if (result.status === "rejected_driver") {
+          alert("عذرًا، تم رفض طلبك كسائق. يمكنك المحاولة مجددًا.");
+        }
+        else {
+          alert("حدث خطأ أثناء التحقق من حالتك كسائق.");
+        }
+
+
+      } catch (error) {
+        console.error('Error in switchRole:', error);
+        alert("حدث خطأ في النظام. يرجى المحاولة مرة أخرى.");
       }
+    }
 
-      function closeUploadModal() {
-        document.getElementById('uploadModal').classList.add('hidden');
+
+
+    async function checkDriverStatus(email) {
+      try {
+        const response = await fetch(`/api/switch/checkDriverStatus?email=${encodeURIComponent(email)}`);
+
+        if (!response.ok) {
+          throw new Error('فشل في التحقق من حالة السائق');
+        }
+
+        const result = await response.json();
+        return result.status;
+
+      } catch (error) {
+        console.error('Error checking driver status:', error);
+        return "no_driver_data";
       }
+    }
 
-      function setupFileUpload(inputId, infoId, type) {
-        const input = document.getElementById(inputId);
-        const info = document.getElementById(infoId);
-
-        input.addEventListener('change', function (e) {
-          const file = e.target.files[0];
-          if (!file) return;
-
-          uploadedFiles[type] = file;
-          info.querySelector('.file-name').textContent = file.name;
-          info.classList.add('show');
-          checkFormCompletion();
+    async function registerDriver(driverData) {
+      try {
+        const response = await fetch('/api/switch/registerDriver', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(driverData)
         });
+
+        if (!response.ok) throw new Error('Registration failed');
+        return await response.json();
+      } catch (error) {
+        console.error('Error registering driver:', error);
+        return { success: false };
+      }
+    }
+
+    function showDriverCheckModal(message, onConfirm) {
+      const modal = document.getElementById('driverCheckModal');
+      const messageElement = document.getElementById('driverCheckMessage');
+      const confirmBtn = document.getElementById('confirmYesBtn');
+
+      messageElement.textContent = message;
+      confirmBtn.onclick = onConfirm;
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeDriverCheckModal() {
+      document.getElementById('driverCheckModal').classList.add('hidden');
+    }
+
+    function openDriverRegistrationForm() {
+      closeDriverCheckModal();
+      document.getElementById("uploadModal").classList.remove("hidden");
+    }
+
+    function closeUploadModal() {
+      document.getElementById("uploadModal").classList.add("hidden");
+    }
+
+    document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const email = localStorage.getItem("userEmail");
+      if (!email) {
+        alert("يجب تسجيل الدخول أولاً");
+        return;
       }
 
-      function checkFormCompletion() {
-        const btn = document.getElementById('submitBtn');
-        btn.disabled = !(uploadedFiles.license && uploadedFiles.registration);
+      const driverData = {
+        email: email,
+        licenseNumber: document.getElementById('licenseNumber').value,
+        carModel: document.getElementById('carModel').value,
+        carColor: document.getElementById('carColor').value,
+        plateNumber: document.getElementById('plateNumber').value,
+        availableSeats: parseInt(document.getElementById('availableSeats').value),
+        licenseFile: document.getElementById('licenseUpload').files[0]?.name || '' // اسم الملف فقط
+      };
+
+      // التحقق من صحة البيانات
+      if (!validateDriverData(driverData)) {
+        return;
       }
 
-      document.addEventListener('DOMContentLoaded', () => {
-        setupFileUpload('licenseUpload', 'licenseInfo', 'license');
-        setupFileUpload('registrationUpload', 'registrationInfo', 'registration');
-      });
+      // إرسال البيانات للتسجيل
+      const result = await registerDriver(driverData);
 
-    </script>
+      if (result.success) {
+        //  بعد التسجيل الناجح - الانتقال لواجهة السائق
+        alert("تم تسجيلك كسائق بنجاح! يتم نقلك لواجهة السائق.");
+        window.location.href = "driverUI.html";
+      } else {
+        alert("حدث خطأ في التسجيل: " + (result.message || "يرجى المحاولة مرة أخرى."));
+      }
+    });
+
+    // التحقق من صحة البيانات
+    function validateDriverData(data) {
+      if (!data.licenseNumber.trim()) {
+        alert("يرجى إدخال رقم رخصة القيادة");
+        return false;
+      }
+
+      if (!data.carModel.trim()) {
+        alert("يرجى إدخال موديل السيارة");
+        return false;
+      }
+
+      if (!data.carColor.trim()) {
+        alert("يرجى إدخال لون السيارة");
+        return false;
+      }
+
+      if (!data.plateNumber.trim()) {
+        alert("يرجى إدخال رقم لوحة السيارة");
+        return false;
+      }
+
+      if (!data.availableSeats || data.availableSeats < 1) {
+        alert("يرجى إدخال عدد مقاعد صحيح");
+        return false;
+      }
+
+      const licenseFile = document.getElementById('licenseUpload').files[0];
+      if (!licenseFile) {
+        alert("يرجى رفع صورة رخصة القيادة");
+        return false;
+      }
+
+      return true;
+    }
+    function showConfirmedDriverModal() {
+      document.getElementById('confirmedDriverModal').classList.remove('hidden');
+    }
+
+    function closeConfirmedDriverModal() {
+      document.getElementById('confirmedDriverModal').classList.add('hidden');
+    }
+
+    function goToDriverUI() {
+      window.location.href = "driverUI.html";
+    }
+
+
+  </script>
+
 </body>
 
 </html>

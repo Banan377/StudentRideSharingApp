@@ -95,7 +95,6 @@ otpForm.addEventListener("submit", async (e) => {
 
     // تنظيف
     localStorage.removeItem("resetPasswordMode");
-    localStorage.removeItem("userEmail");
 
     if (resetMode) {
         window.location.href = "forgotPassword.html";

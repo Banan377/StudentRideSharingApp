@@ -1,3 +1,4 @@
+
 package com.example.rideapp.models;
 
 import jakarta.persistence.*;
@@ -17,6 +18,7 @@ public class UserModel {
     protected String emergencyContacts;
     protected double rateAverage;
     protected String status;
+    
 
     public UserModel() {
     }

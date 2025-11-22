@@ -80,8 +80,7 @@ public class AuthController {
     }
 
 
-   
-    @PostMapping("/register")
+   @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, Object> requestData) {
         try {
             UserModel user = new UserModel();
