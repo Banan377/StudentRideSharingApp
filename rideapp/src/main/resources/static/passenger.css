@@ -457,6 +457,66 @@ input[type="number"] {
   color: white;
 }
 
+/* تنسيقات بطاقات أنشطة الجامعة */
+.eventDescription-row {
+  display: grid;
+  gap: 12px;
+  margin-top: 30px;
+  margin-bottom: 17px;
+}
+
+.eventDescription-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.eventDescription-item i {
+  color: #487788;
+  margin-top: 2px;
+  font-size: 14px;
+  padding: 10px;
+}
+
+.eventDescription-item .label {
+  color: #666;
+  font-size: 11px;
+  display: block;
+  margin: 4px;
+}
+
+.eventDescription-item .value {
+  color: #333;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.eventDetails-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.eventCard-bottom {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 28px;
+  margin-bottom: 23px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  width: 100%;
+  padding: 10px;
+}
 
 /* تنسيقات زر الحجز */
 .book-btn {

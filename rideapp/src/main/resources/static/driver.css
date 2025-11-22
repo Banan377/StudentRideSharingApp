@@ -662,3 +662,176 @@ textarea {
 .success-btn:hover {
   background: #218838;
 }
+
+/* تنسيقات بطاقات أنشطة الجامعة */
+.eventDescription-row {
+  display: grid;
+  gap: 12px;
+  margin-top: 30px;
+  margin-bottom: 17px;
+}
+
+.eventDescription-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.eventDescription-item i {
+  color: #487788;
+  margin-top: 2px;
+  font-size: 14px;
+  padding: 10px;
+}
+
+.eventDescription-item .label {
+  color: #666;
+  font-size: 11px;
+  display: block;
+  margin: 4px;
+}
+
+.eventDescription-item .value {
+  color: #333;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.eventDetails-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.eventCard-bottom {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 28px;
+  margin-bottom: 23px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  width: 100%;
+  padding: 10px;
+}
+
+.trips-section {
+  padding: 24px;
+  width: 100%;
+  background: transparent;
+  min-height: calc(100vh - 70px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.trip-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.24s, box-shadow 0.24s;
+  border: 1px solid #ebebeb;
+  height: auto;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.trip-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.driver-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.driver-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #487788;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.trip-info {
+  margin-bottom: 14px;
+}
+
+.card-book-btn {
+  width: 100%;
+  padding: 12px;
+  background: #487788;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0;
+  text-align: center;
+}
+
+.card-book-btn:hover {
+  background: #265262;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(38, 82, 98, 0.3);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.card-header h3 {
+  color: #265262;
+  font-size: 18px;
+  margin: 0;
+  font-weight: bold;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.detail-item .label {
+  color: #666;
+  font-size: 10px;
+}
+
+.detail-item .value {
+  color: #333;
+  font-weight: 600;
+  font-size: 11px;
+}
