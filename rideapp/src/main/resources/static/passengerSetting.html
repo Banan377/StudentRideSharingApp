@@ -186,6 +186,14 @@
       border: 2px solid #e8f4f8;
       margin-bottom: 20px;
     }
+
+    #saveBtn:disabled {
+      background: #cccccc;
+      color: #888888;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
   </style>
 </head>
 
@@ -268,71 +276,130 @@
           <!-- أزرار -->
           <div class="form-actions">
             <a href="passengerRides.html" class="btn cancel-btn">إلغاء</a>
-            <button type="submit" class="btn submit-btn">حفظ التغييرات</button>
+            <button id="saveBtn" type="submit" class="btn submit-btn" disabled>حفظ التغييرات</button>
           </div>
       </form>
     </div>
   </div>
 
-  <script>
+  <<script>
+    // النسخة المعدلة لزر "حفظ" ليكون "Disabled" حتى يتم تعديل أي شيء
+    let originalData = {
+    college: "",
+    emergency1: "",
+    emergency2: ""
+    };
+
+    function checkFormChanges() {
+    const currentCollege = document.getElementById("college").value;
+    const currentEmergency1 = document.getElementById("emergency1").value;
+    const currentEmergency2 = document.getElementById("emergency2").value;
+    const password = document.getElementById("currentPassword").value;
+
+    const changed =
+    currentCollege !== originalData.college ||
+    currentEmergency1 !== originalData.emergency1 ||
+    currentEmergency2 !== originalData.emergency2 ||
+    password.trim() !== "";
+
+    document.querySelector(".submit-btn").disabled = !changed;
+    }
 
     document.addEventListener("DOMContentLoaded", async function () {
+    const email = localStorage.getItem("userEmail");
 
-      const email = localStorage.getItem("userEmail");
+    if (!email) {
+    alert("يجب تسجيل الدخول أولاً");
+    window.location.href = "login.html";
+    return;
+    }
 
-      if (!email) {
-        alert("يجب تسجيل الدخول أولاً");
-        window.location.href = "login.html";
-        return;
-      }
+    try {
+    const response = await fetch(`/api/profile/${email}`);
+    const user = await response.json();
 
-      try {
-        const response = await fetch(`/api/profile/${email}`);
-        const user = await response.json();
+    document.getElementById("firstName").value = user.name.split(" ")[0] || "";
+    document.getElementById("lastName").value = user.name.split(" ")[1] || "";
+    document.getElementById("email").value = user.email;
+    document.getElementById("college").value = user.college || "";
 
-        // تعبئة البيانات داخل الحقول
-        document.getElementById("firstName").value = user.name.split(" ")[0] || "";
-        document.getElementById("lastName").value = user.name.split(" ")[1] || "";
-        document.getElementById("email").value = user.email;
-        document.getElementById("college").value = user.college || "";
-        document.getElementById("emergency1").value = user.emergencyContacts || "";
-        document.getElementById("emergency2").value = "";
+    if (user.emergencyContacts) {
+    const parts = user.emergencyContacts.split(",");
+    document.getElementById("emergency1").value = parts[0] || "";
+    document.getElementById("emergency2").value = parts[1] || "";
+    } else {
+    document.getElementById("emergency1").value = "";
+    document.getElementById("emergency2").value = "";
+    }
 
-      } catch (err) {
-        alert("خطأ في تحميل البيانات");
-      }
+    originalData.college = document.getElementById("college").value;
+    originalData.emergency1 = document.getElementById("emergency1").value;
+    originalData.emergency2 = document.getElementById("emergency2").value;
+
+    document.querySelector(".submit-btn").disabled = true;
+
+    } catch (err) {
+    alert("خطأ في تحميل البيانات");
+    }
+
+    const inputsToWatch = [
+    document.getElementById("college"),
+    document.getElementById("emergency1"),
+    document.getElementById("emergency2"),
+    document.getElementById("currentPassword")
+    ];
+
+    inputsToWatch.forEach(input => {
+    input.addEventListener("input", checkFormChanges);
     });
-
+    });
 
     document.getElementById("passengerSettingsForm").addEventListener("submit", async function (e) {
-      e.preventDefault();
+    e.preventDefault();
 
-      const updatedUser = {
-        email: document.getElementById("email").value,
-        college: document.getElementById("college").value,
-        emergencyContacts: document.getElementById("emergency1").value,
-        password: document.getElementById("currentPassword").value
-      };
+    const college = document.getElementById("college").value;
+    const emergency1 = document.getElementById("emergency1").value;
+    const emergency2 = document.getElementById("emergency2").value;
+    const password = document.getElementById("currentPassword").value;
+    const email = document.getElementById("email").value;
 
-      try {
-        const response = await fetch(`/api/profile/update`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updatedUser)
-        });
+    const emergencyCombined = emergency1 + "," + emergency2;
 
-        const result = await response.text();
-        alert(result);
+    if (
+    college === originalData.college &&
+    emergency1 === originalData.emergency1 &&
+    emergency2 === originalData.emergency2 &&
+    password.trim() === ""
+    ) {
+    alert("لم يتم تعديل أي بيانات.");
+    return;
+    }
 
-        window.location.href = "passengerRides.html";
+    const updatedUser = {
+    email: email,
+    college: college,
+    emergencyContacts: emergencyCombined,
+    password: password
+    };
 
-      } catch (err) {
-        alert("حدث خطأ أثناء تحديث البيانات");
-      }
-
+    try {
+    const response = await fetch(`/api/profile/update/${email}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updatedUser)
     });
 
-  </script>
+    const result = await response.text();
+    alert(result);
+    window.location.href = "passengerRides.html";
+
+    } catch (err) {
+    alert("حدث خطأ أثناء تحديث البيانات");
+    }
+    });
+    </script>
+
+
 
 </body>
 

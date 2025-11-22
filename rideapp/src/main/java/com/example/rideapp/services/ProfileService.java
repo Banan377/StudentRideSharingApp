@@ -3,6 +3,8 @@ package com.example.rideapp.services;
 import com.example.rideapp.models.UserModel;
 import com.example.rideapp.repositories.UserRepository;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,31 +14,29 @@ public class ProfileService {
     @Autowired
     private UserRepository userRepository;
 
-    // عرض بيانات المستخدم
+    // دالة جلب بيانات المستخدم
     public UserModel getUserProfile(String email) {
-        return userRepository.findById(email).orElse(null);
+        return userRepository.findByEmail(email);
     }
 
-    // تعديل بيانات المستخدم
-    public boolean updateProfile(String email, String college, String emergencyContact, String password) {
+    public boolean updateProfile(String email, String college, String emergencyContacts, String password) {
+        try {
+            UserModel user = userRepository.findByEmail(email);
+            if (user == null)
+                return false;
 
-        UserModel user = userRepository.findById(email).orElse(null);
+            if (college != null)
+                user.setCollege(college);
+            if (emergencyContacts != null)
+                user.setEmergencyContacts(emergencyContacts);
+            if (password != null && !password.trim().isEmpty())
+                user.setPassword(password);
 
-        if (user == null) return false;
-
-        if (college != null && !college.isEmpty()) {
-            user.setCollege(college);
+            userRepository.save(user);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-
-        if (emergencyContact != null && !emergencyContact.isEmpty()) {
-            user.setEmergencyContacts(emergencyContact);
-        }
-
-        if (password != null && !password.isEmpty()) {
-            user.setPassword(password);
-        }
-
-        userRepository.save(user);
-        return true;
     }
+
 }

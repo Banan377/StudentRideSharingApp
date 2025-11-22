@@ -42,26 +42,31 @@ public class AuthService {
     }
 
     public void createAccount(UserModel user, Map<String, Object> driverData) {
-        // 1) تحقق أن الإيميل موجود في جدول الجامعة
         if (!isStudentEmailValid(user.getEmail())) {
             throw new RuntimeException("هذا الإيميل غير مسجّل في قاعدة بيانات الجامعة");
         }
 
-        // 2) تأكد أنه غير مسجل مسبقاً
         if (isUserRegistered(user.getEmail())) {
             throw new RuntimeException("هذا الإيميل مسجل مسبقاً!");
         }
 
-        // 3) حفظ مع تشفير الباسورد
         String encodedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
         user.setPassword(encodedPassword);
 
-        // 4) حفظ المستخدم
+        // تعيين الدور والحالة بناءً على كون المستخدم سائق
+        if (driverData != null && !driverData.isEmpty()) {
+            user.setRole("passenger"); // لا يتحول مباشرة
+            user.setStatus("pending"); // بانتظار التفعيل
+        } else {
+            user.setRole("passenger");
+            user.setStatus("active");
+        }
+
         userRepository.save(user);
-        // 5) إنشاء سجل في جدول الركاب للجميع
+
         PassengerModel passenger = new PassengerModel(user.getEmail());
         passengerRepository.save(passenger);
-        // 7) إذا كان سائق، إنشاء سجل في جدول السائقين
+
         if (driverData != null && !driverData.isEmpty()) {
             DriverModel driver = new DriverModel(
                     user.getEmail(),

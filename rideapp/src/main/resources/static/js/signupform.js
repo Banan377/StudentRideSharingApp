@@ -187,19 +187,16 @@ function validateForm() {
     return true;
 }
 
-// ========== event listeners للتحقق الفوري ==========
 password.addEventListener('input', validatePassword);
 confirmPassword.addEventListener('input', validateConfirm);
 emergency1.addEventListener('input', validateEmergency1);
 emergency2.addEventListener('input', validateEmergency2);
 
-// إظهار/إخفاء قسم السائق
 isDriverCheckbox.addEventListener('change', function () {
     const driverSection = document.getElementById('driverSection');
     driverSection.classList.toggle('show', this.checked);
 });
 
-// ========== ملء الإيميل تلقائياً من localStorage ==========
 document.addEventListener('DOMContentLoaded', function() {
     const savedEmail = localStorage.getItem("userEmail");
     console.log("Saved email from localStorage:", savedEmail);
@@ -211,7 +208,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("Email field populated with:", savedEmail);
     }
     
-    // إضافة عناصر المساحة لأرقام الطوارئ إذا ما موجودة في الHTML
     if (!document.getElementById('emergency1Help')) {
         emergency1.parentNode.appendChild(emergency1Help);
     }
@@ -220,7 +216,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// ========== حدث الإرسال الرئيسي ==========
 signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
