@@ -74,8 +74,11 @@ public class AuthController {
 
         // 2) التحقق من انتهاء الصلاحية
         if (otp.getExpirationTime().isBefore(LocalDateTime.now())) {
+
+            otpService.deleteOTP(otp);
+
             return ResponseEntity.badRequest()
-                    .body(Map.of("success", false, "message", "انتهت صلاحية الكود"));
+                    .body(Map.of("success", false, "message", "انتهت صلاحية الكود — اطلب رمزًا جديدًا"));
         }
 
         // 3) التحقق أن الكود صحيح
@@ -112,6 +115,19 @@ public class AuthController {
         return ResponseEntity.ok(Map.of(
                 "success", true,
                 "message", "تم التحقق بنجاح"));
+    }
+
+    @PostMapping("/cancel-otp")
+    public ResponseEntity<?> cancelOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+
+        OTPModel otp = otpService.getOTPByEmail(email);
+
+        if (otp != null) {
+            otpService.deleteOTP(otp);
+        }
+
+        return ResponseEntity.ok(Map.of("message", "OTP deleted"));
     }
 
     @PostMapping("/register")
