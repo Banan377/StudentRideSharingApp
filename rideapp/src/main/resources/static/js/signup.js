@@ -34,7 +34,6 @@ signupForm.addEventListener('submit', async (e) => {
             window.location.href = "otp.html";
         } else {
             const data = await response.json();
-
             if (data.message && data.message.includes("تم إرسال كود مسبقًا")) {
                 alert(data.message);
                 localStorage.setItem("userEmail", email);

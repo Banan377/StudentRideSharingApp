@@ -1,7 +1,6 @@
 ﻿const otpForm = document.getElementById("otpForm");
 const inputs = document.querySelectorAll(".otp-input-field input");
 const email = localStorage.getItem("userEmail");
-const verifyBtn = document.getElementById("verifyBtn");
 const resendLink = document.getElementById("resendLink");
 const timerBox = document.getElementById("timerBox");
 const timerSpan = document.getElementById("timer");
@@ -16,9 +15,7 @@ inputs.forEach((input, index) => {
     const next = input.nextElementSibling;
     const prev = input.previousElementSibling;
 
-    if (input.value.length > 1) {
-      input.value = input.value.charAt(0);
-    }
+    if (input.value.length > 1) input.value = input.value.charAt(0);
 
     if (input.value !== "" && next) {
       next.removeAttribute("disabled");
@@ -36,7 +33,6 @@ inputs.forEach((input, index) => {
 });
 
 
-// تشغيل العداد من localStorage إذا موجود
 function initializeTimer() {
   const endTime = localStorage.getItem("otpEndTime");
 
@@ -48,14 +44,24 @@ function initializeTimer() {
     }
   }
 
-  // إذا مافي وقت مخزن أو انتهى → نبدأ من جديد
   startTimer(120);
 }
+
+
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) return;
+
+  const prev = document.referrer || "";
+
+  if (!prev.includes("otp.html")) {
+    localStorage.removeItem("otpEndTime");
+  }
+});
+
 
 function startTimer(durationSeconds = 120) {
   let timeLeft = durationSeconds;
 
-  // وقت انتهاء العداد
   const endTime = Date.now() + timeLeft * 1000;
   localStorage.setItem("otpEndTime", endTime);
 
@@ -133,32 +139,34 @@ otpForm.addEventListener("submit", async (e) => {
 });
 
 
-
 resendLink.addEventListener("click", async () => {
   try {
+    const type =
+      localStorage.getItem("passwordFlow") === "signup"
+        ? "signup"
+        : localStorage.getItem("passwordFlow") === "forgot"
+          ? "password_reset"
+          : "change_from_settings";
+
     const response = await fetch("/api/auth/send-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email,
-        otpType: localStorage.getItem("passwordFlow") === "signup"
-          ? "signup"
-          : localStorage.getItem("passwordFlow") === "forgot"
-            ? "password_reset"
-            : "change_from_settings"
-      })
-
+      body: JSON.stringify({ email, otpType: type })
     });
 
     const result = await response.json();
     alert(result.message);
 
-    if (response.ok) startTimer(120);
+    if (response.ok) {
+      startTimer(120);
+    }
 
   } catch (err) {
     alert("حدث خطأ أثناء إعادة إرسال الكود.");
   }
 });
+
+
 const mode = localStorage.getItem("passwordFlow");
 const otpReturn = document.getElementById("otpReturn");
 
@@ -170,8 +178,7 @@ else if (mode === "passengerSetting") {
 }
 else if (mode === "driverSetting") {
   otpReturn.innerHTML = `<a href="driverSettings.html" class="back-link">العودة إلى الإعدادات</a>`;
-} else if (mode === "signup") {
+}
+else if (mode === "signup") {
   otpReturn.innerHTML = `<a href="signup.html" class="back-link">العودة إلى إنشاء الحساب</a>`;
 }
-
-

@@ -35,13 +35,7 @@ public class OTPService {
         Optional<OTPModel> existing = otpRepository.findByEmail(email);
 
         if (existing.isPresent()) {
-            OTPModel oldOtp = existing.get();
-
-            if (oldOtp.getExpirationTime().isAfter(LocalDateTime.now())) {
-                throw new IllegalStateException("OTP_NOT_EXPIRED");
-            }
-
-            otpRepository.delete(oldOtp);
+            otpRepository.delete(existing.get());
         }
 
         String otp = String.format("%06d", new Random().nextInt(999999));
@@ -53,9 +47,6 @@ public class OTPService {
                 LocalDateTime.now().plusMinutes(2));
 
         otpRepository.save(otpModel);
-
-        System.out.println(" OTP Generated for " + email + ": " + otp);
-
         sendOTPEmail(email, otp);
 
         return otpModel;
@@ -69,10 +60,9 @@ public class OTPService {
             SimpleMailMessage msg = new SimpleMailMessage();
             msg.setTo(email);
             msg.setSubject("رمز التحقق");
+            // mailSender.send(msg);
             msg.setText("رمز التحقق الخاص بك هو: " + otp
                     + "\nصالح لمدة " + OTP_EXP_MINUTES + " دقائق.");
-
-            mailSender.send(msg);
 
         } catch (Exception e) {
             System.out.println("Error sending email: " + e.getMessage());

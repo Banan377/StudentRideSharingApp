@@ -130,7 +130,8 @@
 
     sendBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim().toLowerCase();
-
+      sendBtn.disabled = true;
+      sendBtn.textContent = "جاري الإرسال...";
       errorDiv.style.display = "none";
 
       if (!email.endsWith("@sm.imamu.edu.sa")) {
@@ -160,6 +161,12 @@
         }
 
         localStorage.setItem("userEmail", email);
+        window.location.href = "otp.html";
+
+
+
+
+        localStorage.setItem("userEmail", email);
         localStorage.setItem("resetPasswordMode", "true");
 
         window.location.href = "otp.html";
@@ -182,27 +189,33 @@
       title.textContent = "إعادة تعيين كلمة المرور";
       lead.textContent = "أدخل بريدك لإرسال رمز استعادة كلمة المرور.";
       returnLink.innerHTML = `
-    <a href="login.html" style="color:#265262; font-size:14px;text-align:center ;font-weight: bold">
-      العودة إلى تسجيل الدخول
-    </a>`;
+    <div style="text-align:center;">
+      <a href="login.html" style="color:#265262; font-size:14px; font-weight:bold;">
+        العودة إلى تسجيل الدخول
+      </a>
+    </div>`;
     }
 
     else if (mode === "passengerSetting") {
       title.textContent = "تأكيد البريد لتغيير كلمة المرور";
       lead.textContent = "سنرسل رمز تأكيد لتعديل كلمة المرور من الإعدادات.";
       returnLink.innerHTML = `
-    <a href="passengerSetting.html" style="color:#265262;text-align:center;  font-size:14px; font-weight: bold">
-      العودة إلى الإعدادات
-    </a>`;
+    <div style="text-align:center;">
+      <a href="passengerSetting.html" style="color:#265262; font-size:14px; font-weight:bold;">
+        العودة إلى الإعدادات
+      </a>
+    </div>`;
     }
 
     else if (mode === "driverSetting") {
       title.textContent = "تأكيد البريد لتغيير كلمة المرور";
       lead.textContent = "سنرسل رمز تأكيد لتعديل كلمة المرور من الإعدادات.";
       returnLink.innerHTML = `
-    <a href="driverSetting.html" style="color:#265262;text-align:center ;font-size:14px; font-weight: bold">
-      العودة إلى الإعدادات
-    </a>`;
+    <div style="text-align:center;">
+      <a href="driverSetting.html" style="color:#265262; font-size:14px; font-weight:bold;">
+        العودة إلى الإعدادات
+      </a>
+    </div>`;
     }
 
 

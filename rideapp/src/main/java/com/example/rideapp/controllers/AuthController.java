@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/send-otp")
     public ResponseEntity<?> sendOtp(@RequestBody Map<String, String> request) {
         String email = request.get("email");
-        String otpType = request.get("otpType"); // ← مهم
+        String otpType = request.get("otpType");
         boolean isResetPassword = Boolean.parseBoolean(request.getOrDefault("resetPasswordMode", "false"));
 
         // التحقق من وجود الإيميل في قاعدة الطلاب
@@ -53,13 +53,7 @@ public class AuthController {
         try {
             otpService.generateAndSendOTP(email, otpType);
             return ResponseEntity.ok(Map.of("message", "تم إرسال كود التحقق"));
-        } catch (IllegalStateException ex) {
-
-            if ("OTP_NOT_EXPIRED".equals(ex.getMessage())) {
-                return ResponseEntity.badRequest()
-                        .body(Map.of("message", "تم إرسال كود مسبقًا — الرجاء الانتظار حتى انتهاء الوقت"));
-            }
-
+        } catch (Exception ex) {
             return ResponseEntity.badRequest()
                     .body(Map.of("message", "حدث خطأ أثناء إرسال الكود"));
         }
