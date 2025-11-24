@@ -282,7 +282,6 @@
   </div>
 
   <<script>
-    // النسخة المعدلة لزر "حفظ" ليكون "Disabled" حتى يتم تعديل أي شيء
     let originalData = {
     college: "",
     emergency1: "",
@@ -396,11 +395,12 @@
     alert("حدث خطأ أثناء تحديث البيانات");
     }
     });
+   
+
     function startPasswordChange() {
-    localStorage.setItem("passwordChangeMode", "settings");
+    localStorage.setItem("passwordFlow", "passengerSetting");
     window.location.href = "verifyEmail.html";
     }
-
 
 
     </script>
