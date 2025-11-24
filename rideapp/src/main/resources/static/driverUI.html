@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
   <meta charset="UTF-8">
   <title>واجهة السائق</title>
   <link rel="stylesheet" href="driver.css">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -51,86 +49,66 @@
       </div>
     </div>
 
-    <div class="content-area">
-      <!-- الإحصائيات -->
-      <div class="stats-card">
-        <div class="stat-box">
-          <p>الطلبات الجديدة</p><span id="new-requests">2</span>
-        </div>
-        <div class="stat-box">
-          <p>المقبولة</p><span id="accepted">0</span>
-        </div>
-        <div class="stat-box">
-          <p>المرفوضة</p><span id="rejected">0</span>
-        </div>
-      </div>
+    
+<div class="content-area">
 
-      <!-- حاوية الكارد -->
-      <div class="trips-container">
+  <!-- الإحصائيات -->
+  <div class="stats-card">
 
-        <div class="trip-card">
-          <!-- أعلى الكارد: معلومات الرحلة الرئيسية -->
-          <div class="trip-header">
-            <div class="trip-header-text">
-              <h3 class="trip-title">رحلة إلى الجامعة</h3>
-              <p class="trip-subtitle">تفاصيل الرحلة الحالية</p>
-            </div>
-            <div class="trip-seats-box">
-              <span class="trip-seats-label">المقاعد المتبقية</span>
-              <span class="trip-seats-value">1/3</span>
-            </div>
-          </div>
+    <div class="stat-box">
+        <p>الطلبات الجديدة</p>
+        <span id="new-requests">0</span>
+    </div>
 
-          <!-- بيانات الرحلة (تاريخ، وقت، موقع انطلاق) -->
-          <div class="trip-meta">
-            <div class="trip-meta-item">
-              <span class="trip-meta-label">تاريخ الرحلة</span>
-              <span class="trip-meta-value">2025-11-21</span>
-            </div>
-            <div class="trip-meta-item">
-              <span class="trip-meta-label">وقت الرحلة</span>
-              <span class="trip-meta-value">4:30 مساءً</span>
-            </div>
-            <div class="trip-meta-item">
-              <span class="trip-meta-label">موقع الانطلاق</span>
-              <span class="trip-meta-value">حي الياسمين</span>
-            </div>
-          </div>
+    <div class="stat-box">
+        <p>المقبولة</p>
+        <span id="accepted">0</span>
+    </div>
 
-          <!-- طلبات الركاب داخل الكارد الرئيسي -->
-          <div class="passengers-list">
-            <!-- طلب راكب 1 -->
-            <div class="passenger-card booking-request"
-              onclick="openPassengerInfo('أحمد محمد','حي الياسمين','جامعة الملك سعود','4:30 مساءً')">
-              <div class="passenger-info">
-                <p class="passenger-name">نورة محمد</p>
-                <p class="passenger-location">موقع الركوب: حي الياسمين</p>
-              </div>
-              <div class="passenger-actions">
-                <button class="accept-btn action-button">قبول</button>
-                <button class="reject-btn action-button">رفض</button>
-              </div>
-            </div>
+    <div class="stat-box">
+        <p>المرفوضة</p>
+        <span id="rejected">0</span>
+    </div>
 
-            <!-- طلب راكب 2 -->
-            <div class="passenger-card booking-request"
-              onclick="openPassengerInfo('فاطمة علي','الملز','جامعة نورة','6:00 صباحًا')">
-              <div class="passenger-info">
-                <p class="passenger-name">فاطمة علي</p>
-                <p class="passenger-location">موقع الركوب: حي الملز</p>
-              </div>
-              <div class="passenger-actions">
-                <button class="accept-btn action-button">قبول</button>
-                <button class="reject-btn action-button">رفض</button>
-              </div>
-            </div>
-          </div>
-        </div>
+
+  </div>
+<!-- الكارد الكبيرة لعرض تفاصيل الرحلة + الطلبات -->
+<div class="ride-details-card" 
+     style="background:white; padding:20px; border-radius:15px; box-shadow:0 2px 5px rgba(0,0,0,0.1); margin-top:40px;">
+
+    <!-- عنوان الرحلة -->
+    <h2 style="font-size:22px; font-weight:bold; margin-bottom:15px;">رحلة إلى الجامعة</h2>
+
+    <!-- معلومات الرحلة -->
+    <div style="line-height: 2; margin-bottom:20px; text-align:right;">
+        <p><b>تاريخ الرحلة:</b> <span id="ride-date">—</span></p>
+        <p><b>وقت الرحلة:</b> <span id="ride-time">—</span></p>
+        <p><b>موقع الانطلاق:</b> <span id="ride-start">—</span></p>
+        <p><b>الوجهة:</b> <span id="ride-destination">—</span></p>
+        <p><b>المقاعد المتبقية:</b> <span id="ride-seats">—</span></p>
+    </div>
+
+    <!-- عنوان الطلبات -->
+    <h3 style="font-size:18px; font-weight:bold; margin-bottom:15px;">طلبات الحجز</h3>
+
+    <!-- هنا الكروت الصغيرة -->
+    <div id="booking-requests-container" 
+         style="display:grid; gap:15px; max-height:350px; overflow-y:auto;">
+    </div>
+
+</div>
+
+
+
+
+
 
 
       </div>
 
-
+      <!-- حاوية الرحلات -->
+      <div class="trips-container" id="trips-container">
+      </div>
     </div>
 
     <!-- صفحة التقييمات -->
@@ -167,18 +145,18 @@
       </div>
     </div>
 
-
+    <!-- بوب أب معلومات -->
     <div id="popup" class="full-page hidden">
       <div class="form-box">
         <h2 id="popup-name"></h2>
         <p>موقع الانطلاق: <span id="popup-start"></span></p>
         <p>الوجهة: <span id="popup-end"></span></p>
         <p>الوقت: <span id="popup-time"></span></p>
-
         <button class="update-btn" onclick="closePopup()">إغلاق</button>
       </div>
     </div>
 
+    <!-- تأكيد التبديل -->
     <div id="switch-role-confirmation" class="logout-overlay hidden">
       <div class="logout-modal">
         <div class="logout-content">
@@ -195,37 +173,9 @@
 
 
     <script>
-      document.addEventListener("DOMContentLoaded", async () => {
-        const email = localStorage.getItem("userEmail");
-
-        if (!email) {
-          alert("يجب تسجيل الدخول");
-          window.location.href = "login.html";
-          return;
-        }
-
-        try {
-          const res = await fetch(`/api/switch/checkDriverStatus?email=${encodeURIComponent(email)}`);
-          const result = await res.json();
-
-          if (result.status === "pending_driver") {
-            alert("لم تتم الموافقة على حسابك كسائق بعد.");
-            window.location.href = "passengerRides.html";
-          }
-
-          if (result.status === "not_driver") {
-            alert("أنت غير مسجل كسائق.");
-            window.location.href = "passengerRides.html";
-          }
-
-
-        } catch (err) {
-          alert("حدث خطأ في التحقق من حالة الدخول");
-          window.location.href = "login.html";
-        }
-      });
-
-
+      // ==============================
+      // ❶ القائمة + البروفايل
+      // ==============================
       function toggleProfileDropdown() {
         document.getElementById('profile-dropdown').classList.toggle('hidden');
       }
@@ -237,80 +187,67 @@
       }
 
       function closePage() {
-        document.querySelectorAll('.full-page').forEach(page => page.classList.add('hidden'));
+        document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
         document.body.style.overflow = 'auto';
       }
 
+      document.addEventListener("click", function (event) {
+        const profileArea = document.querySelector(".profile-section");
+        const dropdown = document.getElementById("profile-dropdown");
+        if (!profileArea.contains(event.target)) {
+          dropdown.classList.add("hidden");
+        }
+      });
+
+      // ==============================
+      // ❷ تسجيل الخروج
+      // ==============================
       function logout() {
-        document.getElementById('profile-dropdown').classList.add('hidden');
-        const overlay = document.createElement('div');
-        overlay.className = 'logout-overlay';
-        overlay.id = 'logout-confirmation';
-
+        document.getElementById("profile-dropdown").classList.add("hidden");
+        const overlay = document.createElement("div");
+        overlay.className = "logout-overlay";
         overlay.innerHTML = `
-      <div class="logout-modal">
-        <div class="logout-content">
-          <i class="fas fa-sign-out-alt logout-icon"></i>
-          <h3>تسجيل الخروج</h3>
-          <p>هل أنت متأكد؟</p>
-          <div class="logout-buttons">
-            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
-            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
+        <div class="logout-modal">
+          <div class="logout-content">
+            <i class="fas fa-sign-out-alt logout-icon"></i>
+            <h3>تسجيل الخروج</h3>
+            <p>هل أنت متأكد؟</p>
+            <div class="logout-buttons">
+              <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
+              <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
+            </div>
           </div>
-        </div>
-      </div>`;
-
+        </div>`;
         document.body.appendChild(overlay);
       }
 
       function confirmLogout() {
-        localStorage.removeItem("currentUser");
-        localStorage.removeItem("userEmail");
-        localStorage.removeItem("resetPasswordMode");
-
-        const overlay = document.getElementById('logout-confirmation');
+        localStorage.clear();
+        const overlay = document.querySelector(".logout-overlay");
         overlay.innerHTML = `
-      <div class="logout-modal">
-        <div class="logout-content success">
-          <i class="fas fa-check-circle success-icon"></i>
-          <h3>تم تسجيل الخروج</h3>
-          <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
-        </div>
-      </div>`;
+        <div class="logout-modal">
+          <div class="logout-content success">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h3>تم تسجيل الخروج</h3>
+            <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
+          </div>
+        </div>`;
       }
 
       function cancelLogout() {
-        const overlay = document.getElementById('logout-confirmation');
-        if (overlay) overlay.remove();
+        document.querySelector(".logout-overlay").remove();
       }
 
       function closeLogoutSuccess() {
         window.location.href = "login.html";
       }
 
-      document.addEventListener('click', function (event) {
-        const profileSection = document.querySelector('.profile-section');
-        if (!profileSection.contains(event.target)) {
-          document.getElementById('profile-dropdown').classList.add('hidden');
-        }
-      });
-
-      function openPassengerInfo(name, start, end, time) {
-        document.getElementById("popup-name").textContent = name;
-        document.getElementById("popup-start").textContent = start;
-        document.getElementById("popup-end").textContent = end;
-        document.getElementById("popup-time").textContent = time;
-
-        document.getElementById("popup").classList.remove("hidden");
-      }
-
-      function closePopup() {
-        document.getElementById("popup").classList.add("hidden");
-      }
-
+      // ==============================
+      // ❸ التبديل بين سائق / راكب
+      // ==============================
       function showSwitchRoleConfirmation() {
-        document.getElementById('switch-role-confirmation').classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
+        document.getElementById("switch-role-confirmation").classList.remove("hidden");
+        document.body.style.overflow = "hidden";
       }
 
       function confirmSwitchRole() {
@@ -318,12 +255,210 @@
       }
 
       function cancelSwitchRole() {
-        document.getElementById('switch-role-confirmation').classList.add('hidden');
-        document.body.style.overflow = 'auto';
+        document.getElementById("switch-role-confirmation").classList.add("hidden");
+        document.body.style.overflow = "auto";
       }
+
+      // ==============================
+      // ❹ الإحصائيات
+      // ==============================
+      function updateStats(pending, accepted, rejected) {
+        document.getElementById("new-requests").textContent = pending;
+        document.getElementById("accepted").textContent = accepted;
+        document.getElementById("rejected").textContent = rejected;
+      }
+
+      function initStats() {
+        const accepted = parseInt(localStorage.getItem("driverAcceptedCount")) || 0;
+        const rejected = parseInt(localStorage.getItem("driverRejectedCount")) || 0;
+        updateStats(0, accepted, rejected);
+      }
+
+      // ==============================
+      // ❺ جلب طلبات الحجز للسائق - التعديل هنا
+      // ==============================
+   function loadBookingRequests() {
+    const driverEmail = localStorage.getItem("userEmail");
+
+    fetch(`http://localhost:8083/api/bookings/driver-requests?driverEmail=${driverEmail}`)
+        .then(res => res.json())
+        .then(requests => {
+
+            const container = document.getElementById("booking-requests-container");
+            container.innerHTML = "";
+
+            const pendingCount = requests.length;
+            const accepted = parseInt(localStorage.getItem("driverAcceptedCount")) || 0;
+            const rejected = parseInt(localStorage.getItem("driverRejectedCount")) || 0;
+
+            updateStats(pendingCount, accepted, rejected);
+
+            // -------------------------------------------
+            //  🔥 تعبئة الكارد الكبيرة (مرّة واحدة فقط)
+            // -------------------------------------------
+            if (requests.length > 0) {
+                const ride = requests[0].ride;
+
+                document.getElementById("ride-date").textContent = ride.date;
+                document.getElementById("ride-time").textContent = ride.time;
+                document.getElementById("ride-start").textContent = ride.currentLocation;
+                document.getElementById("ride-destination").textContent = ride.destination;
+                document.getElementById("ride-seats").textContent =
+                    `${ride.seatsAvailable} / ${ride.totalSeats}
+`;
+            } else {
+                document.getElementById("ride-date").textContent = "—";
+                document.getElementById("ride-time").textContent = "—";
+                document.getElementById("ride-start").textContent = "—";
+                document.getElementById("ride-destination").textContent = "—";
+                document.getElementById("ride-seats").textContent = "—";
+            }
+
+            // -------------------------------------------
+            //  🔥 كروت الطلبات الصغيرة داخل الكارد
+            // -------------------------------------------
+            if (pendingCount === 0) {
+                container.innerHTML = `<p style="text-align:center; color:#777; padding:20px;">لا توجد طلبات حجز جديدة</p>`;
+                return;
+            }
+
+            requests.forEach(request => {
+
+                const card = document.createElement("div");
+                card.className = "booking-request-card";
+
+                card.innerHTML = `
+<div class="request-info" style="width: 100%;">
+<h3 style="font-size:20px;color:#333;">طلب من: ${request.passenger.name}</h3>
+
+
+
+    <p><b>موقع الانطلاق:</b> ${request.ride.currentLocation}</p>
+
+</div>
+
+<div class="request-actions">
+    <button class="accept-btn" onclick="respondToBooking(${request.bookingId}, 'accepted')">قبول</button>
+    <button class="reject-btn" onclick="respondToBooking(${request.bookingId}, 'rejected')">رفض</button>
+</div>
+                `;
+
+                container.appendChild(card);
+            });
+        })
+        .catch(err => {
+            console.error("❌ خطأ في جلب الطلبات:", err);
+            initStats();
+        });
+}
+
+
+
+
+
+
+      // ==============================
+      // ❻ رد السائق على الطلب (قبول/رفض)
+      // ==============================
+      function respondToBooking(bookingId, status) {
+        fetch(`http://localhost:8083/api/bookings/respond?bookingId=${bookingId}&status=${status}`, {
+          method: "POST"
+        })
+        .then(res => {
+          if (!res.ok) {
+            alert("فشل الرد على الطلب");
+            return;
+          }
+          alert(status === "accepted" ? "✔ تم قبول الحجز" : "❌ تم رفض الحجز");
+          
+          let accepted = parseInt(localStorage.getItem("driverAcceptedCount")) || 0;
+          let rejected = parseInt(localStorage.getItem("driverRejectedCount")) || 0;
+          
+          if (status === "accepted") {
+            localStorage.setItem("driverAcceptedCount", ++accepted);
+          } else {
+            localStorage.setItem("driverRejectedCount", ++rejected);
+            // تحديث المقاعد مباشرة بعد قبول الطلب
+loadBookingRequests();
+
+          }
+          
+          loadBookingRequests();
+          initStats();
+        })
+        .catch(err => {
+          console.error("خطأ:", err);
+          alert("حدث خطأ أثناء الرد");
+        });
+      }
+      
+     
+
+
+
+      // ==============================
+      // ❼ عند تحميل الصفحة
+      // ==============================
+      document.addEventListener("DOMContentLoaded", () => {
+    initStats();
+    loadBookingRequests();
+});
+
     </script>
 
-
+    <style>
+      .booking-request-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 15px;
+        background: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .request-info h4 {
+        margin: 0 0 10px 0;
+        color: #333;
+      }
+      
+      .request-info p {
+        margin: 5px 0;
+        color: #666;
+      }
+      
+      .request-actions {
+        display: flex;
+        gap: 10px;
+      }
+      
+      .accept-btn {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      
+      .reject-btn {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      
+      .accept-btn:hover {
+        background: #218838;
+      }
+      
+      .reject-btn:hover {
+        background: #c82333;
+      }
+    </style>
+  </div>
 </body>
-
 </html>
