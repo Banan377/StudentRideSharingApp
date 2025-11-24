@@ -276,9 +276,9 @@ fetch(`http://localhost:8083/api/rides/available?passengerEmail=${passengerEmail
                 })
                     .then(res => {
                         if (res.ok) {
-                            alert("🎉 تم إرسال طلب الحجز للسائق!");
+                            alert(" تم إرسال طلب الحجز للسائق!");
 
-                          //🔥 إزالة الكارد من الصفحة بعد الحجز
+                          // إزالة الكارد من الصفحة بعد الحجز
                             if (cardElement) {
                                 cardElement.remove();
                             }
