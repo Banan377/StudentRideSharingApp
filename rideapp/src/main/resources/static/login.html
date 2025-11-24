@@ -19,7 +19,7 @@
       <label for="password">كلمة المرور</label>
       <input type="password" id="password" placeholder="••••••••" required>
 
-      <a href="verifyEmail.html" class="forgot-password">نسيت كلمة المرور؟</a>
+      <a href="#" class="forgot-password" onclick="startForgotPassword()">نسيت كلمة المرور؟</a>
 
       <button type="submit">دخول</button>
       <p class="signup-link">ليس لديك حساب؟ <a href="signup.html">إنشاء حساب جديد</a></p>
@@ -112,6 +112,12 @@
         document.getElementById('email').value = savedEmail;
       }
     });
+    function startForgotPassword() {
+      localStorage.setItem("passwordFlow", "forgot");
+      window.location.href = "verifyEmail.html";
+    }
+
+
   </script>
 </body>
 

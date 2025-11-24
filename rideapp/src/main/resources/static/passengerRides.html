@@ -15,8 +15,8 @@
   <div class="sidebar">
     <div class="logo"></div>
     <ul class="menue">
-      <li><a href="bookingPage.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a></li>
-      <li><a href="#"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
+      <li><a href="passengerRides.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a></li>
+      <li><a href="passengerRidesHistory.html"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
       <li><a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a></li>
       <li><a href="passengerEvents.html"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
     </ul>
@@ -194,7 +194,7 @@
           </div>
 
           <button type="submit" class="submit-btn">
-            <i class="fas fa-paper-plane"></i> إرسال الطلب والانتقال لواجهة السائق
+            <i class="fas fa-paper-plane"></i> إرسال الطلب 
           </button>
         </form>
 
@@ -428,7 +428,7 @@
     window.location.href = "driverUI.html";
   }
 
-  // 🔥 زر "احجز الآن" يفتح صفحة الحجز
+  //  زر "احجز الآن" يفتح صفحة الحجز
   document.querySelector('.book-btn').addEventListener('click', function () {
     window.location.href = "bookingPage.html";
   });
@@ -525,7 +525,7 @@ function bookRide(rideId) {
     .then(res => {
         if(res.ok){
             alert("تم إرسال طلب الحجز!");
-            loadAvailableRides(); // 🔥 تحديث المقاعد مباشرة
+            loadAvailableRides(); //  تحديث المقاعد مباشرة
         } else {
             alert("لا يوجد مقاعد متاحة!");
         }

@@ -122,7 +122,8 @@
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
     }
-      #saveBtn:disabled {
+
+    #saveBtn:disabled {
       background: #cccccc;
       color: #888888;
       cursor: not-allowed;
@@ -163,61 +164,61 @@
           <input type="text" id="college">
         </div>
 
-        <div class="section-title">كلمة المرور</div>
+        <div class="section-title">الأمان</div>
+        <div class="password-section">
+          <div class="form-group">
+            <label for="currentPassword">تغيير كلمة المرور</label>
+            <a href="#" onclick="startPasswordChange()" class="password-toggle">ترغب بتغيير كلمة المرور؟</a>
+          </div>
 
-        <div class="form-group">
-          <label>كلمة المرور الحالية</label>
-          <input type="password" id="currentPassword">
-        </div>
+          <div class="section-title">بيانات الطوارئ</div>
 
-        <div class="section-title">بيانات الطوارئ</div>
+          <div class="form-group">
+            <label>رقم الطوارئ</label>
+            <input type="tel" id="emergency1">
+          </div>
 
-        <div class="form-group">
-          <label>رقم الطوارئ</label>
-          <input type="tel" id="emergency1">
-        </div>
+          <div class="form-group">
+            <label>رقم إضافي (اختياري)</label>
+            <input type="tel" id="emergency2">
+          </div>
 
-        <div class="form-group">
-          <label>رقم إضافي (اختياري)</label>
-          <input type="tel" id="emergency2">
-        </div>
+          <div class="section-title">بيانات السيارة</div>
 
-        <div class="section-title">بيانات السيارة</div>
+          <div class="form-group">
+            <label>رقم الرخصة</label>
+            <input type="text" id="licenseNumber" class="readonly-field" readonly>
+          </div>
 
-        <div class="form-group">
-          <label>رقم الرخصة</label>
-          <input type="text" id="licenseNumber" class="readonly-field" readonly>
-        </div>
+          <div class="form-group">
+            <label>رقم لوحة السيارة</label>
+            <input type="text" id="carPlate" class="readonly-field" readonly>
+          </div>
 
-        <div class="form-group">
-          <label>رقم لوحة السيارة</label>
-          <input type="text" id="carPlate" class="readonly-field" readonly>
-        </div>
+          <div class="form-group">
+            <label>طراز السيارة</label>
+            <input type="text" id="carModel">
+          </div>
 
-        <div class="form-group">
-          <label>طراز السيارة</label>
-          <input type="text" id="carModel">
-        </div>
+          <div class="form-group">
+            <label>لون السيارة</label>
+            <input type="text" id="carColor">
+          </div>
 
-        <div class="form-group">
-          <label>لون السيارة</label>
-          <input type="text" id="carColor">
-        </div>
+          <div class="form-group">
+            <label>عدد المقاعد المتاحة</label>
+            <select id="seatsAvailable">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
 
-        <div class="form-group">
-          <label>عدد المقاعد المتاحة</label>
-          <select id="seatsAvailable">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-          </select>
-        </div>
-
-        <div class="form-actions">
-          <a href="driverUI.html" class="btn cancel-btn">إلغاء</a>
-          <button type="submit" class="btn submit-btn" id="saveBtn" disabled>حفظ</button>
-        </div>
+          <div class="form-actions">
+            <a href="driverUI.html" class="btn cancel-btn">إلغاء</a>
+            <button type="submit" class="btn submit-btn" id="saveBtn" disabled>حفظ</button>
+          </div>
 
       </form>
     </div>
@@ -402,6 +403,12 @@
         }
       });
     });
+    function startPasswordChange() {
+      localStorage.setItem("passwordFlow", "driverSetting");
+      window.location.href = "verifyEmail.html";
+    }
+
+
   </script>
 
 </body>

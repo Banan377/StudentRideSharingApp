@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "passengers")
-public class PassengerModel extends UserModel {
+public class PassengerModel {
+
     @Id
-    private String email;
+    private String email; 
 
-    private int totalRides;
-    private double rating;
+    private int totalRides = 0;
+    private double rating = 5.0;
 
-    // Constructors
     public PassengerModel() {}
 
     public PassengerModel(String email) {
@@ -20,13 +20,14 @@ public class PassengerModel extends UserModel {
         this.rating = 5.0;
     }
 
-    // Getters and Setters
+    // Getters & Setters
+
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-     
+
     public int getTotalRides() { return totalRides; }
     public void setTotalRides(int totalRides) { this.totalRides = totalRides; }
-    
+
     public double getRating() { return rating; }
     public void setRating(double rating) { this.rating = rating; }
 }

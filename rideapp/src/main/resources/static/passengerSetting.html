@@ -252,9 +252,8 @@
         <div class="section-title">الأمان</div>
         <div class="password-section">
           <div class="form-group">
-            <label for="currentPassword">كلمة المرور الحالية</label>
-            <input type="password" id="currentPassword">
-            <a href="verifyEmail.html" class="password-toggle">ترغب بتغيير كلمة المرور؟</a>
+            <label for="currentPassword">تغيير كلمة المرور</label>
+            <a href="#" onclick="startPasswordChange()" class="password-toggle">ترغب بتغيير كلمة المرور؟</a>
           </div>
 
 
@@ -283,7 +282,6 @@
   </div>
 
   <<script>
-    // النسخة المعدلة لزر "حفظ" ليكون "Disabled" حتى يتم تعديل أي شيء
     let originalData = {
     college: "",
     emergency1: "",
@@ -397,6 +395,14 @@
     alert("حدث خطأ أثناء تحديث البيانات");
     }
     });
+   
+
+    function startPasswordChange() {
+    localStorage.setItem("passwordFlow", "passengerSetting");
+    window.location.href = "verifyEmail.html";
+    }
+
+
     </script>
 
 
