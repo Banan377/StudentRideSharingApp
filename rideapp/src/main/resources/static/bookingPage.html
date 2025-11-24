@@ -303,6 +303,17 @@
                 dropdown.classList.add('hidden');
             }
         });
+       
+        document.querySelectorAll('.card-profile-btn').forEach((btn) => {
+            btn.addEventListener('click', function () {
+
+                const card = this.closest('.trip-card');
+                const driverName = card.getAttribute('data-driver-name');
+                const driverRating = card.getAttribute('data-driver-rating');
+
+                window.location.href = `driverProfile.html?name=${encodeURIComponent(driverName)}&rating=${driverRating}`;
+            });
+        });
 
 
 

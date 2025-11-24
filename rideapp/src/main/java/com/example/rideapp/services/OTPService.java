@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,9 +30,7 @@ public class OTPService {
         otpRepository.delete(otpModel);
     }
 
-
-  
-    public OTPModel generateAndSendOTP(String email) {
+    public OTPModel generateAndSendOTP(String email, String otpType) {
 
         Optional<OTPModel> existing = otpRepository.findByEmail(email);
 
@@ -47,43 +46,26 @@ public class OTPService {
 
         String otp = String.format("%06d", new Random().nextInt(999999));
 
-        OTPModel otpModel =
-                new OTPModel(email, otp, LocalDateTime.now().plusMinutes(OTP_EXP_MINUTES));
+        OTPModel otpModel = new OTPModel(
+                email,
+                otp,
+                otpType,
+                LocalDateTime.now().plusMinutes(2));
 
         otpRepository.save(otpModel);
 
-        sendOTPEmail(email, otp);
+        System.out.println(" OTP Generated for " + email + ": " + otp);
 
-        System.out.println("Generated OTP for " + email + ": " + otp);
+        sendOTPEmail(email, otp);
 
         return otpModel;
     }
 
-
-
-    public boolean verifyOTP(String email, String otpCode) {
-
-        Optional<OTPModel> existing = otpRepository.findByEmail(email);
-
-        if (existing.isEmpty()) return false;
-
-        OTPModel otpModel = existing.get();
-
-        if (otpModel.getExpirationTime().isBefore(LocalDateTime.now()))
-            return false;
-
-        boolean valid = otpModel.getOtpCode().equals(otpCode);
-
-        if (valid) deleteOTP(otpModel);
-
-        return valid;
-    }
-
-
-
+    @Async
 
     private void sendOTPEmail(String email, String otp) {
         try {
+            System.out.println("OTP GENERATED = " + otp);
             SimpleMailMessage msg = new SimpleMailMessage();
             msg.setTo(email);
             msg.setSubject("رمز التحقق");
@@ -96,4 +78,9 @@ public class OTPService {
             System.out.println("Error sending email: " + e.getMessage());
         }
     }
+
+    public OTPModel getOTPByEmail(String email) {
+        return otpRepository.findByEmail(email).orElse(null);
+    }
+
 }

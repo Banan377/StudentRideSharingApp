@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class UserModel {
     @Id
     protected String email;

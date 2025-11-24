@@ -49,7 +49,7 @@ public class SwitchRoleController {
             if (user == null)
                 return false;
 
-            return "driver".equals(user.getRole());
+            return "driver".equals(driverRepo);
         } catch (Exception e) {
             return false;
         }
@@ -100,7 +100,7 @@ public class SwitchRoleController {
         }
     }
 
-    // كلاس طلب تسجيل السائق
+    //  طلب تسجيل السائق
     public static class DriverRegistrationRequest {
         private String email;
         private String licenseNumber;
@@ -110,7 +110,6 @@ public class SwitchRoleController {
         private int availableSeats;
         private String licenseFile;
 
-        // Getters and Setters
         public String getEmail() {
             return email;
         }

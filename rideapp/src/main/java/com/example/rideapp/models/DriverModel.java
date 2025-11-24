@@ -7,8 +7,9 @@ import jakarta.persistence.*;
 public class DriverModel {
 
     @Id
-    private String email;
-    private String status;
+    private String email; 
+
+    private String status = "pending";
 
     private String licenseNumber;
     private String licenseImage;
@@ -16,14 +17,14 @@ public class DriverModel {
     private String carModel;
     private String carColor;
     private String carPlate;
-
     private int seatsAvailable;
 
     public DriverModel() {
     }
 
-    public DriverModel(String email, String licenseNumber, String licenseImage,
-            String registrationImage, String carModel, String carColor,
+    public DriverModel(String email, String licenseNumber,
+            String licenseImage, String registrationImage,
+            String carModel, String carColor,
             String carPlate, int seatsAvailable) {
         this.email = email;
         this.licenseNumber = licenseNumber;
@@ -32,9 +33,10 @@ public class DriverModel {
         this.carModel = carModel;
         this.carColor = carColor;
         this.carPlate = carPlate;
-        this.status = "pending";
         this.seatsAvailable = seatsAvailable;
+        this.status = "pending";
     }
+
 
     public String getEmail() {
         return email;

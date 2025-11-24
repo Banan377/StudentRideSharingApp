@@ -19,7 +19,6 @@ public class DriverService {
         DriverModel driver = driverRepo.findByEmail(updatedDriver.getEmail());
         if (driver == null) return false;
 
-        // تحديث جميع الحقول المطلوبة
         if (updatedDriver.getCarModel() != null) {
             driver.setCarModel(updatedDriver.getCarModel());
         }

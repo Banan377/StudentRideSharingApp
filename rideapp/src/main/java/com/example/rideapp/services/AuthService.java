@@ -1,7 +1,6 @@
 package com.example.rideapp.services;
 
 import java.util.Map;
-
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -53,19 +52,18 @@ public class AuthService {
         String encodedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
         user.setPassword(encodedPassword);
 
-        // تعيين الدور والحالة بناءً على كون المستخدم سائق
         if (driverData != null && !driverData.isEmpty()) {
-            user.setRole("passenger"); // لا يتحول مباشرة
-            user.setStatus("pending"); // بانتظار التفعيل
+            user.setStatus("pending"); 
         } else {
-            user.setRole("passenger");
             user.setStatus("active");
         }
 
         userRepository.save(user);
 
-        PassengerModel passenger = new PassengerModel(user.getEmail());
-        passengerRepository.save(passenger);
+        if (!passengerRepository.existsById(user.getEmail())) {
+            PassengerModel passenger = new PassengerModel(user.getEmail());
+            passengerRepository.save(passenger);
+        }
 
         if (driverData != null && !driverData.isEmpty()) {
             DriverModel driver = new DriverModel(
@@ -94,5 +92,4 @@ public class AuthService {
         user.setPassword(encoded);
         userRepository.save(user);
     }
-
 }
