@@ -479,26 +479,34 @@ function loadPassengerBookings() {
 }
 
 }
+function getPassengerGender() {
+    const email = localStorage.getItem("userEmail");
+
+    return fetch(`http://localhost:8083/api/user/gender?email=${email}`)
+        .then(res => res.text())
+        .then(g => g.trim().toLowerCase());
+}
+
 function loadAvailableRides() {
-   const passengerEmail = localStorage.getItem("userEmail");
+    const passengerEmail = localStorage.getItem("userEmail");
 
-fetch(`http://localhost:8083/api/rides/available?passengerEmail=${passengerEmail}`)
-
+    fetch(`http://localhost:8083/api/rides/available?passengerEmail=${passengerEmail}`)
         .then(res => res.json())
-        .then(rides => {
+        .then(async rides => {
 
             const container = document.getElementById("rides-container");
             container.innerHTML = "";
 
+            if (rides.length === 0) {
+                container.innerHTML = `<p style="text-align:center; padding:20px;">لا توجد رحلات متاحة</p>`;
+                return;
+            }
+
             rides.forEach(ride => {
 
-                let seatLabel;
-
-                if (ride.seatsAvailable === 0) {
-                    seatLabel = `<span style="color:red;">لا توجد مقاعد متاحة</span>`;
-                } else {
-                    seatLabel = `${ride.seatsAvailable} / ${ride.totalSeats}`;
-                }
+                let seatLabel = ride.seatsAvailable === 0
+                    ? `<span style="color:red;">لا توجد مقاعد متاحة</span>`
+                    : `${ride.seatsAvailable} / ${ride.totalSeats}`;
 
                 const card = `
                 <div class="ride-card">
@@ -508,29 +516,63 @@ fetch(`http://localhost:8083/api/rides/available?passengerEmail=${passengerEmail
                     <p><b>الوقت:</b> ${ride.time}</p>
                     <p><b>المقاعد المتاحة:</b> ${seatLabel}</p>
 
-                    <button onclick="bookRide(${ride.rideId})" class="book-btn">حجز</button>
+                    <button class="book-btn"
+                        data-ride-id="${ride.rideId}"
+                        data-gender-pref="${ride.genderPreference}">
+                        حجز
+                    </button>
                 </div>
                 `;
 
                 container.innerHTML += card;
             });
+
+            // =============  إضافة الحدث بعد إنشاء الكروت =============
+            document.querySelectorAll(".book-btn").forEach(btn => {
+                btn.addEventListener("click", async () => {
+
+                    const rideId = btn.getAttribute("data-ride-id");
+                    const rideGenderPref = btn.getAttribute("data-gender-pref").toLowerCase();
+
+                    // 👇 نجيب جنس الراكب من الباك:
+                    const passengerGender = await getPassengerGender();
+
+                    // ===== شروط الجندر =====
+                    if (rideGenderPref === "male" && passengerGender !== "male") {
+                        alert("هذه الرحلة مخصصة للرجال فقط.");
+                        return;
+                    }
+
+                    if (rideGenderPref === "female" && passengerGender !== "female") {
+                        alert("هذه الرحلة مخصصة للنساء فقط.");
+                        return;
+                    }
+
+                    // ===== إذا كله تمام، نرسل طلب الحجز =====
+                    bookRide(rideId);
+                });
+            });
         });
 }
+
 function bookRide(rideId) {
     const passengerEmail = localStorage.getItem("userEmail");
 
     fetch(`http://localhost:8083/api/bookings/request?rideId=${rideId}&passengerEmail=${passengerEmail}`, {
         method: "POST"
     })
-    .then(res => {
-        if(res.ok){
-            alert("تم إرسال طلب الحجز!");
-            loadAvailableRides(); //  تحديث المقاعد مباشرة
-        } else {
-            alert("لا يوجد مقاعد متاحة!");
-        }
-    });
+        .then(res => {
+            if (res.ok) {
+                alert("تم إرسال طلب الحجز!");
+                loadAvailableRides();
+            } else {
+                alert("لا يوجد مقاعد متاحة!");
+            }
+        });
 }
+
+
+
 
 
 
