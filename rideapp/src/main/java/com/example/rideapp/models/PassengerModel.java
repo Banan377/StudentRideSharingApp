@@ -7,12 +7,14 @@ import jakarta.persistence.*;
 public class PassengerModel {
 
     @Id
-    private String email; 
+    private String email;
 
     private int totalRides = 0;
     private double rating = 5.0;
+    private String name;
 
-    public PassengerModel() {}
+    public PassengerModel() {
+    }
 
     public PassengerModel(String email) {
         this.email = email;
@@ -22,12 +24,35 @@ public class PassengerModel {
 
     // Getters & Setters
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getEmail() {
+        return email;
+    }
 
-    public int getTotalRides() { return totalRides; }
-    public void setTotalRides(int totalRides) { this.totalRides = totalRides; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public double getRating() { return rating; }
-    public void setRating(double rating) { this.rating = rating; }
+    public int getTotalRides() {
+        return totalRides;
+    }
+
+    public void setTotalRides(int totalRides) {
+        this.totalRides = totalRides;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

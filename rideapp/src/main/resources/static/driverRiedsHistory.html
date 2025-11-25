@@ -41,8 +41,7 @@
                         <ul>
                             <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل
                                         التقييمات</span></a></li>
-                            <li><a href="#" onclick="showSettingsPage()"><i
-                                        class="fas fa-cog"></i><span>الإعدادات</span></a></li>
+                            <li><a href="driverSetting.html"><i class="fas fa-cog"></i><span>الإعدادات</span></a></li>
                             <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل
                                         الخروج</span></a></li>
                         </ul>
@@ -86,36 +85,7 @@
             </div>
         </div>
 
-        <!--  الإعدادات -->
-        <div id="settings-page" class="full-page hidden">
-            <div class="container-form">
-                <div class="form-box">
-                    <div class="page-header">
-                        <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
-                        <h2>الإعدادات</h2>
-                    </div>
 
-                    <div class="settings-form">
-                        <div class="form-group">
-                            <label for="name">الاسم</label>
-                            <input type="text" id="name" placeholder="أدخل اسمك">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password">كلمة المرور</label>
-                            <input type="password" id="password" placeholder="أدخل كلمة المرور الجديدة">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="emergency-contact">جهة اتصال الطوارئ</label>
-                            <input type="tel" id="emergency-contact" placeholder="رقم الهاتف للطوارئ">
-                        </div>
-
-                        <button onclick="updateSettings()" class="update-btn">تحديث المعلومات</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
 
         <!-- TRIPS SECTION (مثال) -->
