@@ -1,6 +1,6 @@
 package com.example.rideapp.controllers;
 
-import com.example.rideapp.models.Student;
+import com.example.rideapp.models.OTPModel;
 import com.example.rideapp.models.UserModel;
 import com.example.rideapp.services.AuthService;
 import com.example.rideapp.services.OTPService;
@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,61 +26,110 @@ public class AuthController {
     @Autowired
     private StudentRepository studentRepository;
 
-
-    
     @PostMapping("/send-otp")
     public ResponseEntity<?> sendOtp(@RequestBody Map<String, String> request) {
         String email = request.get("email");
+        String otpType = request.get("otpType");
         boolean isResetPassword = Boolean.parseBoolean(request.getOrDefault("resetPasswordMode", "false"));
 
-        // 1) تحقق أن الإيميل تابع للطلاب
-        Optional<Student> student = studentRepository.findById(email);
-        if (student.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("message", "الإيميل غير مسجل في النظام"));
+        // التحقق من وجود الإيميل في قاعدة الطلاب
+        if (!studentRepository.existsByEmail(email)) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "الإيميل غير مسجل في قاعدة بيانات الطلاب"));
         }
 
-        // 2) تسجيل جديد → يمنع الإيميل المتكرر
+        // تسجيل جديد
         if (!isResetPassword && authService.isUserRegistered(email)) {
-            return ResponseEntity.badRequest().body(Map.of("message", "هذا الإيميل مسجل مسبقًا!"));
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "هذا الإيميل مسجل مسبقًا!"));
         }
 
-        // 3) نسيان كلمة المرور → يجب أن يكون الإيميل مسجّل فعلاً
+        // استعادة كلمة المرور
         if (isResetPassword && !authService.isUserRegistered(email)) {
-            return ResponseEntity.badRequest().body(Map.of("message", "لا يوجد حساب مرتبط بهذا البريد"));
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "لا يوجد حساب مرتبط بهذا البريد"));
         }
 
         try {
-            otpService.generateAndSendOTP(email);
+            otpService.generateAndSendOTP(email, otpType);
             return ResponseEntity.ok(Map.of("message", "تم إرسال كود التحقق"));
-        } catch (IllegalStateException ex) {
-
-            if (ex.getMessage().equals("OTP_NOT_EXPIRED")) {
-                return ResponseEntity.badRequest()
-                        .body(Map.of("message", "تم إرسال كود مسبقًا — الرجاء الانتظار حتى انتهاء الوقت"));
-            }
-
-            return ResponseEntity.badRequest().body(Map.of("message", "حدث خطأ أثناء إرسال الكود"));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "حدث خطأ أثناء إرسال الكود"));
         }
     }
-
 
     @PostMapping("/verify-otp")
     public ResponseEntity<?> verifyOtp(@RequestBody Map<String, String> request) {
+
         String email = request.get("email");
         String otpCode = request.get("otpCode");
 
-        boolean isValid = otpService.verifyOTP(email, otpCode);
+        OTPModel otp = otpService.getOTPByEmail(email);
 
-        if (isValid) {
-            return ResponseEntity.ok(Map.of("message", "تم التحقق بنجاح", "success", true));
+        if (otp == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("success", false, "message", "لا يوجد كود تحقق مخصص لهذا البريد"));
         }
 
-        return ResponseEntity.badRequest()
-                .body(Map.of("message", "كود OTP غير صحيح أو منتهي الصلاحية", "success", false));
+        // 2) التحقق من انتهاء الصلاحية
+        if (otp.getExpirationTime().isBefore(LocalDateTime.now())) {
+
+            otpService.deleteOTP(otp);
+
+            return ResponseEntity.badRequest()
+                    .body(Map.of("success", false, "message", "انتهت صلاحية الكود — اطلب رمزًا جديدًا"));
+        }
+
+        // 3) التحقق أن الكود صحيح
+        if (!otp.getOtpCode().equals(otpCode)) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("success", false, "message", "كود OTP غير صحيح"));
+        }
+
+        // 4) حذف الكود بعد الاستخدام
+        otpService.deleteOTP(otp);
+
+        // 5) التوجيه حسب نوع الـ OTP
+        switch (otp.getOtpType()) {
+
+            case "password_reset":
+                return ResponseEntity.ok(Map.of(
+                        "success", true,
+                        "redirect", "forgotPassword.html",
+                        "message", "تم التحقق، يمكنك إعادة تعيين كلمة المرور"));
+
+            case "signup":
+                return ResponseEntity.ok(Map.of(
+                        "success", true,
+                        "redirect", "signup-form.html",
+                        "message", "تم التحقق، أكمل إنشاء حسابك"));
+
+            case "change_from_settings":
+                return ResponseEntity.ok(Map.of(
+                        "success", true,
+                        "redirect", "resetPassword.html",
+                        "message", "تم التحقق، يمكنك تغيير كلمة المرور"));
+        }
+
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "تم التحقق بنجاح"));
     }
 
+    @PostMapping("/cancel-otp")
+    public ResponseEntity<?> cancelOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
 
-   
+        OTPModel otp = otpService.getOTPByEmail(email);
+
+        if (otp != null) {
+            otpService.deleteOTP(otp);
+        }
+
+        return ResponseEntity.ok(Map.of("message", "OTP deleted"));
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, Object> requestData) {
         try {
@@ -125,8 +174,6 @@ public class AuthController {
         }
     }
 
-
-    
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
         String email = request.get("email");

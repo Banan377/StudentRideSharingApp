@@ -87,3 +87,19 @@ button {
 button:hover {
   background-color:#265262;
 }
+.signup-link {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+    color: #265262;
+}
+
+.signup-link a {
+    color: #487788;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}

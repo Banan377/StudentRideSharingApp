@@ -11,24 +11,50 @@ import java.time.LocalDateTime;
 public class OTPModel {
 
     @Id
-    private String email;      
+    private String email;
     private String otpCode;
     private LocalDateTime expirationTime;
+    private String otpType;
 
-    public OTPModel() {}
+    public OTPModel() {
+    }
 
-    public OTPModel(String email, String otpCode, LocalDateTime expirationTime) {
+    public OTPModel(String email, String otpCode, String otpType,LocalDateTime expirationTime) {
         this.email = email;
         this.otpCode = otpCode;
         this.expirationTime = expirationTime;
+        this.otpType=otpType;
     }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getOtpCode() { return otpCode; }
-    public void setOtpCode(String otpCode) { this.otpCode = otpCode; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public LocalDateTime getExpirationTime() { return expirationTime; }
-    public void setExpirationTime(LocalDateTime expirationTime) { this.expirationTime = expirationTime; }
+    public String getOtpCode() {
+        return otpCode;
+    }
+
+    public void setOtpCode(String otpCode) {
+        this.otpCode = otpCode;
+    }
+
+    public LocalDateTime getExpirationTime() {
+        return expirationTime;
+    }
+
+    public void setExpirationTime(LocalDateTime expirationTime) {
+        this.expirationTime = expirationTime;
+    }
+
+    public String getOtpType() {
+        return otpType;
+    }
+
+    public void setOtpType(String otpType) {
+        this.otpType = otpType;
+    }
 }

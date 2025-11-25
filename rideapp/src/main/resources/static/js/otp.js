@@ -36,8 +36,25 @@ inputs.forEach((input, index) => {
 });
 
 
+function initializeTimer() {
+  const endTime = localStorage.getItem("otpEndTime");
+
+  if (endTime) {
+    const remaining = Math.floor((endTime - Date.now()) / 1000);
+    if (remaining > 0) {
+      startTimer(remaining);
+      return;
+    }
+  }
+
+  startTimer(120);
+}
+
 function startTimer(durationSeconds = 120) {
   let timeLeft = durationSeconds;
+
+  const endTime = Date.now() + timeLeft * 1000;
+  localStorage.setItem("otpEndTime", endTime);
 
   resendLink.style.display = "none";
   timerBox.style.display = "block";
@@ -47,11 +64,13 @@ function startTimer(durationSeconds = 120) {
   updateTimerUI(timeLeft);
 
   countdown = setInterval(() => {
-    timeLeft--;
-    updateTimerUI(timeLeft);
+    timeLeft = Math.floor((endTime - Date.now()) / 1000);
 
-    if (timeLeft < 0) {
+    if (timeLeft >= 0) {
+      updateTimerUI(timeLeft);
+    } else {
       clearInterval(countdown);
+      localStorage.removeItem("otpEndTime");
       timerBox.style.display = "none";
       resendLink.style.display = "inline";
     }
@@ -63,12 +82,11 @@ function updateTimerUI(timeLeft) {
   let seconds = timeLeft % 60;
 
   timerSpan.textContent =
-    `${minutes.toString().padStart(2, "0")}:${seconds
-      .toString()
-      .padStart(2, "0")}`;
+    `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 }
 
-startTimer(120);
+initializeTimer();
+
 
 otpForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -90,18 +108,27 @@ otpForm.addEventListener("submit", async (e) => {
     const result = await response.json();
     alert(result.message);
 
-    if (response.ok) {
+    if (result.redirect) {
+      window.location.href = result.redirect;
+      return;
+    }
 
-      if (localStorage.getItem("resetPasswordMode") === "true") {
+    if (response.ok) {
+      const resetMode = localStorage.getItem("resetPasswordMode") === "true";
+      localStorage.removeItem("resetPasswordMode");
+
+      if (resetMode) {
         window.location.href = "forgotPassword.html";
       } else {
         window.location.href = "signup-form.html";
       }
     }
+
   } catch (err) {
     alert("حدث خطأ أثناء التحقق من الكود.");
   }
 });
+
 
 
 resendLink.addEventListener("click", async () => {
@@ -111,8 +138,13 @@ resendLink.addEventListener("click", async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email,
-        resetPasswordMode: localStorage.getItem("resetPasswordMode") === "true"
-      }),
+        otpType: localStorage.getItem("passwordFlow") === "signup"
+          ? "signup"
+          : localStorage.getItem("passwordFlow") === "forgot"
+            ? "password_reset"
+            : "change_from_settings"
+      })
+
     });
 
     const result = await response.json();
@@ -124,3 +156,34 @@ resendLink.addEventListener("click", async () => {
     alert("حدث خطأ أثناء إعادة إرسال الكود.");
   }
 });
+window.addEventListener("beforeunload", () => {
+  const prev = document.referrer || "";
+
+  if (!prev.includes("otp.html")) {
+    fetch("/api/auth/cancel-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+
+    localStorage.removeItem("otpEndTime");
+    localStorage.removeItem("otpActive");
+  }
+});
+
+const mode = localStorage.getItem("passwordFlow");
+const otpReturn = document.getElementById("otpReturn");
+
+if (mode === "forgot") {
+  otpReturn.innerHTML = `<a href="login.html" class="back-link">العودة إلى تسجيل الدخول</a>`;
+}
+else if (mode === "passengerSetting") {
+  otpReturn.innerHTML = `<a href="passengerSetting.html" class="back-link">العودة إلى الإعدادات</a>`;
+}
+else if (mode === "driverSetting") {
+  otpReturn.innerHTML = `<a href="driverSetting.html" class="back-link">العودة إلى الإعدادات</a>`;
+} else if (mode === "signup") {
+  otpReturn.innerHTML = `<a href="signup.html" class="back-link">العودة إلى إنشاء الحساب</a>`;
+}
+
+

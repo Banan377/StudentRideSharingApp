@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <title>إعدادات الراكب</title>
@@ -98,7 +99,7 @@
       cursor: pointer;
     }
 
-    .radio-group input[type="radio"]:disabled + span {
+    .radio-group input[type="radio"]:disabled+span {
       color: #666;
       cursor: not-allowed;
     }
@@ -185,6 +186,14 @@
       border: 2px solid #e8f4f8;
       margin-bottom: 20px;
     }
+
+    #saveBtn:disabled {
+      background: #cccccc;
+      color: #888888;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
   </style>
 </head>
 
@@ -200,28 +209,28 @@
       <form id="passengerSettingsForm">
         <!-- المعلومات الأساسية -->
         <div class="section-title">المعلومات الشخصية</div>
-        
+
         <div class="form-group">
           <label for="firstName">الاسم الأول</label>
-          <input type="text" id="firstName" value="فاطمة" class="readonly-field" readonly>
+          <input type="text" id="firstName" class="readonly-field" readonly>
           <div class="field-note">لا يمكن تعديل الاسم الأول</div>
         </div>
 
         <div class="form-group">
           <label for="lastName">الاسم الأخير</label>
-          <input type="text" id="lastName" value="علي" class="readonly-field" readonly>
+          <input type="text" id="lastName" class="readonly-field" readonly>
           <div class="field-note">لا يمكن تعديل الاسم الأخير</div>
         </div>
 
         <div class="form-group">
           <label for="email">البريد الإلكتروني الجامعي</label>
-          <input type="email" id="email" value="fatima.ali@university.edu" class="readonly-field" readonly>
+          <input type="email" id="email" class="readonly-field" readonly>
           <div class="field-note">لا يمكن تعديل البريد الإلكتروني</div>
         </div>
 
         <div class="form-group">
           <label for="college">الكلية</label>
-          <input type="text" id="college" value="كلية الهندسة">
+          <input type="text" id="college">
         </div>
 
         <div class="form-group">
@@ -243,92 +252,161 @@
         <div class="section-title">الأمان</div>
         <div class="password-section">
           <div class="form-group">
-            <label for="currentPassword">كلمة المرور الحالية</label>
-            <input type="password" id="currentPassword">
-            <a href="verifyEmail.html" class="password-toggle">ترغب بتغيير كلمة المرور؟</a>
+            <label for="currentPassword">تغيير كلمة المرور</label>
+            <a href="#" onclick="startPasswordChange()" class="password-toggle">ترغب بتغيير كلمة المرور؟</a>
           </div>
 
-         
 
-        <!-- بيانات الطوارئ -->
-        <div class="section-title">بيانات الطوارئ</div>
-        <div class="emergency-section">
-          <div class="form-group">
-            <label for="emergency1">رقم هاتف الطوارئ</label>
-            <input type="tel" id="emergency1" value="0551112233">
+
+          <!-- بيانات الطوارئ -->
+          <div class="section-title">بيانات الطوارئ</div>
+          <div class="emergency-section">
+            <div class="form-group">
+              <label for="emergency1">رقم هاتف الطوارئ</label>
+              <input type="tel" id="emergency1" value="0551112233">
+            </div>
+
+            <div class="form-group">
+              <label for="emergency2">رقم هاتف إضافي (اختياري)</label>
+              <input type="tel" id="emergency2" value="0554445566">
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="emergency2">رقم هاتف إضافي (اختياري)</label>
-            <input type="tel" id="emergency2" value="0554445566">
+          <!-- أزرار -->
+          <div class="form-actions">
+            <a href="passengerRides.html" class="btn cancel-btn">إلغاء</a>
+            <button id="saveBtn" type="submit" class="btn submit-btn" disabled>حفظ التغييرات</button>
           </div>
-        </div>
-
-        <!-- أزرار -->
-        <div class="form-actions">
-          <a href="passengerRides.html" class="btn cancel-btn">إلغاء</a>
-          <button type="submit" class="btn submit-btn">حفظ التغييرات</button>
-        </div>
       </form>
     </div>
   </div>
 
-  <script>
-    document.getElementById('passengerSettingsForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-    
-      
-      // التحقق من الحقول الإجبارية
-      const requiredFields = ['emergency1'];
-      let isValid = true;
-      
-      requiredFields.forEach(field => {
-        const input = document.getElementById(field);
-        if (!input.value.trim()) {
-          isValid = false;
-          input.style.borderColor = '#dc3545';
-        } else {
-          input.style.borderColor = '#e0e0e0';
-        }
-      });
-      
-      if (!isValid) {
-        alert('يرجى ملء جميع الحقول الإجبارية');
-        return;
-      }
-      
-      // محاكاة حفظ البيانات
-      const formData = {
-        firstName: document.getElementById('firstName').value,
-        lastName: document.getElementById('lastName').value,
-        email: document.getElementById('email').value,
-        college: document.getElementById('college').value,
-        gender: document.querySelector('input[name="gender"]:checked').value,
-        emergency1: document.getElementById('emergency1').value,
-        emergency2: document.getElementById('emergency2').value
-      };
+  <<script>
+    let originalData = {
+    college: "",
+    emergency1: "",
+    emergency2: ""
+    };
 
-      if (newPassword) {
-        formData.passwordChanged = true;
-      }
+    function checkFormChanges() {
+    const currentCollege = document.getElementById("college").value;
+    const currentEmergency1 = document.getElementById("emergency1").value;
+    const currentEmergency2 = document.getElementById("emergency2").value;
+    const password = document.getElementById("currentPassword").value;
 
-      console.log('تم حفظ إعدادات الراكب:', formData);
-      
-      alert('تم تحديث الإعدادات بنجاح');
-      window.location.href = 'passengerRides.html';
+    const changed =
+    currentCollege !== originalData.college ||
+    currentEmergency1 !== originalData.emergency1 ||
+    currentEmergency2 !== originalData.emergency2 ||
+    password.trim() !== "";
+
+    document.querySelector(".submit-btn").disabled = !changed;
+    }
+
+    document.addEventListener("DOMContentLoaded", async function () {
+    const email = localStorage.getItem("userEmail");
+
+    if (!email) {
+    alert("يجب تسجيل الدخول أولاً");
+    window.location.href = "login.html";
+    return;
+    }
+
+    try {
+    const response = await fetch(`/api/profile/${email}`);
+    const user = await response.json();
+
+    document.getElementById("firstName").value = user.name.split(" ")[0] || "";
+    document.getElementById("lastName").value = user.name.split(" ")[1] || "";
+    document.getElementById("email").value = user.email;
+    document.getElementById("college").value = user.college || "";
+
+    if (user.emergencyContacts) {
+    const parts = user.emergencyContacts.split(",");
+    document.getElementById("emergency1").value = parts[0] || "";
+    document.getElementById("emergency2").value = parts[1] || "";
+    } else {
+    document.getElementById("emergency1").value = "";
+    document.getElementById("emergency2").value = "";
+    }
+
+    originalData.college = document.getElementById("college").value;
+    originalData.emergency1 = document.getElementById("emergency1").value;
+    originalData.emergency2 = document.getElementById("emergency2").value;
+
+    document.querySelector(".submit-btn").disabled = true;
+
+    } catch (err) {
+    alert("خطأ في تحميل البيانات");
+    }
+
+    const inputsToWatch = [
+    document.getElementById("college"),
+    document.getElementById("emergency1"),
+    document.getElementById("emergency2"),
+    document.getElementById("currentPassword")
+    ];
+
+    inputsToWatch.forEach(input => {
+    input.addEventListener("input", checkFormChanges);
+    });
     });
 
-    // إضافة تأثيرات للحقول عند التركيز
-    document.querySelectorAll('input:not(.readonly-field)').forEach(input => {
-      input.addEventListener('focus', function() {
-        this.style.borderColor = '#487788';
-        this.style.boxShadow = '0 0 0 3px rgba(72, 119, 136, 0.1)';
-      });
-      
-      input.addEventListener('blur', function() {
-        this.style.boxShadow = 'none';
-      });
+    document.getElementById("passengerSettingsForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const college = document.getElementById("college").value;
+    const emergency1 = document.getElementById("emergency1").value;
+    const emergency2 = document.getElementById("emergency2").value;
+    const password = document.getElementById("currentPassword").value;
+    const email = document.getElementById("email").value;
+
+    const emergencyCombined = emergency1 + "," + emergency2;
+
+    if (
+    college === originalData.college &&
+    emergency1 === originalData.emergency1 &&
+    emergency2 === originalData.emergency2 &&
+    password.trim() === ""
+    ) {
+    alert("لم يتم تعديل أي بيانات.");
+    return;
+    }
+
+    const updatedUser = {
+    email: email,
+    college: college,
+    emergencyContacts: emergencyCombined,
+    password: password
+    };
+
+    try {
+    const response = await fetch(`/api/profile/update/${email}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updatedUser)
     });
-  </script>
+
+    const result = await response.text();
+    alert(result);
+    window.location.href = "passengerRides.html";
+
+    } catch (err) {
+    alert("حدث خطأ أثناء تحديث البيانات");
+    }
+    });
+   
+
+    function startPasswordChange() {
+    localStorage.setItem("passwordFlow", "passengerSetting");
+    window.location.href = "verifyEmail.html";
+    }
+
+
+    </script>
+
+
+
 </body>
+
 </html>

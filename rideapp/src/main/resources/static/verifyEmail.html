@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>التحقق من البريد الإلكتروني</title>
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: "Poppins", sans-serif;
       background: #ccddea;
@@ -22,7 +28,7 @@
       max-width: 440px;
       background: #fff;
       border-radius: 12px;
-      box-shadow: 0 6px 28px rgba(0,0,0,0.08);
+      box-shadow: 0 6px 28px rgba(0, 0, 0, 0.08);
       padding: 28px;
       text-align: right;
     }
@@ -61,7 +67,8 @@
       text-align: left;
     }
 
-    .error-msg, .success-msg {
+    .error-msg,
+    .success-msg {
       margin-top: 10px;
       padding: 10px 12px;
       border-radius: 8px;
@@ -93,7 +100,9 @@
       margin-top: 14px;
     }
 
-    .btn:hover { background: #1e414d; }
+    .btn:hover {
+      background: #1e414d;
+    }
   </style>
 </head>
 
@@ -109,6 +118,8 @@
       <div id="error" class="error-msg"></div>
 
       <button id="sendBtn" type="button" class="btn">أرسل رمز التحقق</button>
+      <p id="returnLink"></p>
+
     </form>
   </div>
 
@@ -119,7 +130,8 @@
 
     sendBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim().toLowerCase();
-
+      sendBtn.disabled = true;
+      sendBtn.textContent = "جاري الإرسال...";
       errorDiv.style.display = "none";
 
       if (!email.endsWith("@sm.imamu.edu.sa")) {
@@ -134,8 +146,10 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email,
+            otpType: "password_reset",
             resetPasswordMode: true
           })
+
         });
 
         const result = await response.json();
@@ -147,6 +161,12 @@
         }
 
         localStorage.setItem("userEmail", email);
+        window.location.href = "otp.html";
+
+
+
+
+        localStorage.setItem("userEmail", email);
         localStorage.setItem("resetPasswordMode", "true");
 
         window.location.href = "otp.html";
@@ -156,8 +176,52 @@
         errorDiv.style.display = "block";
       }
     });
+
+
+    const mode = localStorage.getItem("passwordFlow");
+
+
+    const title = document.querySelector("h2");
+    const lead = document.querySelector(".lead");
+    const returnLink = document.getElementById("returnLink");
+
+    if (mode === "forgot") {
+      title.textContent = "إعادة تعيين كلمة المرور";
+      lead.textContent = "أدخل بريدك لإرسال رمز استعادة كلمة المرور.";
+      returnLink.innerHTML = `
+    <div style="text-align:center;">
+      <a href="login.html" style="color:#265262; font-size:14px; font-weight:bold;">
+        العودة إلى تسجيل الدخول
+      </a>
+    </div>`;
+    }
+
+    else if (mode === "passengerSetting") {
+      title.textContent = "تأكيد البريد لتغيير كلمة المرور";
+      lead.textContent = "سنرسل رمز تأكيد لتعديل كلمة المرور من الإعدادات.";
+      returnLink.innerHTML = `
+    <div style="text-align:center;">
+      <a href="passengerSetting.html" style="color:#265262; font-size:14px; font-weight:bold;">
+        العودة إلى الإعدادات
+      </a>
+    </div>`;
+    }
+
+    else if (mode === "driverSetting") {
+      title.textContent = "تأكيد البريد لتغيير كلمة المرور";
+      lead.textContent = "سنرسل رمز تأكيد لتعديل كلمة المرور من الإعدادات.";
+      returnLink.innerHTML = `
+    <div style="text-align:center;">
+      <a href="driverSetting.html" style="color:#265262; font-size:14px; font-weight:bold;">
+        العودة إلى الإعدادات
+      </a>
+    </div>`;
+    }
+
+
+
   </script>
 
 </body>
-</html>
 
+</html>

@@ -17,7 +17,6 @@ public class StudentService {
     }
 
     public Optional<Student> isValidStudentEmail(String email) {
-        // يتحقق إذا الإيميل موجود في قاعدة الجامعة
         return studentRepository.findByEmail(email);
     }
 }

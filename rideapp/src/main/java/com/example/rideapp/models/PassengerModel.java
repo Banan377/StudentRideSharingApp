@@ -5,14 +5,16 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "passengers")
 public class PassengerModel {
+
     @Id
     private String email;
 
-    private int totalRides;
-    private double rating;
+    private int totalRides = 0;
+    private double rating = 5.0;
+    private String name;
 
-    // Constructors
-    public PassengerModel() {}
+    public PassengerModel() {
+    }
 
     public PassengerModel(String email) {
         this.email = email;
@@ -20,13 +22,37 @@ public class PassengerModel {
         this.rating = 5.0;
     }
 
-    // Getters and Setters
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-     
-    public int getTotalRides() { return totalRides; }
-    public void setTotalRides(int totalRides) { this.totalRides = totalRides; }
-    
-    public double getRating() { return rating; }
-    public void setRating(double rating) { this.rating = rating; }
+    // Getters & Setters
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getTotalRides() {
+        return totalRides;
+    }
+
+    public void setTotalRides(int totalRides) {
+        this.totalRides = totalRides;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

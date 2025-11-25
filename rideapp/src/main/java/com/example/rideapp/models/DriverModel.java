@@ -5,8 +5,11 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "drivers")
 public class DriverModel {
+
     @Id
-    private String email;
+    private String email; 
+
+    private String status = "pending";
 
     private String licenseNumber;
     private String licenseImage;
@@ -14,15 +17,14 @@ public class DriverModel {
     private String carModel;
     private String carColor;
     private String carPlate;
-    private String status; // pending, approved, rejected
     private int seatsAvailable;
 
-    // Constructors
     public DriverModel() {
     }
 
-    public DriverModel(String email, String licenseNumber, String licenseImage,
-            String registrationImage, String carModel, String carColor,
+    public DriverModel(String email, String licenseNumber,
+            String licenseImage, String registrationImage,
+            String carModel, String carColor,
             String carPlate, int seatsAvailable) {
         this.email = email;
         this.licenseNumber = licenseNumber;
@@ -31,11 +33,11 @@ public class DriverModel {
         this.carModel = carModel;
         this.carColor = carColor;
         this.carPlate = carPlate;
-        this.status = "pending";
         this.seatsAvailable = seatsAvailable;
+        this.status = "pending";
     }
 
-    // Getters and Setters
+
     public String getEmail() {
         return email;
     }
@@ -92,19 +94,19 @@ public class DriverModel {
         this.carPlate = carPlate;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public int getSeatsAvailable() {
         return seatsAvailable;
     }
 
     public void setSeatsAvailable(int seatsAvailable) {
         this.seatsAvailable = seatsAvailable;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
