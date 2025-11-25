@@ -23,7 +23,7 @@ public class RideCreationController {
             @RequestBody RideModel ride,
             @RequestParam String driverEmail) {
 
-        ride.setDriverEmail(driverEmail); // ← أهم سطر
+        ride.setDriverEmail(driverEmail); 
         RideModel savedRide = rideService.createRide(ride);
 
         return ResponseEntity.ok(savedRide);

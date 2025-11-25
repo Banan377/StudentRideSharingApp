@@ -3,8 +3,10 @@ package com.example.rideapp.services;
 import com.example.rideapp.models.BookingModel;
 import com.example.rideapp.models.PassengerModel;
 import com.example.rideapp.models.RideModel;
+import com.example.rideapp.models.UserModel;
 import com.example.rideapp.repositories.BookingRepository;
 import com.example.rideapp.repositories.PassengerRepository;
+import com.example.rideapp.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,21 +15,23 @@ import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
-    @Autowired
 
     private final BookingRepository bookingRepository;
     private final RideService rideService;
     private final PassengerRepository passengerRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public BookingService(BookingRepository bookingRepository,
             RideService rideService,
-            PassengerRepository passengerRepository) {
+            PassengerRepository passengerRepository,
+            UserRepository userRepository) {
         this.bookingRepository = bookingRepository;
         this.rideService = rideService;
         this.passengerRepository = passengerRepository;
+        this.userRepository = userRepository;
     }
-
-    // نفس bookRide القديم عادي
 
     // طلب حجز من الراكب -> يروح للسائق كـ pending
     public BookingModel createBookingRequest(Long rideId, String passengerEmail) {
@@ -62,8 +66,11 @@ public class BookingService {
                     PassengerModel passengerFull = passengerRepository.findByEmail(booking.getPassenger().getEmail())
                             .orElse(null);
 
-                    if (passengerFull != null) {
-                        booking.getPassenger().setName(passengerFull.getName());
+                    UserModel user = userRepository.findByEmail(booking.getPassenger().getEmail())
+                            .orElse(null);
+
+                    if (user != null) {
+                        booking.getPassenger().setName(user.getName());
                     }
 
                 })

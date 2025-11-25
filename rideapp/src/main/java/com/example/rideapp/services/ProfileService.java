@@ -16,12 +16,12 @@ public class ProfileService {
 
     // دالة جلب بيانات المستخدم
     public UserModel getUserProfile(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     public boolean updateProfile(String email, String college, String emergencyContacts, String password) {
         try {
-            UserModel user = userRepository.findByEmail(email);
+            UserModel user = userRepository.findByEmail(email).orElse(null);;
             if (user == null)
                 return false;
 
