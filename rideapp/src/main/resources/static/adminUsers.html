@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>إدارة المستخدمين</title>
+  <link rel="stylesheet" href="passenger.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .admin-title {
+      color: #265262;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .users-table th {
+      font-weight: 600;
+      color: #444;
+      font-size: 14px;
+    }
+
+    .users-table td {
+      font-size: 13px;
+      color: #333;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .status-active {
+      background: #e8f7ec;
+      color: #2e7d32;
+    }
+
+    .status-suspended {
+      background: #fdecea;
+      color: #c62828;
+    }
+
+    .status-pending_driver {
+      background: #fff7e6;
+      color: #b9770e;
+    }
+
+    .status-approved_driver {
+      background: #e6f4ff;
+      color: #1565c0;
+    }
+
+    .status-rejected_driver {
+      background: #fde7f0;
+      color: #ad1457;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo"></div>
+    <ul class="menue">
+      <li><a href="adminDashboard.html"><i class="fas fa-chart-line"></i><span>لوحة التحكم</span></a></li>
+      <li><a href="adminPendingDrivers.html"><i class="fas fa-id-card"></i><span>طلبات السائقين</span></a></li>
+      <li class="active"><a href="adminUsers.html"><i class="fas fa-users"></i><span>إدارة المستخدمين</span></a></li>
+      <li><a href="#"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
+    </ul>
+  </div>
+
+  <main class="main-content">
+
+    <div class="container">
+      <div class="header">
+
+        <h2 class="admin-title" style="margin-right:20px;">إدارة المستخدمين</h2>
+
+        <div class="profile-section">
+          <button onclick="toggleProfileDropdown()" class="profile-btn">
+            <i class="fas fa-user-circle"></i>
+          </button>
+          <div id="profile-dropdown" class="dropdown-menu hidden">
+            <ul>
+              <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <section style="padding: 25px; width:100%;">
+
+      <div
+        style="background:white; padding:20px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.08); margin-bottom:20px;">
+        <h3 style="color:#265262; margin-bottom:15px;">البحث و الفلاتر</h3>
+
+        <div style="display:flex; gap:15px; flex-wrap:wrap;">
+          <input id="searchInput" type="text" placeholder="بحث بالاسم أو البريد..."
+            style="padding:10px; border:1px solid #ccc; border-radius:8px; flex:1;">
+
+          <select id="roleFilter" style="padding:10px; border-radius:8px; border:1px solid #ccc; width:180px;">
+            <option value="">كل الأدوار</option>
+            <option value="passenger">راكب</option>
+            <option value="driver">سائق</option>
+            <option value="admin">مشرف</option>
+          </select>
+
+          <select id="statusFilter" style="padding:10px; border-radius:8px; border:1px solid #ccc; width:180px;">
+            <option value="">كل الحالات</option>
+            <option value="active">نشط</option>
+            <option value="suspended">موقوف</option>
+            <option value="pending_driver">طلب سائق</option>
+            <option value="approved_driver">سائق معتمد</option>
+            <option value="rejected_driver">مرفوض</option>
+          </select>
+
+          <button onclick="applyFilters()"
+            style="background:#487788; color:white; padding:10px 18px; border-radius:8px;">
+            تصفية
+          </button>
+        </div>
+      </div>
+
+      <!-- USERS TABLE -->
+      <div style="background:white; padding:20px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.08);">
+        <table class="users-table" style="width:100%; border-collapse:collapse; text-align:center;">
+          <thead>
+            <tr style="background:#f3f4f6;">
+              <th style="padding:12px;">الاسم</th>
+              <th style="padding:12px;">البريد</th>
+              <th style="padding:12px;">الدور</th>
+              <th style="padding:12px;">الحالة</th>
+              <th style="padding:12px;">إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="usersTable"></tbody>
+        </table>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    function toggleProfileDropdown() {
+      document.getElementById('profile-dropdown').classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', function (event) {
+      const profile = document.querySelector('.profile-section');
+      if (!profile.contains(event.target)) {
+        document.getElementById('profile-dropdown').classList.add('hidden');
+      }
+    });
+
+    function logout() {
+      document.getElementById('profile-dropdown').classList.add('hidden');
+      const overlay = document.createElement('div');
+      overlay.className = 'logout-overlay';
+      overlay.id = 'logout-confirmation';
+
+      overlay.innerHTML = `
+      <div class="logout-modal">
+        <div class="logout-content">
+          <i class="fas fa-sign-out-alt logout-icon"></i>
+          <h3>تسجيل الخروج</h3>
+          <p>هل أنت متأكد؟</p>
+          <div class="logout-buttons">
+            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
+            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
+          </div>
+        </div>
+      </div>`;
+
+      document.body.appendChild(overlay);
+    }
+
+    function confirmLogout() {
+      localStorage.removeItem("currentUser");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("resetPasswordMode");
+
+      const overlay = document.getElementById('logout-confirmation');
+      overlay.innerHTML = `
+      <div class="logout-modal">
+        <div class="logout-content success">
+          <i class="fas fa-check-circle success-icon"></i>
+          <h3>تم تسجيل الخروج</h3>
+          <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
+        </div>
+      </div>`;
+    }
+
+    function cancelLogout() {
+      const overlay = document.getElementById('logout-confirmation');
+      if (overlay) overlay.remove();
+    }
+
+    function closeLogoutSuccess() {
+      window.location.href = "login.html";
+    }
+
+    async function loadUsers() {
+      const res = await fetch('/api/admin/users');
+      const users = await res.json();
+      window.allUsers = users;
+      renderUsers(users);
+    }
+
+    function statusPill(status) {
+      if (!status) return "-";
+      let cls = "status-pill ";
+      if (status === "active") cls += "status-active";
+      else if (status === "suspended") cls += "status-suspended";
+      else if (status === "pending_driver") cls += "status-pending_driver";
+      else if (status === "approved_driver") cls += "status-approved_driver";
+      else if (status === "rejected_driver") cls += "status-rejected_driver";
+      return `<span class="${cls}">${status}</span>`;
+    }
+
+    function renderUsers(list) {
+      const table = document.getElementById("usersTable");
+      table.innerHTML = "";
+
+      if (!list || list.length === 0) {
+        table.innerHTML = `<tr><td colspan="5" style="padding:20px;">لا يوجد بيانات</td></tr>`;
+        return;
+      }
+
+      list.forEach(user => {
+        table.innerHTML += `
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:10px;">${user.name || "-"}</td>
+            <td style="padding:10px;">${user.email}</td>
+            <td style="padding:10px;">${user.role || "-"}</td>
+            <td style="padding:10px;">${statusPill(user.status)}</td>
+            <td style="padding:10px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+
+              <button onclick="changeStatus('${user.email}', 'active')"
+                      style="padding:6px 10px; background:#4caf50; color:white; border-radius:6px; font-size:12px;">
+                تفعيل
+              </button>
+
+              <button onclick="changeStatus('${user.email}', 'suspended')"
+                      style="padding:6px 10px; background:#f39c12; color:white; border-radius:6px; font-size:12px;">
+                إيقاف
+              </button>
+
+              <button onclick="deleteUser('${user.email}')"
+                      style="padding:6px 10px; background:#e74c3c; color:white; border-radius:6px; font-size:12px;">
+                حذف
+              </button>
+
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    async function changeStatus(email, status) {
+      if (!confirm("هل أنت متأكد من تغيير الحالة؟")) return;
+
+      await fetch(`/api/admin/users/status?email=${encodeURIComponent(email)}&status=${encodeURIComponent(status)}`, {
+        method: 'PUT'
+      });
+
+      alert("تم التحديث بنجاح");
+      loadUsers();
+    }
+
+    async function deleteUser(email) {
+      if (!confirm("هل تريد حذف هذا المستخدم نهائياً؟")) return;
+
+      await fetch(`/api/admin/users?email=${encodeURIComponent(email)}`, {
+        method: 'DELETE'
+      });
+
+      alert("تم حذف المستخدم");
+      loadUsers();
+    }
+
+    function applyFilters() {
+      const text = document.getElementById('searchInput').value.toLowerCase();
+      const role = document.getElementById('roleFilter').value;
+      const status = document.getElementById('statusFilter').value;
+
+      let filtered = window.allUsers.filter(u =>
+        (u.email.toLowerCase().includes(text) || (u.name || "").toLowerCase().includes(text)) &&
+        (role === "" || u.role === role) &&
+        (status === "" || u.status === status)
+      );
+
+      renderUsers(filtered);
+    }
+
+    loadUsers();
+  </script>
+
+</body>
+
+</html>

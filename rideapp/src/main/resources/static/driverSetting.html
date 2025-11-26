@@ -66,18 +66,21 @@
     }
 
     .readonly-field {
-      background: #f5f5f5;
+      background-color: #f9fbfb;
       color: #666;
       cursor: not-allowed;
+      border-color: #e8f4f8;
     }
 
     .section-title {
-      background: #f5f5f5;
-      padding: 10px 15px;
-      margin: 25px 0 15px;
-      border-right: 3px solid #487788;
+      background: #f3f6f7;
+      padding: 12px 20px;
+      margin: 30px 0 20px 0;
+      border-right: 4px solid #487788;
       font-weight: 600;
       color: #265262;
+      font-size: 16px;
+      border-radius: 8px;
     }
 
     .form-actions {
@@ -123,6 +126,35 @@
       box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
     }
 
+    .password-toggle {
+      color: #487788;
+      text-decoration: none;
+      font-size: 13px;
+      margin-top: 8px;
+      display: inline-block;
+      font-weight: 500;
+    }
+
+    .password-toggle:hover {
+      text-decoration: underline;
+    }
+
+    .emergency-section {
+      background: #fff9f9;
+      padding: 20px;
+      border-radius: 10px;
+      border: 2px solid #ffe6e6;
+      margin-bottom: 20px;
+    }
+
+    .password-section {
+      background: #f9fbfb;
+      padding: 20px;
+      border-radius: 10px;
+      border: 2px solid #e8f4f8;
+      margin-bottom: 20px;
+    }
+
     #saveBtn:disabled {
       background: #cccccc;
       color: #888888;
@@ -130,6 +162,7 @@
       box-shadow: none;
       transform: none;
     }
+
   </style>
 </head>
 
@@ -164,57 +197,60 @@
           <input type="text" id="college">
         </div>
 
-        <div class="section-title">الأمان</div>
         <div class="password-section">
+          <div class="section-title">الأمان</div>
           <div class="form-group">
             <label for="currentPassword">تغيير كلمة المرور</label>
             <a href="#" onclick="startPasswordChange()" class="password-toggle">ترغب بتغيير كلمة المرور؟</a>
           </div>
 
+
           <div class="section-title">بيانات الطوارئ</div>
+          <div class="emergency-section">
+            <div class="form-group">
+              <label for="emergency1">رقم هاتف الطوارئ</label>
+              <input type="tel" id="emergency1" class="readonly-field" >
+            </div>
 
-          <div class="form-group">
-            <label>رقم الطوارئ</label>
-            <input type="tel" id="emergency1">
+            <div class="form-group">
+              <label for="emergency2">رقم هاتف إضافي (اختياري)</label>
+              <input type="tel" id="emergency2">
+            </div>
           </div>
 
-          <div class="form-group">
-            <label>رقم إضافي (اختياري)</label>
-            <input type="tel" id="emergency2">
+          <div class="car-section">
+
+            <div class="section-title">بيانات السيارة</div>
+            <div class="form-group">
+              <label>رقم الرخصة</label>
+              <input type="text" id="licenseNumber" class="readonly-field" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>رقم لوحة السيارة</label>
+              <input type="text" id="carPlate" class="readonly-field" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>طراز السيارة</label>
+              <input type="text" id="carModel">
+            </div>
+
+            <div class="form-group">
+              <label>لون السيارة</label>
+              <input type="text" id="carColor">
+            </div>
+
+            <div class="form-group">
+              <label>عدد المقاعد المتاحة</label>
+              <select id="seatsAvailable">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
           </div>
-
-          <div class="section-title">بيانات السيارة</div>
-
-          <div class="form-group">
-            <label>رقم الرخصة</label>
-            <input type="text" id="licenseNumber" class="readonly-field" readonly>
-          </div>
-
-          <div class="form-group">
-            <label>رقم لوحة السيارة</label>
-            <input type="text" id="carPlate" class="readonly-field" readonly>
-          </div>
-
-          <div class="form-group">
-            <label>طراز السيارة</label>
-            <input type="text" id="carModel">
-          </div>
-
-          <div class="form-group">
-            <label>لون السيارة</label>
-            <input type="text" id="carColor">
-          </div>
-
-          <div class="form-group">
-            <label>عدد المقاعد المتاحة</label>
-            <select id="seatsAvailable">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-            </select>
-          </div>
-
           <div class="form-actions">
             <a href="driverUI.html" class="btn cancel-btn">إلغاء</a>
             <button type="submit" class="btn submit-btn" id="saveBtn" disabled>حفظ</button>
