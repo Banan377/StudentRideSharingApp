@@ -22,6 +22,9 @@ public class RideModel {
     private Double distance;
     private String driverEmail;
     private int totalSeats; // عدد المقاعد الأصلي
+    private boolean isEventRide = false;
+
+    
 
     public RideModel() {
     }
@@ -105,6 +108,22 @@ public class RideModel {
 
     public void setDriverEmail(String driverEmail) {
         this.driverEmail = driverEmail;
+    }
+
+    public int getTotalSeats() {
+        return totalSeats;
+    }
+
+    public void setTotalSeats(int totalSeats) {
+        this.totalSeats = totalSeats;
+    }
+
+    public boolean isEventRide() {
+        return isEventRide;
+    }
+
+    public void setEventRide(boolean eventRide) {
+        isEventRide = eventRide;
     }
 
 }

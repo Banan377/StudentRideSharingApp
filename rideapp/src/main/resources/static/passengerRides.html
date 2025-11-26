@@ -201,7 +201,6 @@
       </div>
     </div>
     <section id="myBookings" class="trips-section">
-      <h2 style="margin-bottom: 10px;">رحلاتي</h2>
       <div class="trips-grid" id="passenger-bookings"></div>
     </section>
 
@@ -226,6 +225,28 @@
 
     function closePage() {
       document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
+    }
+
+    function logout() {
+      document.getElementById('profile-dropdown').classList.add('hidden');
+      const overlay = document.createElement('div');
+      overlay.className = 'logout-overlay';
+      overlay.id = 'logout-confirmation';
+
+      overlay.innerHTML = `
+      <div class="logout-modal">
+        <div class="logout-content">
+          <i class="fas fa-sign-out-alt logout-icon"></i>
+          <h3>تسجيل الخروج</h3>
+          <p>هل أنت متأكد؟</p>
+          <div class="logout-buttons">
+            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
+            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
+          </div>
+        </div>
+      </div>`;
+
+      document.body.appendChild(overlay);
     }
 
     function logout() {
@@ -490,63 +511,136 @@
       fetch(`http://localhost:8083/api/passenger/my-bookings?passengerEmail=${encodeURIComponent(passengerEmail)}`)
         .then(res => res.json())
         .then(bookings => {
-          const container = document.querySelector(".trips-grid");
+
+          const container = document.getElementById("passenger-bookings");
           container.innerHTML = "";
 
-          if (bookings.length === 0) {
+          if (!Array.isArray(bookings) || bookings.length === 0) {
             container.innerHTML = `<p style="text-align:center; padding:20px;">لا توجد رحلات</p>`;
             return;
           }
 
           bookings.forEach(booking => {
-            let statusLabel = "";
+
+            let statusColor = "";
+            let statusText = "";
 
             if (booking.status === "pending") {
-              statusLabel = `<span class="pending">قيد الانتظار</span>`;
+              statusColor = "pending";
+              statusText = "قيد الانتظار";
             } else if (booking.status === "accepted") {
-              statusLabel = `<span class="accepted">تم تأكيد الطلب</span>`;
+              statusColor = "accepted";
+              statusText = "تم القبول";
             } else if (booking.status === "rejected") {
-              statusLabel = `<span class="rejected">تم رفض الطلب</span>`;
+              statusColor = "rejected";
+              statusText = "تم الرفض";
             }
 
             const card = `
-                    <div class="trip-card">
-                        <h3>${booking.ride.destination}</h3>
-                        <p><b>الانطلاق:</b> ${booking.ride.currentLocation}</p>
-                        <p><b>الوقت:</b> ${booking.ride.time}</p>
-                        <p><b>الحالة:</b> ${statusLabel}</p>
+                <article class="trip-card">
+
+                    <div>
+                        <div class="card-header">
+                            <h3>رحلتك</h3>
+                            <div class="chat-icon"><i class="fas fa-comment"></i></div>
+                        </div>
+
+                        <div class="trip-info">
+
+                            <div class="location-row">
+                                <div class="location-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <div>
+                                        <span class="label">نقطة الانطلاق:</span>
+                                        <span class="value">${booking.ride.currentLocation}</span>
+                                    </div>
+                                </div>
+
+                                <div class="location-item">
+                                    <i class="fas fa-flag"></i>
+                                    <div>
+                                        <span class="label">نقطة الوصول:</span>
+                                        <span class="value">${booking.ride.destination}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="details-row">
+                                <div class="detail-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <div>
+                                        <span class="label">اليوم:</span>
+                                        <span class="value">${booking.ride.date}</span>
+                                    </div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <i class="fas fa-clock"></i>
+                                    <div>
+                                        <span class="label">الوقت:</span>
+                                        <span class="value">${booking.ride.time}</span>
+                                    </div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <i class="fas fa-users"></i>
+                                    <div>
+                                        <span class="label">الحالة:</span>
+                                        <span class="value ${statusColor}">${statusText}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="driver-section">
+                        <div class="driver-info">
+                            <div class="driver-avatar"><i class="fas fa-user"></i></div>
+                            <div class="driver-details">
+                                <div class="driver-name">${booking.ride.driverName || booking.ride.driverEmail}</div>
+                                <div class="driver-rating">
+                                    <div class="stars">★ ★ ★ ★ ★</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </article>
                 `;
+
             container.innerHTML += card;
           });
         });
-      if (ride.seatsAvailable === 0) {
-        seatLabel = `<span class="fulled">لا توجد مقاعد متاحة</span>`;
-      } else {
-        seatLabel = `${ride.seatsAvailable} / ${ride.totalSeats}`;
-      }
-
     }
+
+    function getPassengerGender() {
+      const email = localStorage.getItem("userEmail");
+
+      return fetch(`http://localhost:8083/api/user/gender?email=${email}`)
+        .then(res => res.text())
+        .then(g => g.trim().toLowerCase());
+    }
+
     function loadAvailableRides() {
       const passengerEmail = localStorage.getItem("userEmail");
 
       fetch(`http://localhost:8083/api/rides/available?passengerEmail=${passengerEmail}`)
-
         .then(res => res.json())
-        .then(rides => {
+        .then(async rides => {
 
           const container = document.getElementById("rides-container");
           container.innerHTML = "";
 
+          if (rides.length === 0) {
+            container.innerHTML = `<p style="text-align:center; padding:20px;">لا توجد رحلات متاحة</p>`;
+            return;
+          }
+
           rides.forEach(ride => {
 
-            let seatLabel;
-
-            if (ride.seatsAvailable === 0) {
-              seatLabel = `<span style="color:red;">لا توجد مقاعد متاحة</span>`;
-            } else {
-              seatLabel = `${ride.seatsAvailable} / ${ride.totalSeats}`;
-            }
+            let seatLabel = ride.seatsAvailable === 0
+              ? `<span style="color:red;">لا توجد مقاعد متاحة</span>`
+              : `${ride.seatsAvailable} / ${ride.totalSeats}`;
 
             const card = `
                 <div class="ride-card">
@@ -556,14 +650,44 @@
                     <p><b>الوقت:</b> ${ride.time}</p>
                     <p><b>المقاعد المتاحة:</b> ${seatLabel}</p>
 
-                    <button onclick="bookRide(${ride.rideId})" class="book-btn">حجز</button>
+                    <button class="book-btn"
+                        data-ride-id="${ride.rideId}"
+                        data-gender-pref="${ride.genderPreference}">
+                        حجز
+                    </button>
                 </div>
                 `;
 
             container.innerHTML += card;
           });
+
+          // =============  إضافة الحدث بعد إنشاء الكروت =============
+          document.querySelectorAll(".book-btn").forEach(btn => {
+            btn.addEventListener("click", async () => {
+
+              const rideId = btn.getAttribute("data-ride-id");
+              const rideGenderPref = btn.getAttribute("data-gender-pref").toLowerCase();
+
+              const passengerGender = await getPassengerGender();
+
+              // ===== شروط الجندر =====
+              if (rideGenderPref === "male" && passengerGender !== "male") {
+                alert("هذه الرحلة مخصصة للرجال فقط.");
+                return;
+              }
+
+              if (rideGenderPref === "female" && passengerGender !== "female") {
+                alert("هذه الرحلة مخصصة للنساء فقط.");
+                return;
+              }
+
+              // ===== إذا كله تمام، نرسل طلب الحجز =====
+              bookRide(rideId);
+            });
+          });
         });
     }
+
     function bookRide(rideId) {
       const passengerEmail = localStorage.getItem("userEmail");
 
@@ -573,12 +697,15 @@
         .then(res => {
           if (res.ok) {
             alert("تم إرسال طلب الحجز!");
-            loadAvailableRides(); //  تحديث المقاعد مباشرة
+            loadAvailableRides();
           } else {
             alert("لا يوجد مقاعد متاحة!");
           }
         });
     }
+
+
+
 
 
 

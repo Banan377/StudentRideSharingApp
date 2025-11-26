@@ -27,6 +27,7 @@ public class RideService {
     public RideModel createRide(RideModel ride) {
         // حفظ ايميل السائق داخل الرحلة
         ride.setDriverEmail(ride.getDriverEmail());
+        ride.setTotalSeats(ride.getSeatsAvailable());
 
         ride.setStatus("ACTIVE");
         return rideRepository.save(ride);
