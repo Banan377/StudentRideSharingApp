@@ -14,4 +14,6 @@ public interface BookingRepository extends JpaRepository<BookingModel, Long> {
     List<BookingModel> findByDriverEmailAndStatus(@Param("driverEmail") String driverEmail,
             @Param("status") String status);
 
+    void deleteByPassengerEmail(String passengerEmail);
+
 }

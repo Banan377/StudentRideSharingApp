@@ -211,52 +211,49 @@
 
         function logout() {
             document.getElementById('profile-dropdown').classList.add('hidden');
-            showLogoutConfirmation();
-        }
-
-        function showLogoutConfirmation() {
             const overlay = document.createElement('div');
             overlay.className = 'logout-overlay';
+            overlay.id = 'logout-confirmation';
+
             overlay.innerHTML = `
-        <div class="logout-modal">
-          <div class="logout-content">
-            <i class="fas fa-sign-out-alt logout-icon"></i>
-            <h3>تسجيل الخروج</h3>
-            <p>هل أنت متأكد من تسجيل الخروج؟</p>
-            <div class="logout-buttons">
-              <button onclick="confirmLogout()" class="confirm-logout-btn">نعم، تسجيل الخروج</button>
-              <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
-            </div>
+      <div class="logout-modal">
+        <div class="logout-content">
+          <i class="fas fa-sign-out-alt logout-icon"></i>
+          <h3>تسجيل الخروج</h3>
+          <p>هل أنت متأكد؟</p>
+          <div class="logout-buttons">
+            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
+            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
           </div>
-        </div>`;
+        </div>
+      </div>`;
+
             document.body.appendChild(overlay);
         }
 
         function confirmLogout() {
-            document.querySelector('.logout-overlay').remove();
-            showLogoutSuccess();
+            localStorage.removeItem("currentUser");
+            localStorage.removeItem("userEmail");
+            localStorage.removeItem("resetPasswordMode");
+
+            const overlay = document.getElementById('logout-confirmation');
+            overlay.innerHTML = `
+      <div class="logout-modal">
+        <div class="logout-content success">
+          <i class="fas fa-check-circle success-icon"></i>
+          <h3>تم تسجيل الخروج</h3>
+          <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
+        </div>
+      </div>`;
         }
 
         function cancelLogout() {
-            document.querySelector('.logout-overlay').remove();
-        }
-
-        function showLogoutSuccess() {
-            const overlay = document.createElement('div');
-            overlay.className = 'logout-overlay';
-            overlay.innerHTML = `
-        <div class="logout-modal">
-          <div class="logout-content success">
-            <i class="fas fa-check-circle success-icon"></i>
-            <h3>تم تسجيل الخروج بنجاح</h3>
-            <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
-          </div>
-        </div>`;
-            document.body.appendChild(overlay);
+            const overlay = document.getElementById('logout-confirmation');
+            if (overlay) overlay.remove();
         }
 
         function closeLogoutSuccess() {
-            document.querySelector('.logout-overlay').remove();
+            window.location.href = "login.html";
         }
 
         document.addEventListener('click', function (event) {

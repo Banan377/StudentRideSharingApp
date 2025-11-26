@@ -12,4 +12,6 @@ public interface RideRepository extends JpaRepository<RideModel, Long> {
 
     List<RideModel> findBySeatsAvailableGreaterThan(int seats);
 
+    void deleteByDriverEmail(String driverEmail);
+
 }
