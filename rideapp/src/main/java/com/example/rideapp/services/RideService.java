@@ -2,8 +2,10 @@ package com.example.rideapp.services;
 
 import com.example.rideapp.models.BookingModel;
 import com.example.rideapp.models.RideModel;
+import com.example.rideapp.models.UserModel;
 import com.example.rideapp.repositories.BookingRepository;
 import com.example.rideapp.repositories.RideRepository;
+import com.example.rideapp.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -91,6 +93,38 @@ public class RideService {
             ride.setCurrentLocation(location);
             rideRepository.save(ride);
         });
+    }
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public List<RideModel> getPastRidesForPassenger(String passengerEmail) {
+
+        // جلب كل الحجوزات المقبولة للراكب
+        List<BookingModel> bookings = bookingRepository.findByPassenger_Email(passengerEmail)
+                .stream()
+                .filter(b -> "accepted".equals(b.getStatus()))
+                .collect(Collectors.toList());
+
+        // تحويل الحجوزات إلى رحلات
+        List<RideModel> rides = bookings.stream()
+                .map(BookingModel::getRide)
+                .collect(Collectors.toList());
+
+        // إضافة اسم السائق للرحلات
+        rides.forEach(ride -> {
+            UserModel driver = userRepository.findByEmail(ride.getDriverEmail()).orElse(null);
+            if (driver != null) {
+                ride.setDriverName(driver.getName());
+                ride.setDriverRating(driver.getRateAverage());
+            }
+        });
+
+        return rides;
+    }
+
+    public List<RideModel> getRidesForDriver(String driverEmail) {
+        return rideRepository.findByDriverEmail(driverEmail);
     }
 
 }
