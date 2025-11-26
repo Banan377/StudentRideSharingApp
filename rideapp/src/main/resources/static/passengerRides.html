@@ -582,7 +582,6 @@ function loadAvailableRides() {
                     const rideId = btn.getAttribute("data-ride-id");
                     const rideGenderPref = btn.getAttribute("data-gender-pref").toLowerCase();
 
-                    // 👇 نجيب جنس الراكب من الباك:
                     const passengerGender = await getPassengerGender();
 
                     // ===== شروط الجندر =====
