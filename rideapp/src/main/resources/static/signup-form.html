@@ -57,10 +57,10 @@
       <h2>بيانات الطوارئ</h2>
       <div class="emergency-section">
         <label for="emergency1">رقم الطوارئ (إجباري):</label>
-        <input type="tel" id="emergency1" required placeholder="05xxxxxxxx">
+        <input type="tel" id="emergency1" required pattern="05[0-9]{8}" maxlength="10" placeholder="05xxxxxxxx">
 
         <label for="emergency2">رقم إضافي (اختياري):</label>
-        <input type="tel" id="emergency2" placeholder="05xxxxxxxx">
+        <input type="tel" id="emergency2" pattern="05[0-9]{8}" maxlength="10" placeholder="05xxxxxxxx">
       </div>
 
       <label>
@@ -73,22 +73,22 @@
         <div class="row">
           <div class="field">
             <label for="licenseNumber">رقم الرخصة</label>
-            <input type="text" id="licenseNumber"  placeholder=" 123456789">
+            <input type="text" id="licenseNumber" placeholder=" 123456789">
           </div>
           <div class="field">
             <label for="carPlate">رقم اللوحة</label>
-            <input type="text" id="carPlate"  placeholder=" أ ب ج 1234">
+            <input type="text" id="carPlate" placeholder=" أ ب ج 1234">
           </div>
         </div>
 
         <div class="row">
           <div class="field">
             <label for="carModel">موديل السيارة </label>
-            <input type="text" id="carModel"  placeholder=" كامري 2023">
+            <input type="text" id="carModel" placeholder=" كامري 2023">
           </div>
           <div class="field">
             <label for="carColor">لون السيارة</label>
-            <input type="text" id="carColor"  placeholder=" أبيض">
+            <input type="text" id="carColor" placeholder=" أبيض">
           </div>
         </div>
 

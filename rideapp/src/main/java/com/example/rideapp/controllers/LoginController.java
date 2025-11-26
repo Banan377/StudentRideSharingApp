@@ -84,22 +84,20 @@ public class LoginController {
             response.put("user", userInfo);
 
             String redirectUrl;
+            if ("admin".equals(user.getRole())) {
+                redirectUrl = "adminDashboard.html";
 
-            if ("driver".equals(user.getRole())) {
-                if ("active".equals(user.getStatus())) {
-                    redirectUrl = "passengerRides.html";
-                } else if ("pending_driver".equals(user.getStatus())) {
-                    response.put("message", "لم يتم تفعيل حسابك كسائق بعد. سيتم تحويلك إلى واجهة الراكب.");
-                    redirectUrl = "passengerRides.html";
-                } else {
-                    redirectUrl = "passengerRides.html";
-                }
+            } else if ("driver".equals(user.getRole()) && "approved".equals(user.getStatus())) {
+                redirectUrl = "driverUI.html";
+
             } else {
                 redirectUrl = "passengerRides.html";
             }
 
             response.put("redirectUrl", redirectUrl);
             return ResponseEntity.ok(response);
+
+           
 
         } catch (Exception e) {
             System.err.println("خطأ في تسجيل الدخول: " + e.getMessage());

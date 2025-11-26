@@ -249,8 +249,9 @@
         </div>
 
         <!-- كلمة المرور -->
-        <div class="section-title">الأمان</div>
         <div class="password-section">
+          <div class="section-title">الأمان</div>
+
           <div class="form-group">
             <label for="currentPassword">تغيير كلمة المرور</label>
             <a href="#" onclick="startPasswordChange()" class="password-toggle">ترغب بتغيير كلمة المرور؟</a>
@@ -263,12 +264,12 @@
           <div class="emergency-section">
             <div class="form-group">
               <label for="emergency1">رقم هاتف الطوارئ</label>
-              <input type="tel" id="emergency1" value="0551112233">
+              <input type="tel" id="emergency1" class="readonly-field" >
             </div>
 
             <div class="form-group">
               <label for="emergency2">رقم هاتف إضافي (اختياري)</label>
-              <input type="tel" id="emergency2" value="0554445566">
+              <input type="tel" id="emergency2">
             </div>
           </div>
 
@@ -281,7 +282,7 @@
     </div>
   </div>
 
-  <<script>
+  <script>
     let originalData = {
     college: "",
     emergency1: "",
@@ -395,7 +396,7 @@
     alert("حدث خطأ أثناء تحديث البيانات");
     }
     });
-   
+
 
     function startPasswordChange() {
     localStorage.setItem("passwordFlow", "passengerSetting");
