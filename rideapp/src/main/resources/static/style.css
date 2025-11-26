@@ -162,3 +162,11 @@ form button {
 form button:hover {
     background: #265262;
 }
+.back-link {
+    display: block; 
+    margin-top: 10px; 
+    text-align: center;
+    color:#265262; 
+    font-size:14px; 
+    font-weight: bold;
+}

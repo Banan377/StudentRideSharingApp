@@ -14,7 +14,7 @@
 
       <div class="field">
         <label for="lastName">الايميل الجامعي:</label>
-        <input type="email" id="Email" required placeholder="أدخل الإيميل الجامعي">
+        <input type="email" id="signupEmail" required placeholder="أدخل الإيميل الجامعي">
 
       </div>
       <div class="row">
@@ -57,10 +57,10 @@
       <h2>بيانات الطوارئ</h2>
       <div class="emergency-section">
         <label for="emergency1">رقم الطوارئ (إجباري):</label>
-        <input type="tel" id="emergency1" required placeholder="05xxxxxxxx">
+        <input type="tel" id="emergency1" required pattern="05[0-9]{8}" maxlength="10" placeholder="05xxxxxxxx">
 
         <label for="emergency2">رقم إضافي (اختياري):</label>
-        <input type="tel" id="emergency2" placeholder="05xxxxxxxx">
+        <input type="tel" id="emergency2" pattern="05[0-9]{8}" maxlength="10" placeholder="05xxxxxxxx">
       </div>
 
       <label>
@@ -115,19 +115,6 @@
             <label for="registration">استمارة السيارة (صورة)</label>
             <input type="file" id="registration" accept="image/*">
             <small style="color: #666;">سيتم المراجعة يدوياً من قبل الإدارة</small>
-          </div>
-        </div>
-      </div>
-
-      <div class="driver-section" id="driverSection">
-        <div class="row">
-          <div class="field">
-            <label for="license">رخصة القيادة:</label>
-            <input type="file" id="license" accept="image/*">
-          </div>
-          <div class="field">
-            <label for="registration">الاستمارة:</label>
-            <input type="file" id="registration" accept="image/*">
           </div>
         </div>
       </div>

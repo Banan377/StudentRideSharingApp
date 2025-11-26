@@ -1,7 +1,7 @@
 package com.example.rideapp.services;
 
 import java.util.Map;
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,39 +41,55 @@ public class AuthService {
     }
 
     public void createAccount(UserModel user, Map<String, Object> driverData) {
-        // 1) تحقق أن الإيميل موجود في جدول الجامعة
         if (!isStudentEmailValid(user.getEmail())) {
             throw new RuntimeException("هذا الإيميل غير مسجّل في قاعدة بيانات الجامعة");
         }
 
-        // 2) تأكد أنه غير مسجل مسبقاً
         if (isUserRegistered(user.getEmail())) {
             throw new RuntimeException("هذا الإيميل مسجل مسبقاً!");
         }
 
-        // 3) حفظ مع تشفير الباسورد
         String encodedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
         user.setPassword(encodedPassword);
 
-        // 4) حفظ المستخدم
+        if (driverData != null && !driverData.isEmpty()) {
+            user.setStatus("pending"); 
+        } else {
+            user.setStatus("active");
+        }
+
         userRepository.save(user);
-        // 5) إنشاء سجل في جدول الركاب للجميع
-        PassengerModel passenger = new PassengerModel(user.getEmail());
-        passengerRepository.save(passenger);
-        // 7) إذا كان سائق، إنشاء سجل في جدول السائقين
+
+        if (!passengerRepository.existsById(user.getEmail())) {
+            PassengerModel passenger = new PassengerModel(user.getEmail());
+            passengerRepository.save(passenger);
+        }
+
         if (driverData != null && !driverData.isEmpty()) {
             DriverModel driver = new DriverModel(
                     user.getEmail(),
                     (String) driverData.get("licenseNumber"),
-                    "", // سيتم تعبئتها لاحقاً
-                    "", // سيتم تعبئتها لاحقاً
+                    "",
+                    "",
                     (String) driverData.get("carModel"),
                     (String) driverData.get("carColor"),
                     (String) driverData.get("carPlate"),
                     (int) driverData.get("seatsAvailable"));
-            driver.setStatus("pending"); // في انتظار الموافقة
+            driver.setStatus("pending");
             driverRepository.save(driver);
         }
     }
 
+    public void updatePassword(String email, String newPassword) {
+        Optional<UserModel> userOpt = userRepository.findById(email);
+
+        if (userOpt.isEmpty()) {
+            throw new RuntimeException("المستخدم غير موجود");
+        }
+
+        UserModel user = userOpt.get();
+        String encoded = new BCryptPasswordEncoder().encode(newPassword);
+        user.setPassword(encoded);
+        userRepository.save(user);
+    }
 }

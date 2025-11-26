@@ -23,7 +23,14 @@
           <input type="number" disabled />
         </div>
         <button type="submit" id="verifyBtn">ارسال</button>
-        <p class="signup-link"></p><a href="signup.html">العودة لصفحة انشاء الحساب</a></p>
+        <a id="resendLink" style="color: #444;; font-size:20px; font-weight: bold; margin-top:20px;">
+          إعادة إرسال الرمز
+        </a>
+        <div id="timerBox" style="color: #444;; font-size:20px; font-weight: bold; margin-top:20px;">
+          الوقت المتبقي: <span id="timer">02:00</span>
+        </div>
+
+        <p id="otpReturn" style="text-align:center; margin-top:20px;"></p>
       </form>
 
     </div>

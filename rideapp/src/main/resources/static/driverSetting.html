@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <title>إعدادات السائق</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: #ccddea;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: #265262;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      margin: 0;
+    }
+
+    .form-content {
+      padding: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .readonly-field {
+      background-color: #f9fbfb;
+      color: #666;
+      cursor: not-allowed;
+      border-color: #e8f4f8;
+    }
+
+    .section-title {
+      background: #f3f6f7;
+      padding: 12px 20px;
+      margin: 30px 0 20px 0;
+      border-right: 4px solid #487788;
+      font-weight: 600;
+      color: #265262;
+      font-size: 16px;
+      border-radius: 8px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 40px;
+      padding-top: 25px;
+      border-top: 2px solid #f0f0f0;
+    }
+
+    .btn {
+      padding: 14px 25px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn {
+      background: #487788;
+      color: white;
+    }
+
+    .submit-btn:hover {
+      background: #265262;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(38, 82, 98, 0.3);
+    }
+
+    .cancel-btn {
+      background: #6c757d;
+      color: white;
+    }
+
+    .cancel-btn:hover {
+      background: #5a6268;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+    }
+
+    .password-toggle {
+      color: #487788;
+      text-decoration: none;
+      font-size: 13px;
+      margin-top: 8px;
+      display: inline-block;
+      font-weight: 500;
+    }
+
+    .password-toggle:hover {
+      text-decoration: underline;
+    }
+
+    .emergency-section {
+      background: #fff9f9;
+      padding: 20px;
+      border-radius: 10px;
+      border: 2px solid #ffe6e6;
+      margin-bottom: 20px;
+    }
+
+    .password-section {
+      background: #f9fbfb;
+      padding: 20px;
+      border-radius: 10px;
+      border: 2px solid #e8f4f8;
+      margin-bottom: 20px;
+    }
+
+    #saveBtn:disabled {
+      background: #cccccc;
+      color: #888888;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-cog"></i> إعدادات الحساب - السائق</h1>
+    </div>
+
+    <div class="form-content">
+      <form id="driverSettingsForm">
+
+        <div class="section-title">المعلومات الشخصية</div>
+
+        <div class="form-group">
+          <label>الاسم الأول</label>
+          <input type="text" id="firstName" class="readonly-field" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>الاسم الأخير</label>
+          <input type="text" id="lastName" class="readonly-field" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>البريد الإلكتروني</label>
+          <input type="email" id="email" class="readonly-field" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>الكلية</label>
+          <input type="text" id="college">
+        </div>
+
+        <div class="password-section">
+          <div class="section-title">الأمان</div>
+          <div class="form-group">
+            <label for="currentPassword">تغيير كلمة المرور</label>
+            <a href="#" onclick="startPasswordChange()" class="password-toggle">ترغب بتغيير كلمة المرور؟</a>
+          </div>
+
+
+          <div class="section-title">بيانات الطوارئ</div>
+          <div class="emergency-section">
+            <div class="form-group">
+              <label for="emergency1">رقم هاتف الطوارئ</label>
+              <input type="tel" id="emergency1" class="readonly-field" >
+            </div>
+
+            <div class="form-group">
+              <label for="emergency2">رقم هاتف إضافي (اختياري)</label>
+              <input type="tel" id="emergency2">
+            </div>
+          </div>
+
+          <div class="car-section">
+
+            <div class="section-title">بيانات السيارة</div>
+            <div class="form-group">
+              <label>رقم الرخصة</label>
+              <input type="text" id="licenseNumber" class="readonly-field" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>رقم لوحة السيارة</label>
+              <input type="text" id="carPlate" class="readonly-field" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>طراز السيارة</label>
+              <input type="text" id="carModel">
+            </div>
+
+            <div class="form-group">
+              <label>لون السيارة</label>
+              <input type="text" id="carColor">
+            </div>
+
+            <div class="form-group">
+              <label>عدد المقاعد المتاحة</label>
+              <select id="seatsAvailable">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <a href="driverUI.html" class="btn cancel-btn">إلغاء</a>
+            <button type="submit" class="btn submit-btn" id="saveBtn" disabled>حفظ</button>
+          </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let originalUser = {};
+    let originalDriver = {};
+
+    // دالة لجلب بيانات السائق والمستخدم
+    async function loadDriverSettings() {
+      const email = localStorage.getItem("userEmail");
+
+      if (!email) {
+        alert("يجب تسجيل الدخول أولاً");
+        window.location.href = "login.html";
+        return;
+      }
+
+      try {
+        // جلب بيانات المستخدم
+        const userRes = await fetch(`/api/profile/${email}`);
+        const user = await userRes.json();
+        originalUser = {
+          college: user.college || "",
+          emergency1: (user.emergencyContacts?.split(",")[0]) || "",
+          emergency2: (user.emergencyContacts?.split(",")[1]) || ""
+        };
+
+        document.getElementById("firstName").value = user.name?.split(" ")[0] || "";
+        document.getElementById("lastName").value = user.name?.split(" ")[1] || "";
+        document.getElementById("email").value = user.email || "";
+        document.getElementById("college").value = originalUser.college;
+        document.getElementById("emergency1").value = originalUser.emergency1;
+        document.getElementById("emergency2").value = originalUser.emergency2;
+
+        // جلب بيانات السائق
+        const driverRes = await fetch(`/api/profile/driver/${email}`);
+        const result = await driverRes.json();
+
+        if (result.isDriver && result.driverData) {
+          const driverData = result.driverData;
+          originalDriver = {
+            carModel: driverData.carModel || "",
+            carColor: driverData.carColor || "",
+            seatsAvailable: driverData.seatsAvailable || "",
+          };
+
+          document.getElementById('licenseNumber').value = driverData.licenseNumber || '';
+          document.getElementById('carModel').value = originalDriver.carModel;
+          document.getElementById('carColor').value = originalDriver.carColor;
+          document.getElementById('carPlate').value = driverData.carPlate || '';
+          document.getElementById('seatsAvailable').value = originalDriver.seatsAvailable;
+        } else {
+          alert("أنت غير مسجل كسائق");
+        }
+
+      } catch (error) {
+        console.error('Error loading settings:', error);
+        alert("حدث خطأ في تحميل البيانات");
+      }
+    }
+
+    function isUserDataChanged() {
+      return (
+        document.getElementById("college").value !== originalUser.college ||
+        document.getElementById("emergency1").value !== originalUser.emergency1 ||
+        document.getElementById("emergency2").value !== originalUser.emergency2 ||
+        document.getElementById("currentPassword").value !== ""
+      );
+    }
+
+    function isDriverDataChanged() {
+      return (
+        document.getElementById("carModel").value !== originalDriver.carModel ||
+        document.getElementById("carColor").value !== originalDriver.carColor ||
+        document.getElementById("seatsAvailable").value !== originalDriver.seatsAvailable
+      );
+    }
+
+    function checkFormChanges() {
+      const saveBtn = document.getElementById("saveBtn");
+      if (isUserDataChanged() || isDriverDataChanged()) {
+        saveBtn.disabled = false;
+      } else {
+        saveBtn.disabled = true;
+      }
+    }
+
+    // تحديث بيانات المستخدم
+    async function updateUserProfile() {
+      const email = localStorage.getItem("userEmail");
+      const emergencyCombined =
+        document.getElementById("emergency1").value + "," +
+        document.getElementById("emergency2").value;
+
+      const userUpdate = {
+        college: document.getElementById("college").value,
+        emergencyContacts: emergencyCombined,
+        password: document.getElementById("currentPassword").value || null
+      };
+
+      try {
+        const response = await fetch(`/api/profile/update/${email}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userUpdate)
+        });
+
+        return response.ok;
+
+      } catch (error) {
+        console.error('Error updating user profile:', error);
+        alert("حدث خطأ في تحديث البيانات الشخصية");
+        return false;
+      }
+    }
+
+    // تحديث بيانات السائق
+    async function updateDriverSettings() {
+      const email = localStorage.getItem("userEmail");
+      const updateData = {
+        licenseNumber: document.getElementById('licenseNumber').value,
+        carModel: document.getElementById('carModel').value,
+        carColor: document.getElementById('carColor').value,
+        seatsAvailable: parseInt(document.getElementById('seatsAvailable').value) || 0
+      };
+
+      if (!updateData.licenseNumber || !updateData.carModel || !updateData.carColor || updateData.seatsAvailable <= 0) {
+        alert("يرجى ملء جميع الحقول المطلوبة بشكل صحيح");
+        return false;
+      }
+
+      try {
+        const response = await fetch(`/api/profile/driver/update/${email}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updateData)
+        });
+
+        return response.ok;
+
+      } catch (error) {
+        console.error('Error updating driver settings:', error);
+        alert("حدث خطأ في تحديث بيانات السائق");
+        return false;
+      }
+    }
+
+    document.getElementById("driverSettingsForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const driverUpdated = await updateDriverSettings();
+      const userUpdated = await updateUserProfile();
+
+      if (driverUpdated && userUpdated) {
+        alert("تم حفظ جميع التغييرات بنجاح!");
+        window.location.href = "driverUI.html";
+      } else if (driverUpdated) {
+        alert("تم تحديث بيانات السيارة فقط");
+        window.location.href = "driverUI.html";
+      } else if (userUpdated) {
+        alert("تم تحديث البيانات الشخصية فقط");
+        window.location.href = "driverUI.html";
+      } else {
+        alert("لم يتم تعديل أي بيانات");
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadDriverSettings();
+
+      const inputsToWatch = [
+        "college", "emergency1", "emergency2",
+        "currentPassword", "carModel", "carColor", "seatsAvailable"
+      ];
+
+      inputsToWatch.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+          input.addEventListener("input", checkFormChanges);
+        }
+      });
+    });
+    function startPasswordChange() {
+      localStorage.setItem("passwordFlow", "driverSetting");
+      window.location.href = "verifyEmail.html";
+    }
+
+
+  </script>
+
+</body>
+
+</html>
