@@ -23,15 +23,18 @@ public class RideBookingController {
 
     // ====== طلب حجز من الراكب (زر حجز الآن في bookingPage) ======
     @PostMapping("/request")
-    public ResponseEntity<BookingModel> createBookingRequest(
+    public ResponseEntity<?> createBooking(
             @RequestParam String passengerEmail,
             @RequestParam Long rideId) {
+        try {
+            BookingModel booking = bookingService.createBookingRequest(rideId, passengerEmail);
+            return ResponseEntity.ok(booking);
 
-        BookingModel booking = bookingService.createBookingRequest(rideId, passengerEmail);
-        if (booking == null) {
-            return ResponseEntity.badRequest().build();
+        } catch (RuntimeException ex) {
+            return ResponseEntity
+                    .status(400)
+                    .body(ex.getMessage()); // 🔥 هنا ترجع رسالة واضحة
         }
-        return ResponseEntity.ok(booking);
     }
 
     // ====== جلب الطلبات المعلّقة للسائق (تستخدم في driverUI.html) ======
