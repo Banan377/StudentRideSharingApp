@@ -12,6 +12,7 @@ public class RideModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rideId;
 
+    private String startArea;
     private String destination;
     private LocalDate date;
     private LocalTime time;
@@ -22,6 +23,10 @@ public class RideModel {
     private Double distance;
     private String driverEmail;
     private int totalSeats; // عدد المقاعد الأصلي
+    private boolean isEventRide;
+    
+    @Column(columnDefinition = "text")
+    private String routePolyline; // encoded polyline
 
     public RideModel() {
     }
@@ -35,6 +40,14 @@ public class RideModel {
         this.rideId = rideId;
     }
 
+     public String getStartArea() {
+        return startArea;
+    }
+
+    public void setStartArea(String startArea) {
+        this.startArea = startArea;
+    }
+    
     public String getDestination() {
         return destination;
     }
@@ -106,5 +119,22 @@ public class RideModel {
     public void setDriverEmail(String driverEmail) {
         this.driverEmail = driverEmail;
     }
-
+    public int getTotalSeats() {
+        return totalSeats;
+    }
+    public void setTotalSeats(int totalSeats) {
+        this.totalSeats = totalSeats;
+    }
+    public String getRoutePolyline() {
+        return routePolyline;
+    }
+    public void setRoutePolyline(String routePolyline) {
+        this.routePolyline = routePolyline;
+    }
+    public boolean isEventRide() {
+        return isEventRide;
+    }
+    public void setIsEventRide(boolean isEventRide) {
+        this.isEventRide = isEventRide;
+    }
 }
