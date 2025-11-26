@@ -266,30 +266,31 @@ fetch(`http://localhost:8083/api/rides/available?passengerEmail=${passengerEmail
                     });
             }
 
-            // ====== إرسال طلب الحجز ======
-            function sendBookingRequest(rideId, cardElement) {
-                const passengerEmail = localStorage.getItem("userEmail") || "passenger@example.com";
+   // ====== إرسال طلب الحجز ======
+function sendBookingRequest(rideId, cardElement) {
+    const passengerEmail = localStorage.getItem("userEmail");
 
-                // مطابق للـ Controller: /api/bookings/request?passengerEmail=&rideId=
-                fetch(`http://localhost:8083/api/bookings/request?passengerEmail=${encodeURIComponent(passengerEmail)}&rideId=${rideId}`, {
-                    method: "POST"
-                })
-                    .then(res => {
-                        if (res.ok) {
-                            alert(" تم إرسال طلب الحجز للسائق!");
-
-                          // إزالة الكارد من الصفحة بعد الحجز
-                            if (cardElement) {
-                                cardElement.remove();
-                            }
-                        } else {
-                            alert("فشل في إرسال طلب الحجز.");
-                        }
-                    })
-                    .catch(err => {
-                        console.error("خطأ في طلب الحجز:", err);
-                    });
+    fetch(`http://localhost:8083/api/bookings/request?passengerEmail=${encodeURIComponent(passengerEmail)}&rideId=${rideId}`, {
+        method: "POST"
+    })
+    .then(async res => {
+        if (res.ok) {
+            alert("تم إرسال طلب الحجز للسائق!");
+            if (cardElement) {
+                cardElement.remove();
             }
+        } else {
+            const errorMessage = await res.text();  // 🔥 هنا نقرأ الرسالة القادمة من السيرفر
+            alert(errorMessage);  // 🔥 تظهر نفس رسالة الخطأ مثل: الجنس غير مسموح
+        }
+    })
+    .catch(err => {
+        console.error("خطأ في طلب الحجز:", err);
+        alert("حدث خطأ غير متوقع");
+    });
+}
+
+
         </script>
 
 </body>

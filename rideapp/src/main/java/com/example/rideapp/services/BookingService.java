@@ -33,16 +33,46 @@ public class BookingService {
         this.userRepository = userRepository;
     }
 
-    // طلب حجز من الراكب -> يروح للسائق كـ pending
     public BookingModel createBookingRequest(Long rideId, String passengerEmail) {
+
+        // 1) جلب الرحلة
         RideModel ride = rideService.getRideById(rideId);
         if (ride == null || ride.getSeatsAvailable() < 1) {
             return null;
         }
 
+        // 2) جلب الراكب من جدول passengers
         PassengerModel passenger = passengerRepository.findById(passengerEmail)
                 .orElseThrow(() -> new RuntimeException("Passenger not found: " + passengerEmail));
 
+        // 3) جلب جنس الراكب من جدول users
+        UserModel user = userRepository.findByEmail(passengerEmail).orElse(null);
+        String passengerGender = (user != null) ? user.getGender() : null;
+
+        // 4) جلب تفضيل السائق
+        String pref = ride.getGenderPreference();
+        if (pref == null)
+            pref = ""; // حماية
+
+        // ================================
+        // 🔥 التحقق من الجندر – بدون ALL
+        // ================================
+
+        // حالة رحلة للذكور فقط
+        if (pref.equalsIgnoreCase("male")) {
+            if (passengerGender == null || !passengerGender.equalsIgnoreCase("male")) {
+                throw new RuntimeException("هذه الرحلة مخصصة للرجال فقط");
+            }
+        }
+
+        // حالة رحلة للإناث فقط
+        if (pref.equalsIgnoreCase("female")) {
+            if (passengerGender == null || !passengerGender.equalsIgnoreCase("female")) {
+                throw new RuntimeException("هذه الرحلة مخصصة للنساء فقط");
+            }
+        }
+
+        // 5) إذا الجنس متوافق → إنشاء الحجز
         BookingModel booking = new BookingModel();
         booking.setRide(ride);
         booking.setPassenger(passenger);
