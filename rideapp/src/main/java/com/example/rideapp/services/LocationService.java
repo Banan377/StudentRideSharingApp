@@ -33,4 +33,8 @@ public class LocationService {
     rideRepo.save(ride);
     return saved;
   }
+
+  public List<MapModel> getLocations(Long rideId) {
+    return mapRepo.findByRide_RideIdOrderByTimestampAsc(rideId);
+  }
 }
