@@ -86,4 +86,11 @@ public class RideService {
                 .collect(Collectors.toList());
     }
 
+    public void updateRideLocation(Long rideId, String location) {
+        rideRepository.findById(rideId).ifPresent(ride -> {
+            ride.setCurrentLocation(location);
+            rideRepository.save(ride);
+        });
+    }
+
 }
