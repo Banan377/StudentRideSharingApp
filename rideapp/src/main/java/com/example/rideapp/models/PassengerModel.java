@@ -55,4 +55,9 @@ public class PassengerModel {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getGender() {
+        return null;
+    }
+
 }
