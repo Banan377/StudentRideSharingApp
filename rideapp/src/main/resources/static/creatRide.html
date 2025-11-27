@@ -173,7 +173,7 @@
   </div>
   <script>
     let rideId = null; let startLat = null, startLng = null; let destLat = null, destLng = null;
-    let map1, map2, driverMarker1, driverMarker2, polyline, marker1, marker2;
+    let map1, map2, driverMarker1, driverMarker2, polyline1, polyline2, marker1, marker2;
 
    async function submitRide() {
          if (!startLat || !startLng) {
@@ -291,7 +291,7 @@
 
     map2.addListener("click", (event) => {
       destLat = event.latLng.lat();
-      destLag = event.latLng.lng();
+      destLng = event.latLng.lng();
 
       if (marker2) marker2.setMap(null);
 
@@ -337,7 +337,7 @@
         return;
       }
       
-      fetch(`http://localhost:8083/api/rides/${rideId}/updatesendStartLocation`, {
+      fetch(`http://localhost:8083/api/rides/${rideId}/sendStartLocation`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -362,7 +362,7 @@
         return;
       }
       
-      fetch(`http://localhost:8083/api/rides/${rideId}/updatesendDestination`, {
+      fetch(`http://localhost:8083/api/rides/${rideId}/sendDestination`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
