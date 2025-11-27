@@ -2007,6 +2007,7 @@ textarea {
   font-weight: bold;
 }
 
+<<<<<<< HEAD
 .emergency-bar {
   display: inline-block;
   background: #d90429;
@@ -2027,4 +2028,21 @@ textarea {
 
 .hidden {
   display: none !important;
+=======
+.emergency-btn {
+  background-color: #d90429;
+  color: white;
+  width: 100%;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.emergency-btn:hover {
+  background-color: #a3001d;
+>>>>>>> 1a8785a (update saety)
 }

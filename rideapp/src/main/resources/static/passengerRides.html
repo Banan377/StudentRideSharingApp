@@ -540,9 +540,9 @@
           </div>
 </div>
 
-
-
-
+<button class="emergency-btn" onclick="openEmergency(${booking.ride.rideId})">
+   🚨 زر الطوارئ
+</button>
 
 </article>
 
@@ -718,22 +718,36 @@
 
     let selectedRideId = null;
 
-    function openEmergencyPopup(rideId) {
+    // فتح البوب أب
+    function openEmergency(rideId) {
       selectedRideId = rideId;
       document.getElementById("emergencyPopup").classList.remove("hidden");
     }
 
+    // إغلاق البوب أب
     function closeEmergencyPopup() {
       document.getElementById("emergencyPopup").classList.add("hidden");
       selectedRideId = null;
     }
-    function openEmergencyPopupGlobal() {
-      document.getElementById("emergencyPopup").classList.remove("hidden");
-    }
 
+    // إرسال البلاغ
+    document.getElementById("confirmEmergency").addEventListener("click", async () => {
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const btn = document.getElementById("confirmEmergency");
+      const userEmail = localStorage.getItem("userEmail");
+
+      const url = `/api/safety/trigger?rideId=${selectedRideId}&userId=${userEmail}&message=Help`;
+
+      try {
+        await fetch(url, { method: "POST" });
+
+        alert(" تم إرسال بلاغ الطوارئ بنجاح!");
+
+      } catch (error) {
+        alert("حدث خطأ أثناء إرسال البلاغ");
+      }
+
+      closeEmergencyPopup();
+    });
 
       if (btn) {
         btn.onclick = () => {
@@ -754,10 +768,23 @@
             });
         };
       }
-    });
 
 
   </script>
+
+  <div id="emergencyPopup" class="logout-overlay hidden">
+    <div class="logout-modal">
+      <div class="logout-content">
+        <i class="fas fa-exclamation-triangle logout-icon" style="color:#d90429;"></i>
+        <h3>تنبيه طوارئ</h3>
+        <p>هل أنت متأكد أنك تريد إرسال بلاغ الطوارئ؟</p>
+        <div class="logout-buttons">
+          <button id="confirmEmergency" class="confirm-logout-btn">نعم</button>
+          <button onclick="closeEmergencyPopup()" class="cancel-logout-btn">إلغاء</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 
