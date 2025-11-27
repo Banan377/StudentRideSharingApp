@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=PASETHERE&callback=initMap" async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=PH&callback=initMap" async defer></script>
 
   <style>
     .container-form {
@@ -172,8 +172,102 @@
     </div>
   </div>
   <script>
-    let rideId = null; let startLat = null, startLng = null; let destLat = null, destLng = null;
+    let rideId = null; let startLat = null, startLng = null; let destLat = null, destLng = null; let startLocation = null; let destinationLocation = null;
     let map1, map2, driverMarker1, driverMarker2, polyline1, polyline2, marker1, marker2;
+
+        function initMap() {
+      const defaultPos = { lat: 24.7136, lng: 46.6753 };
+      
+      map1 = new google.maps.Map(document.getElementById("map1"), {
+        center: defaultPos,
+        zoom: 12,
+      });
+
+      map2 = new google.maps.Map(document.getElementById("map2"), {
+        center: defaultPos,
+        zoom: 12,
+      });
+
+       if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              };
+
+      driverMarker1 = new google.maps.Marker({
+        position: pos,
+        map: map1,
+        title: "موقعك الحالي",
+      });
+
+      driverMarker2 = new google.maps.Marker({
+        position: pos,
+        map: map2,
+        title: "موقعك الحالي",
+      });
+
+      map1.setCenter(pos);
+      map2.setCenter(pos);
+
+      map1.addListener("click", (event) => {
+       startLat = event.latLng.lat();
+       startLng = event.latLng.lng();
+
+      if (marker1) marker1.setMap(null);
+
+      marker1 = new google.maps.Marker({
+        position: { lat:startLat, lng:startLng },
+        map: map1,
+      });
+
+      startLocation = { lat: startLat, lng: startLng };
+      console.log("Start location:", startLat, startLng);
+
+     
+    });
+
+    map2.addListener("click", (event) => {
+      destLat = event.latLng.lat();
+      destLng = event.latLng.lng();
+
+      if (marker2) marker2.setMap(null);
+
+      marker2 = new google.maps.Marker({
+        position: { lat:destLat, lng:destLng },
+        map: map2,
+      });
+
+      destinationLocation = { lat: destLat, lng: destLng };
+      console.log("Destination:", destLat, destLng);
+
+      
+    });
+
+            },
+            () => {
+              alert("لم يتم السماح بالحصول على الموقع");
+            }
+          );
+        } else {
+          alert("المتصفح لا يدعم خدمة الموقع");
+        }
+
+      polyline1 = new google.maps.Polyline({
+        map: map1,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+      });
+
+      polyline2 = new google.maps.Polyline({
+        map: map2,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+      });
+    }
 
    async function submitRide() {
          if (!startLat || !startLng) {
@@ -187,7 +281,7 @@
         }
 
         const ride = {
-        destination: "King Saud University",
+        destination: destinationLocation,
         date: document.getElementById("rideDate").value,
         time: document.getElementById("rideTime").value,
         seatsAvailable: document.getElementById("seats").value,
@@ -237,97 +331,6 @@
     }
 
     
-    function initMap() {
-      const defaultPos = { lat: 24.7136, lng: 46.6753 };
-      
-      map1 = new google.maps.Map(document.getElementById("map1"), {
-        center: defaultPos,
-        zoom: 12,
-      });
-
-      map2 = new google.maps.Map(document.getElementById("map2"), {
-        center: defaultPos,
-        zoom: 12,
-      });
-
-       if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-              };
-
-      driverMarker1 = new google.maps.Marker({
-        position: pos,
-        map: map1,
-        title: "موقعك الحالي",
-      });
-
-      driverMarker2 = new google.maps.Marker({
-        position: pos,
-        map: map2,
-        title: "موقعك الحالي",
-      });
-
-      map1.setCenter(pos);
-      map2.setCenter(pos);
-
-      map1.addListener("click", (event) => {
-       startLat = event.latLng.lat();
-       startLng = event.latLng.lng();
-
-      if (marker1) marker1.setMap(null);
-
-      marker1 = new google.maps.Marker({
-        position: { lat:startLat, lng:startLng },
-        map: map1,
-      });
-
-      console.log("Start location:", startLat, startLng);
-
-     
-    });
-
-    map2.addListener("click", (event) => {
-      destLat = event.latLng.lat();
-      destLng = event.latLng.lng();
-
-      if (marker2) marker2.setMap(null);
-
-      marker2 = new google.maps.Marker({
-        position: { lat:destLat, lng:destLng },
-        map: map2,
-      });
-
-      console.log("Destination:", destLat, destLng);
-
-      
-    });
-
-            },
-            () => {
-              alert("لم يتم السماح بالحصول على الموقع");
-            }
-          );
-        } else {
-          alert("المتصفح لا يدعم خدمة الموقع");
-        }
-
-      polyline1 = new google.maps.Polyline({
-        map: map1,
-        strokeColor: "#FF0000",
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-      });
-
-      polyline2 = new google.maps.Polyline({
-        map: map2,
-        strokeColor: "#FF0000",
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-      });
-    }
     
 
 
