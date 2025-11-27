@@ -33,7 +33,7 @@ public class RideBookingController {
         } catch (RuntimeException ex) {
             return ResponseEntity
                     .status(400)
-                    .body(ex.getMessage()); //  هنا ترجع رسالة واضحة
+                    .body(ex.getMessage()); // هنا ترجع رسالة واضحة
         }
     }
 
@@ -57,6 +57,12 @@ public class RideBookingController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/accepted-passengers")
+    public ResponseEntity<List<BookingModel>> getAcceptedPassengers(
+            @RequestParam Long rideId) {
+        return ResponseEntity.ok(bookingService.getAcceptedPassengersForRide(rideId));
     }
 
 }
