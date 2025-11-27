@@ -13,4 +13,4 @@ server:
 
 google:
   maps:
-    api-key: ${GOOGLE_MAPS_API_KEY:AIzaSyAWgZ88Tp99Oub3iibw_CAsChWWgDWZYro}
+    api-key: ${GOOGLE_MAPS_API_KEY:PASTEHERE}
