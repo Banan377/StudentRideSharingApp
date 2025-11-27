@@ -54,7 +54,6 @@ public class BookingService {
         if (pref == null)
             pref = ""; // حماية
 
-
         // حالة رحلة للذكور فقط
         if (pref.equalsIgnoreCase("male")) {
             if (passengerGender == null || !passengerGender.equalsIgnoreCase("male")) {
@@ -114,6 +113,23 @@ public class BookingService {
 
             bookingRepository.save(booking);
             return true;
+
         }).orElse(false);
     }
+
+    public List<BookingModel> getAcceptedPassengersForRide(Long rideId) {
+        List<BookingModel> bookings = bookingRepository.findByRide_RideIdAndStatus(rideId, "accepted");
+
+        bookings.forEach(booking -> {
+            UserModel user = userRepository.findByEmail(booking.getPassenger().getEmail()).orElse(null);
+            if (user != null) {
+                booking.setPassengerName(user.getName());
+            } else {
+                booking.setPassengerName("غير معروف");
+            }
+        });
+
+        return bookings;
+    }
+
 }
