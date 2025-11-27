@@ -16,4 +16,6 @@ public interface RideRepository extends JpaRepository<RideModel, Long> {
 
     void deleteByDriverEmail(String driverEmail);
 
+    List<RideModel> findByDriverEmailAndStatus(String driverEmail, String status);
+
 }

@@ -597,8 +597,9 @@
                         <div class="driver-info">
                             <div class="driver-avatar"><i class="fas fa-user"></i></div>
                             <div class="driver-details">
-                                <div class="driver-name">${booking.ride.driverName || booking.ride.driverEmail}</div>
-                                <div class="driver-rating">
+<div class="driver-name">
+   ${booking.ride.driverName || booking.ride.driver?.name || booking.ride.driverEmail}
+</div>                                <div class="driver-rating">
                                     <div class="stars">★ ★ ★ ★ ★</div>
                                 </div>
                             </div>
