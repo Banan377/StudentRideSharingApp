@@ -77,66 +77,13 @@
         </div>
 
 
-        <!-- TRIPS SECTION (مثال) -->
-        <section class="trips-section">
-            <div class="events-grid">
-                <!-- البطاقة 1 -->
-                <article class="trip-card" data-driver-name="أحمد محمد" data-driver-rating="4.8">
-                    <div>
-                        <div class="card-header">
-                            <h3>رحلة سابقة</h3>
-                            <div class="chat-icon"><i class="fas fa-comment"></i></div>
-                        </div>
-                        <div class="trip-info">
-                            <div class="location-row">
-                                <div class="location-item"> <i class="fas fa-map-marker-alt"></i>
-                                    <div><span class="label">نقطة الانطلاق:</span><span class="value">حي النخيل</span>
-                                    </div>
-                                </div>
-                                <div class="location-item"> <i class="fas fa-flag"></i>
-                                    <div><span class="label">نقطة الوصول:</span><span class="value">كلية الشريعة</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="details-row">
-                                <div class="detail-item"><i class="fas fa-calendar"></i>
-                                    <div><span class="label">اليوم:</span><span class="value">الاثنين</span></div>
-                                </div>
-                                <div class="detail-item"><i class="fas fa-clock"></i>
-                                    <div><span class="label">الوقت:</span><span class="value">08:00 ص</span></div>
-                                </div>
-                                <div class="detail-item"><i class="fas fa-users"></i>
-                                    <div><span class="label">المقاعد:</span><span class="value">3/4</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="driver-section">
-                        <div class="driver-info">
-                            <div class="default-avatar driver-avatar"><i class="fas fa-user"></i></div>
-                            <div class="driver-details">
-                                <div class="driver-name">أحمد محمد</div>
-                                <div class="driver-rating" tabindex="0" role="button" title="عرض بروفايل السائق">
-                                    <div class="stars"> <i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                            class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                            class="fas fa-star-half-alt"></i> </div> <span
-                                        class="rating-text">4.8</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-profile-btn">عرض البروفايل</div>
-                        <div class="card-book-btn">طلب إعادة الرحلة</div>
-                    </div>
-                </article>
-            </div>
-        </section>
+
     </main>
 
 
     <div id="driver-modal-root"></div>
 
     <script>
-        // Profile dropdown
         function toggleProfileDropdown() {
             document.getElementById('profile-dropdown').classList.toggle('hidden');
         }
@@ -266,6 +213,100 @@
                 });
             });
         });
+
+        //cards
+        document.addEventListener("DOMContentLoaded", () => {
+            const userEmail = localStorage.getItem("userEmail");
+            fetch(`http://localhost:8083/api/rides/past?passengerEmail=${userEmail}`)
+                .then(res => res.json())
+                .then(data => renderPastRides(data))
+                .catch(err => console.error(err));
+        });
+
+
+        function renderPastRides(rides) {
+            const container = document.querySelector('.events-grid');
+            container.innerHTML = ""; 
+
+            if (rides.length === 0) {
+                container.innerHTML = "<p class='no-data'>لا توجد رحلات سابقة.</p>";
+                return;
+            }
+
+            rides.forEach(ride => {
+                const card = document.createElement("article");
+                card.className = "trip-card";
+                card.setAttribute("data-driver-name", ride.driverName || "السائق");
+                card.setAttribute("data-driver-rating", ride.driverRating || "0");
+
+                card.innerHTML = `
+            <div>
+                <div class="card-header">
+                    <h3>رحلة سابقة</h3>
+                    <div class="chat-icon"><i class="fas fa-comment"></i></div>
+                </div>
+                <div class="trip-info">
+                    <div class="location-row">
+                        <div class="location-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <span class="label">نقطة الانطلاق:</span>
+                                <span class="value">${ride.currentLocation}</span>
+                            </div>
+                        </div>
+
+                        <div class="location-item">
+                            <i class="fas fa-flag"></i>
+                            <div>
+                                <span class="label">نقطة الوصول:</span>
+                                <span class="value">${ride.destination}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="details-row">
+                        <div class="detail-item">
+                            <i class="fas fa-calendar"></i>
+                            <div><span class="label">التاريخ:</span>
+                                <span class="value">${ride.date}</span></div>
+                        </div>
+
+                        <div class="detail-item">
+                            <i class="fas fa-clock"></i>
+                            <div><span class="label">الوقت:</span>
+                                <span class="value">${ride.time}</span></div>
+                        </div>
+
+                        <div class="detail-item">
+                            <i class="fas fa-users"></i>
+                            <div><span class="label">المقاعد:</span>
+                                <span class="value">${ride.seatsAvailable}/${ride.totalSeats}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="driver-section">
+                <div class="driver-info">
+                    <div class="default-avatar driver-avatar"><i class="fas fa-user"></i></div>
+                    <div class="driver-details">
+                        <div class="driver-name">${ride.driverName || "غير معروف"}</div>
+                        <div class="driver-rating">
+                            <div class="stars"><i class="fas fa-star"></i></div>
+                            <span class="rating-text">${ride.driverRating || "0"}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-profile-btn">عرض البروفايل</div>
+                <div class="card-book-btn">طلب إعادة الرحلة</div>
+            </div>
+        `;
+
+                container.appendChild(card);
+            });
+        }
+
     </script>
 
 </body>

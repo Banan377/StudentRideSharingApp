@@ -33,7 +33,7 @@ public class RideBookingController {
         } catch (RuntimeException ex) {
             return ResponseEntity
                     .status(400)
-                    .body(ex.getMessage()); // 🔥 هنا ترجع رسالة واضحة
+                    .body(ex.getMessage()); //  هنا ترجع رسالة واضحة
         }
     }
 

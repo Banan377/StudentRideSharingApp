@@ -13,6 +13,7 @@ public class BookingModel {
     @ManyToOne
     @JoinColumn(name = "ride_id")
     private RideModel ride;
+  
 
     @ManyToOne
     @JoinColumn(name = "passenger_email")

@@ -6,9 +6,10 @@
   <title>إنشاء رحلة</title>
 
   <link rel="stylesheet" href="driver.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=PH&callback=initMap" async defer></script>
 
   <style>
     .container-form {
@@ -129,27 +130,23 @@
           <div class="row">
             <div class="field">
               <label>نقطة الانطلاق</label>
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3623.9023029394794!2d46.675295215002004!3d24.71355158411983!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f0fa3bca3b6f1%3A0x5e86d6c5a2d88b1b!2sRiyadh!5e0!3m2!1sar!2ssa!4v1698856484476!5m2!1sar!2ssa"
-                allowfullscreen="" loading="lazy"></iframe>
+              <div id="map1" style="width:450px;height:200px"></div>
             </div>
 
             <div class="field">
               <label>الوجهة</label>
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.5901550334483!2d46.71263111499533!3d24.782277084085617!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2ef1a51b8c9a4d%3A0x72f19e5d64efc1b1!2sKing%20Saud%20University!5e0!3m2!1sar!2ssa!4v1698856501543!5m2!1sar!2ssa"
-                allowfullscreen="" loading="lazy"></iframe>
+              <div id="map2" style="width:450px;height:200px"></div>
             </div>
           </div>
 
           <div class="row">
             <div class="field">
               <label for="date">تاريخ الرحلة</label>
-           <input type="date" id="rideDate" name="date" required>
+              <input type="date" id="rideDate" name="date" required>
             </div>
             <div class="field">
               <label for="seats">عدد المقاعد</label>
-<input type="number" id="seats" name="seats" min="1" max="6" required>
+              <input type="number" id="seats" name="seats" min="1" max="6" required>
             </div>
           </div>
 
@@ -157,61 +154,237 @@
             <div class="field">
               <label for="gender">تفضيل الجنس</label>
               <select id="gender" name="gender">
-  <option value="any">الكل</option>
-  <option value="male">ذكور فقط</option>
-  <option value="female">إناث فقط</option>
-</select>
+                <option value="male">ذكور فقط</option>
+                <option value="female">إناث فقط</option>
+              </select>
             </div>
 
             <div class="field">
               <label for="time">وقت الرحلة</label>
-<input type="time" id="rideTime" name="time" required>            </div>
+              <input type="time" id="rideTime" name="time" required>
+            </div>
           </div>
 
 
-<button type="button" onclick="submitRide()">نشر</button>
+          <button type="button" onclick="submitRide()">نشر</button>
         </form>
       </div>
     </div>
   </div>
   <script>
-  function submitRide() {
-    const ride = {
-  destination: "King Saud University",
-  date: document.getElementById("rideDate").value,
-  time: document.getElementById("rideTime").value,
-  seatsAvailable: document.getElementById("seats").value,
-  genderPreference: document.getElementById("gender").value,
-  status: "ACTIVE",
-  currentLocation: "Riyadh",
-  distance: 0.0,
-  driverEmail: localStorage.getItem("userEmail")   // 🔥 مهم جداً
-};
+    let rideId = null; let startLat = null, startLng = null; let destLat = null, destLng = null; let startLocation = null; let destinationLocation = null;
+    let map1, map2, driverMarker1, driverMarker2, polyline1, polyline2, marker1, marker2;
 
+        function initMap() {
+      const defaultPos = { lat: 24.7136, lng: 46.6753 };
+      
+      map1 = new google.maps.Map(document.getElementById("map1"), {
+        center: defaultPos,
+        zoom: 12,
+      });
 
- fetch(`http://localhost:8083/api/rides/createRide?driverEmail=${encodeURIComponent(localStorage.getItem("userEmail"))}`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(ride)
-})
+      map2 = new google.maps.Map(document.getElementById("map2"), {
+        center: defaultPos,
+        zoom: 12,
+      });
 
-    .then(response => {
-      if (response.ok) {
-        alert(" تم إنشاء الرحلة بنجاح!");
-console.log("بيحول للواجهة...");
-window.location.href = "driverUI.html";
-      } else {
-        alert(" فشل في إنشاء الرحلة.");
-      }
-    })
-    .catch(error => {
-      console.error("Error:", error);
-      alert(" حدث خطأ.");
+       if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              };
+
+      driverMarker1 = new google.maps.Marker({
+        position: pos,
+        map: map1,
+        title: "موقعك الحالي",
+      });
+
+      driverMarker2 = new google.maps.Marker({
+        position: pos,
+        map: map2,
+        title: "موقعك الحالي",
+      });
+
+      map1.setCenter(pos);
+      map2.setCenter(pos);
+
+      map1.addListener("click", (event) => {
+       startLat = event.latLng.lat();
+       startLng = event.latLng.lng();
+
+      if (marker1) marker1.setMap(null);
+
+      marker1 = new google.maps.Marker({
+        position: { lat:startLat, lng:startLng },
+        map: map1,
+      });
+
+      startLocation = { lat: startLat, lng: startLng };
+      console.log("Start location:", startLat, startLng);
+
+     
     });
-  }
-</script>
+
+    map2.addListener("click", (event) => {
+      destLat = event.latLng.lat();
+      destLng = event.latLng.lng();
+
+      if (marker2) marker2.setMap(null);
+
+      marker2 = new google.maps.Marker({
+        position: { lat:destLat, lng:destLng },
+        map: map2,
+      });
+
+      destinationLocation = { lat: destLat, lng: destLng };
+      console.log("Destination:", destLat, destLng);
+
+      
+    });
+
+            },
+            () => {
+              alert("لم يتم السماح بالحصول على الموقع");
+            }
+          );
+        } else {
+          alert("المتصفح لا يدعم خدمة الموقع");
+        }
+
+      polyline1 = new google.maps.Polyline({
+        map: map1,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+      });
+
+      polyline2 = new google.maps.Polyline({
+        map: map2,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+      });
+    }
+
+   async function submitRide() {
+         if (!startLat || !startLng) {
+          alert("يجب اختيار نقطة الانطلاق على الخريطة");
+          return;
+         }
+
+        if (!destLat || !destLng) {
+          alert("يجب اختيار الوجهة على الخريطة");
+          return;
+        }
+
+        const ride = {
+        destination: destinationLocation,
+        date: document.getElementById("rideDate").value,
+        time: document.getElementById("rideTime").value,
+        seatsAvailable: document.getElementById("seats").value,
+        genderPreference: document.getElementById("gender").value,
+        status: "ACTIVE",
+        currentLocation: "Riyadh",
+        distance: 0.0,
+        driverEmail: localStorage.getItem("userEmail")   
+      };
+
+
+      fetch(`http://localhost:8083/api/rides/createRide?driverEmail=${encodeURIComponent(localStorage.getItem("userEmail"))}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(ride)
+      })
+
+        .then(response =>{
+           if (!response.ok) throw new Error(" فشل في إنشاء الرحلة.");
+           return response.json();
+        })
+        .then(data => {
+          rideId = data.id;
+           // إرسال نقطة الانطلاق
+          fetch(`http://localhost:8083/api/rides/${rideId}/updateStartLocation`, {
+           method: "POST",
+           headers: { "Content-Type": "application/json" },
+           body: JSON.stringify({ latitude: startLat, longitude: startLng })
+        });
+        // إرسال الوجهة
+           fetch(`http://localhost:8083/api/rides/${rideId}/updateDestination`, {
+           method: "POST",
+           headers: { "Content-Type": "application/json" },
+           body: JSON.stringify({ latitude: destLat, longitude: destLng })
+         });
+        })
+        .then(() => {
+           alert(" تم إنشاء الرحلة بنجاح!");
+          window.location.href = "driverUI.html";
+        })
+        .catch(error => {
+          alert(" حدث خطأ.");
+          console.error("Error:", error);
+        });
+    }
+
+    
+    
+
+
+      async function sendStartLocation(startLat, startLng) {
+       if (!rideId) {
+        console.error("Ride ID غير موجود بعد!");
+        return;
+      }
+      
+      fetch(`http://localhost:8083/api/rides/${rideId}/sendStartLocation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ latitude: startLat, longitude: startLng }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("Location sent:", startLat, startLng);
+          } else {
+            console.error("Failed to send location");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+
+    async function sendDestination(destLat, destLng) {
+       if (!rideId) {
+        console.error("Ride ID غير موجود بعد!");
+        return;
+      }
+      
+      fetch(`http://localhost:8083/api/rides/${rideId}/sendDestination`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ latitude: destLat, longitude: destLng }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("Destination sent:", destLat, destLng);
+          } else {
+            console.error("Failed to send Destination");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+
+  </script>
 
 </body>
 

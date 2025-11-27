@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/ride_db}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:password}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8083
+
+google:
+  maps:
+    api-key: ${GOOGLE_MAPS_API_KEY:PH}

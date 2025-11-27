@@ -65,7 +65,7 @@ public class LoginController {
             if (!passwordMatches) {
                 return ResponseEntity.badRequest().body(Map.of(
                         "success", false,
-                        "message", "كلمة المرور غير صحيحة"));
+                        "message", "كلمة المرور خاطئة"));
             }
 
             Map<String, Object> response = new HashMap<>();

@@ -17,7 +17,7 @@ public class UserModel {
     protected String emergencyContacts;
     protected double rateAverage;
     protected String status;
-    
+    private String currentLocation; // "lat,lng"
 
     public UserModel() {
     }
@@ -106,5 +106,11 @@ public class UserModel {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+    public String getCurrentLocation() {
+        return currentLocation;
+    }
+    public void setCurrentLocation(String currentLocation) {
+        this.currentLocation = currentLocation;
     }
 }
