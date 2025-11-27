@@ -73,9 +73,9 @@
 
       </div>
 
-      <div id="driver-rides-area" style="display:flex; flex-direction:column; gap:30px; margin-top:25px;"></div>
+      <div id="driver-rides-area" class="rides-grid"></div>
 
-    </div> 
+    </div>
 
 
 
@@ -146,7 +146,6 @@
 
 
   <script>
-   
     function toggleProfileDropdown() {
       document.getElementById('profile-dropdown').classList.toggle('hidden');
     }
@@ -170,7 +169,6 @@
       }
     });
 
-   
     function logout() {
       document.getElementById("profile-dropdown").classList.add("hidden");
       const overlay = document.createElement("div");
@@ -225,7 +223,6 @@
       document.body.style.overflow = "auto";
     }
 
-    
     function updateStats(pending, accepted, rejected) {
       document.getElementById("new-requests").textContent = pending;
       document.getElementById("accepted").textContent = accepted;
@@ -238,7 +235,6 @@
       updateStats(0, accepted, rejected);
     }
 
-   
     function loadDriverRides() {
       const driverEmail = localStorage.getItem("userEmail");
 
@@ -265,22 +261,64 @@
           `;
 
             rideCard.innerHTML = `
-            <h2 style="font-size:22px; font-weight:bold; margin-bottom:15px;">
-              رحلة إلى ${ride.destination}
-            </h2>
+<div class="trip-card">
 
-            <div style="line-height: 2; margin-bottom:20px; text-align:right;">
-              <p><b>تاريخ الرحلة:</b> ${ride.date}</p>
-              <p><b>وقت الرحلة:</b> ${ride.time}</p>
-              <p><b>موقع الانطلاق:</b> ${ride.currentLocation}</p>
-              <p><b>الوجهة:</b> ${ride.destination}</p>
-              <p><b>المقاعد المتبقية:</b> ${ride.seatsAvailable} / ${ride.totalSeats}</p>
+    <div class="card-header">
+        <h3 class="card-title">رحلة منشورة</h3>
+        <div class="chat-icon"><i class="fas fa-comment"></i></div>
+    </div>
+
+    <div class="trip-info-grid">
+
+        <div class="info-box">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+                <span class="label">نقطة الانطلاق:</span>
+                <span class="value">${ride.currentLocation}</span>
             </div>
+        </div>
 
-            <h3 style="font-size:18px; font-weight:bold; margin-bottom:10px;">طلبات الحجز</h3>
+        <div class="info-box">
+            <i class="fas fa-flag"></i>
+            <div>
+                <span class="label">نقطة الوصول:</span>
+                <span class="value">${ride.destination}</span>
+            </div>
+        </div>
 
-            <div id="requests-${ride.rideId}" class="inner-requests" style="display:grid; gap:15px;"></div>
-          `;
+        <div class="info-box">
+            <i class="fas fa-calendar"></i>
+            <div>
+                <span class="label">اليوم:</span>
+                <span class="value">${ride.date}</span>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <i class="fas fa-clock"></i>
+            <div>
+                <span class="label">الوقت:</span>
+                <span class="value">${ride.time}</span>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <i class="fas fa-users"></i>
+            <div>
+                <span class="label">المقاعد المتبقية:</span>
+                <span class="value">${ride.seatsAvailable}/${ride.totalSeats}</span>
+            </div>
+        </div>
+
+    </div>
+
+    <h3 class="sub-title">طلبات الحجز</h3>
+    <div id="requests-${ride.rideId}" class="requests-container"></div>
+
+</div>
+`;
+
+
 
             mainArea.appendChild(rideCard);
           });
@@ -289,7 +327,6 @@
         });
     }
 
-    
     function loadBookingRequests() {
       const driverEmail = localStorage.getItem("userEmail");
 
@@ -321,6 +358,8 @@
             grouped[rId].forEach(req => {
 
               const card = document.createElement("div");
+              card.className = "booking-request-card";
+              card.id = `booking-${req.bookingId}`;
               card.className = "booking-request-card";
               card.style = `
               border:1px solid #ddd;
@@ -358,7 +397,6 @@
         });
     }
 
-   
     function respondToBooking(bookingId, status) {
       fetch(`http://localhost:8083/api/bookings/respond?bookingId=${bookingId}&status=${status}`, {
         method: "POST"
@@ -378,16 +416,24 @@
             localStorage.setItem("driverAcceptedCount", ++accepted);
           } else {
             localStorage.setItem("driverRejectedCount", ++rejected);
+
+            //  حذف كارد الراكب فقط إذا كان مرفوض
+            const card = document.getElementById(`booking-${bookingId}`);
+            if (card) card.remove();
           }
 
-          loadDriverRides();   
+          // الاحتفاظ بتحميل طلبات القبول فقط
+          if (status === "accepted") {
+            loadDriverRides();
+          }
         });
     }
 
-    
+
+
     document.addEventListener("DOMContentLoaded", () => {
       initStats();
-      loadDriverRides();   
+      loadDriverRides();
     });
 
   </script>
@@ -444,6 +490,133 @@
 
     .reject-btn:hover {
       background: #c82333;
+    }
+
+    .trip-card {
+
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      border: 1px solid #ebebeb;
+      min-height: 320px;
+      width: 100%;
+    }
+
+    .trip-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .location-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .location-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .details-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .driver-section {
+      border-top: 1px solid #f0f0f0;
+      padding-top: 12px;
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chat-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #487788;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #265262;
+      margin-bottom: 15px;
+    }
+
+    .trip-info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .info-box {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .info-box i {
+      color: #487788;
+      font-size: 18px;
+      margin-top: 3px;
+    }
+
+    .label {
+      font-size: 12px;
+      color: #666;
+      display: block;
+    }
+
+    .value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .sub-title {
+      margin-top: 20px;
+      font-size: 17px;
+      font-weight: bold;
+      color: #265262;
+    }
+
+    .requests-container {
+      margin-top: 10px;
+      display: grid;
+      gap: 15px;
+    }
+
+    .rides-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      margin-top: 25px;
     }
   </style>
   </div>
