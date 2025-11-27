@@ -66,6 +66,22 @@ public class AuthService {
         }
 
         if (driverData != null && !driverData.isEmpty()) {
+            user.setStatus("pending");
+        } else {
+            user.setStatus("active");
+        }
+
+        userRepository.save(user);
+
+        if (!passengerRepository.existsById(user.getEmail())) {
+            PassengerModel passenger = new PassengerModel(user.getEmail());
+            passengerRepository.save(passenger);
+        }
+
+        if (driverData != null && !driverData.isEmpty()) {
+
+            int seats = Integer.parseInt(driverData.get("seatsAvailable").toString());
+
             DriverModel driver = new DriverModel(
                     user.getEmail(),
                     (String) driverData.get("licenseNumber"),
@@ -74,7 +90,8 @@ public class AuthService {
                     (String) driverData.get("carModel"),
                     (String) driverData.get("carColor"),
                     (String) driverData.get("carPlate"),
-                    (int) driverData.get("seatsAvailable"));
+                    seats);
+
             driver.setStatus("pending");
             driverRepository.save(driver);
         }

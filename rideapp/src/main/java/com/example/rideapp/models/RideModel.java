@@ -12,6 +12,13 @@ public class RideModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rideId;
 
+    @Transient
+    private String driverName;
+
+    @Transient
+    private double driverRating;
+
+    private String startArea;
     private String destination;
     private LocalDate date;
     private LocalTime time;
@@ -22,6 +29,10 @@ public class RideModel {
     private Double distance;
     private String driverEmail;
     private int totalSeats; // عدد المقاعد الأصلي
+    private boolean isEventRide;
+
+    @Column(columnDefinition = "text")
+    private String routePolyline; // encoded polyline
 
     public RideModel() {
     }
@@ -33,6 +44,14 @@ public class RideModel {
 
     public void setRideId(Long rideId) {
         this.rideId = rideId;
+    }
+
+    public String getStartArea() {
+        return startArea;
+    }
+
+    public void setStartArea(String startArea) {
+        this.startArea = startArea;
     }
 
     public String getDestination() {
@@ -107,4 +126,43 @@ public class RideModel {
         this.driverEmail = driverEmail;
     }
 
+    public int getTotalSeats() {
+        return totalSeats;
+    }
+
+    public void setTotalSeats(int totalSeats) {
+        this.totalSeats = totalSeats;
+    }
+
+    public String getRoutePolyline() {
+        return routePolyline;
+    }
+
+    public void setRoutePolyline(String routePolyline) {
+        this.routePolyline = routePolyline;
+    }
+
+    public boolean isEventRide() {
+        return isEventRide;
+    }
+
+    public void setIsEventRide(boolean isEventRide) {
+        this.isEventRide = isEventRide;
+    }
+
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
+    public double getDriverRating() {
+        return driverRating;
+    }
+
+    public void setDriverRating(double driverRating) {
+        this.driverRating = driverRating;
+    }
 }

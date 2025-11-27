@@ -23,7 +23,7 @@ public class RideCreationController {
             @RequestBody RideModel ride,
             @RequestParam String driverEmail) {
 
-        ride.setDriverEmail(driverEmail); 
+        ride.setDriverEmail(driverEmail);
         RideModel savedRide = rideService.createRide(ride);
 
         return ResponseEntity.ok(savedRide);
@@ -50,6 +50,22 @@ public class RideCreationController {
     @GetMapping("/search")
     public ResponseEntity<List<RideModel>> searchRides(@RequestParam String destination) {
         return ResponseEntity.ok(rideService.searchRides(destination));
+    }
+
+    // الرحلات السابقة
+    @GetMapping("/past")
+    public ResponseEntity<List<RideModel>> getPastRides(
+            @RequestParam String passengerEmail) {
+
+        List<RideModel> rides = rideService.getPastRidesForPassenger(passengerEmail);
+        return ResponseEntity.ok(rides);
+    }
+
+    // جلب رحلات السائق
+    @GetMapping("/driver-rides")
+    public ResponseEntity<List<RideModel>> getDriverRides(@RequestParam String email) {
+        List<RideModel> rides = rideService.getRidesForDriver(email);
+        return ResponseEntity.ok(rides);
     }
 
 }

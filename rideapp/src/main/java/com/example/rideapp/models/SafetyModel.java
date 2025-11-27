@@ -45,10 +45,10 @@ public class SafetyModel {
     public UserModel getTriggeredBy() {
         return triggeredBy;
     }
-    public void setstatus(String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
-    public String getstatus() {
+    public String getStatus() {
         return status;
     }
     public void setMessage(String message) {
