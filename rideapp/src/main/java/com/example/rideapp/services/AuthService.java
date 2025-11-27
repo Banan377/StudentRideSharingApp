@@ -53,6 +53,19 @@ public class AuthService {
         user.setPassword(encodedPassword);
 
         if (driverData != null && !driverData.isEmpty()) {
+            user.setStatus("pending"); 
+        } else {
+            user.setStatus("active");
+        }
+
+        userRepository.save(user);
+
+        if (!passengerRepository.existsById(user.getEmail())) {
+            PassengerModel passenger = new PassengerModel(user.getEmail());
+            passengerRepository.save(passenger);
+        }
+
+        if (driverData != null && !driverData.isEmpty()) {
             user.setStatus("pending");
         } else {
             user.setStatus("active");
