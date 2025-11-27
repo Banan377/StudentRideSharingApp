@@ -312,15 +312,16 @@
 
     </div>
 
+    <h3 class="sub-title">الركاب المنضمون</h3>
+    <div id="passengers-${ride.rideId}" class="accepted-passengers" style="margin-bottom:20px;"></div>
+
     <h3 class="sub-title">طلبات الحجز</h3>
     <div id="requests-${ride.rideId}" class="requests-container"></div>
 
 </div>
 `;
-
-
-
             mainArea.appendChild(rideCard);
+            loadAcceptedPassengers(ride.rideId);
           });
 
           loadBookingRequests();
@@ -372,6 +373,7 @@
             `;
 
               card.innerHTML = `
+         
               <div class="request-info" style="width:100%;">
                 <h3 style="font-size:20px;color:#333;">طلب من: ${req.passenger.name}</h3>
                 <p><b>موقع الانطلاق:</b> ${req.ride.currentLocation}</p>
@@ -388,6 +390,7 @@
                   رفض
                 </button>
               </div>
+              
             `;
 
               container.appendChild(card);
@@ -397,7 +400,7 @@
         });
     }
 
-    function respondToBooking(bookingId, status) {
+    function respondToBooking(bookingId, status, rideId) {
       fetch(`http://localhost:8083/api/bookings/respond?bookingId=${bookingId}&status=${status}`, {
         method: "POST"
       })
@@ -414,20 +417,16 @@
 
           if (status === "accepted") {
             localStorage.setItem("driverAcceptedCount", ++accepted);
+            loadAcceptedPassengers(rideId);
           } else {
             localStorage.setItem("driverRejectedCount", ++rejected);
 
-            //  حذف كارد الراكب فقط إذا كان مرفوض
             const card = document.getElementById(`booking-${bookingId}`);
             if (card) card.remove();
           }
-
-          // الاحتفاظ بتحميل طلبات القبول فقط
-          if (status === "accepted") {
-            loadDriverRides();
-          }
         });
     }
+
 
 
 
@@ -435,6 +434,31 @@
       initStats();
       loadDriverRides();
     });
+
+    function loadAcceptedPassengers(rideId) {
+      fetch(`http://localhost:8083/api/bookings/accepted-passengers?rideId=${rideId}`)
+        .then(res => res.json())
+        .then(passengers => {
+          const container = document.getElementById(`passengers-${rideId}`);
+          container.innerHTML = "";
+
+          if (passengers.length === 0) {
+            container.innerHTML = "<p style='color:#777;font-size:14px;'>لا يوجد ركاب بعد</p>";
+            return;
+          }
+
+          passengers.forEach(p => {
+            const div = document.createElement("div");
+            div.className = "accepted-passenger-card";
+            div.innerHTML = `
+          <p><i class="fas fa-user"></i> ${p.passengerName}
+</p>
+        `;
+            container.appendChild(div);
+          });
+        });
+    }
+
 
   </script>
 

@@ -79,13 +79,22 @@ public class RideService {
                 .map(b -> b.getRide().getRideId())
                 .collect(Collectors.toSet());
 
-        // ارجاع الرحلات:
-        // 1) اللي فيها مقاعد
-        // 2) الراكب ما حجزها قبل
-        return allRides.stream()
+        // فلترة الرحلات
+        List<RideModel> rides = allRides.stream()
                 .filter(ride -> ride.getSeatsAvailable() > 0)
                 .filter(ride -> !bookedRideIds.contains(ride.getRideId()))
                 .collect(Collectors.toList());
+
+        // إضافة اسم السائق
+        rides.forEach(ride -> {
+            UserModel driver = userRepository.findByEmail(ride.getDriverEmail()).orElse(null);
+            if (driver != null) {
+                ride.setDriverName(driver.getName());
+                ride.setDriverRating(driver.getRateAverage());
+            }
+        });
+
+        return rides;
     }
 
     public void updateRideLocation(Long rideId, String location) {

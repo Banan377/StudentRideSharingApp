@@ -13,7 +13,8 @@ public class BookingModel {
     @ManyToOne
     @JoinColumn(name = "ride_id")
     private RideModel ride;
-  
+    @Transient
+    private String passengerName;
 
     @ManyToOne
     @JoinColumn(name = "passenger_email")
@@ -64,5 +65,13 @@ public class BookingModel {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getPassengerName() {
+        return passengerName;
+    }
+
+    public void setPassengerName(String passengerName) {
+        this.passengerName = passengerName;
     }
 }
