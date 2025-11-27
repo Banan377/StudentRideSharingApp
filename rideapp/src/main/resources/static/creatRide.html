@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=PH&callback=initMap" async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=PASETHERE&callback=initMap" async defer></script>
 
   <style>
     .container-form {
@@ -172,10 +172,10 @@
     </div>
   </div>
   <script>
-    let rideId = null; let startLat = null, startLng = null; let destLat = null, destLng = null; let startLocation = null; let destinationLocation = null;
-    let map1, map2, driverMarker1, driverMarker2, polyline1, polyline2, marker1, marker2;
+    let rideId = null; let startLat = null, startLng = null; let destLat = null, destLng = null; let startLocation = null; let destinationLocation = null; let distanceKm = 0; let durationText = "";
+    let map1, map2, polyline1, polyline2, marker1, marker2 ;
 
-        function initMap() {
+      function initMap() {
       const defaultPos = { lat: 24.7136, lng: 46.6753 };
       
       map1 = new google.maps.Map(document.getElementById("map1"), {
@@ -187,7 +187,8 @@
         center: defaultPos,
         zoom: 12,
       });
-
+      
+      
        if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -196,20 +197,18 @@
                 lng: position.coords.longitude,
               };
 
-      driverMarker1 = new google.maps.Marker({
-        position: pos,
-        map: map1,
-        title: "موقعك الحالي",
-      });
-
-      driverMarker2 = new google.maps.Marker({
-        position: pos,
-        map: map2,
-        title: "موقعك الحالي",
-      });
-
       map1.setCenter(pos);
       map2.setCenter(pos);
+
+
+            },
+            () => {
+              alert("لم يتم السماح بالحصول على الموقع");
+            }
+          );
+        } else {
+          alert("المتصفح لا يدعم خدمة الموقع");
+        }
 
       map1.addListener("click", (event) => {
        startLat = event.latLng.lat();
@@ -220,11 +219,14 @@
       marker1 = new google.maps.Marker({
         position: { lat:startLat, lng:startLng },
         map: map1,
+        label: "نقطة الانطلاق"
       });
 
-      startLocation = { lat: startLat, lng: startLng };
-      console.log("Start location:", startLat, startLng);
+      
 
+      startLocation =  startLat+", "+ startLng ;
+      console.log("Start location:", startLat, startLng);
+     
      
     });
 
@@ -237,22 +239,15 @@
       marker2 = new google.maps.Marker({
         position: { lat:destLat, lng:destLng },
         map: map2,
+        label: "الوجهة"
       });
-
-      destinationLocation = { lat: destLat, lng: destLng };
+      
+      destinationLocation = destLat+", "+ destLng;
       console.log("Destination:", destLat, destLng);
-
+     
       
     });
 
-            },
-            () => {
-              alert("لم يتم السماح بالحصول على الموقع");
-            }
-          );
-        } else {
-          alert("المتصفح لا يدعم خدمة الموقع");
-        }
 
       polyline1 = new google.maps.Polyline({
         map: map1,
@@ -269,6 +264,24 @@
       });
     }
 
+    function calculateDistance(startLat, startLng, destLat, destLng) {
+      if (!startLat || !startLng || !destLat || !destLng )return;
+
+      const R = 6371; // نصف قطر الأرض بالكيلومتر
+      const dLat = (destLat - startLat) * Math.PI / 180;
+      const dLon = (destLng - startLng) * Math.PI / 180;
+
+      const a =
+       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+       Math.cos(startLat * Math.PI / 180) *
+       Math.cos(destLat * Math.PI / 180) *
+       Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+      return R * c; // المسافة بالكيلومتر
+ }
+
    async function submitRide() {
          if (!startLat || !startLng) {
           alert("يجب اختيار نقطة الانطلاق على الخريطة");
@@ -280,6 +293,11 @@
           return;
         }
 
+       distanceKm = calculateDistance(startLat,   
+       startLng, destLat, destLng);
+       
+       console.log("Distance:", distanceKm, "km");
+
         const ride = {
         destination: destinationLocation,
         date: document.getElementById("rideDate").value,
@@ -287,8 +305,8 @@
         seatsAvailable: document.getElementById("seats").value,
         genderPreference: document.getElementById("gender").value,
         status: "ACTIVE",
-        currentLocation: "Riyadh",
-        distance: 0.0,
+        currentLocation: startLocation,
+        distance: distanceKm,
         driverEmail: localStorage.getItem("userEmail")   
       };
 
@@ -308,18 +326,20 @@
         .then(data => {
           rideId = data.id;
            // إرسال نقطة الانطلاق
+          return Promise.all([
           fetch(`http://localhost:8083/api/rides/${rideId}/updateStartLocation`, {
            method: "POST",
            headers: { "Content-Type": "application/json" },
            body: JSON.stringify({ latitude: startLat, longitude: startLng })
-        });
+        }),
         // إرسال الوجهة
            fetch(`http://localhost:8083/api/rides/${rideId}/updateDestination`, {
            method: "POST",
            headers: { "Content-Type": "application/json" },
            body: JSON.stringify({ latitude: destLat, longitude: destLng })
-         });
-        })
+           })
+         ]);
+         })
         .then(() => {
            alert(" تم إنشاء الرحلة بنجاح!");
           window.location.href = "driverUI.html";
@@ -382,6 +402,9 @@
         .catch((error) => {
           console.error("Error:", error);
         });
+
+        
+
     }
 
   </script>
