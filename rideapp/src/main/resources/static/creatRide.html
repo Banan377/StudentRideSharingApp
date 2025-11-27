@@ -9,8 +9,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<<<<<<< HEAD
   <script src="https://maps.googleapis.com/maps/api/js?key=PH&callback=initMap"
     async defer></script>
+=======
+  <script src="https://maps.googleapis.com/maps/api/js?key=PASETHERE&callback=initMap" async defer></script>
+>>>>>>> cb99abd (calculate distance)
 
   <style>
     .container-form {
@@ -188,6 +192,10 @@
         center: defaultPos,
         zoom: 12,
       });
+      
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+      directionsRenderer.setMap(map2);
 
 
       if (navigator.geolocation) {
@@ -229,13 +237,19 @@
         console.log("Start location:", startLat, startLng);
 
 
+      marker1 = new google.maps.Marker({
+        position: { lat:startLat, lng:startLng },
+        map: map1,
+        label: "نقطة الانطلاق"
       });
 
-      map2.addListener("click", (event) => {
-        destLat = event.latLng.lat();
-        destLng = event.latLng.lng();
+      
 
-        if (marker2) marker2.setMap(null);
+      startLocation =  startLat+", "+ startLng ;
+      console.log("Start location:", startLat, startLng);
+     
+     
+    });
 
         marker2 = new google.maps.Marker({
           position: { lat: destLat, lng: destLng },
@@ -247,8 +261,17 @@
         console.log("Destination:", destLat, destLng);
 
 
+      marker2 = new google.maps.Marker({
+        position: { lat:destLat, lng:destLng },
+        map: map2,
+        label: "الوجهة"
       });
-
+      
+      destinationLocation = destLat+", "+ destLng;
+      console.log("Destination:", destLat, destLng);
+     
+      
+    }
 
       polyline1 = new google.maps.Polyline({
         map: map1,
@@ -263,10 +286,31 @@
         strokeOpacity: 1.0,
         strokeWeight: 2,
       });
-    }
+    
 
     function calculateDistance(startLat, startLng, destLat, destLng) {
-      if (!startLat || !startLng || !destLat || !destLng) return;
+      if (!startLat || !startLng || !destLat || !destLng )return;
+
+      const R = 6371; // نصف قطر الأرض بالكيلومتر
+      const dLat = (destLat - startLat) * Math.PI / 180;
+      const dLon = (destLng - startLng) * Math.PI / 180;
+
+      const a =
+       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+       Math.cos(startLat * Math.PI / 180) *
+       Math.cos(destLat * Math.PI / 180) *
+       Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+      return R * c; // المسافة بالكيلومتر
+ }
+
+   async function submitRide() {
+         if (!startLat || !startLng) {
+          alert("يجب اختيار نقطة الانطلاق على الخريطة");
+          return;
+         }
 
       const R = 6371; // نصف قطر الأرض بالكيلومتر
       const dLat = (destLat - startLat) * Math.PI / 180;
@@ -453,7 +497,6 @@
         .catch((error) => {
           console.error("Error:", error);
         });
-
 
 
     }
