@@ -173,7 +173,7 @@
   </div>
   <script>
     let rideId = null; let startLat = null, startLng = null; let destLat = null, destLng = null; let startLocation = null; let destinationLocation = null; let distanceKm = 0; let durationText = "";
-    let map1, map2, driverMarker1, driverMarker2, polyline1, polyline2, marker1, marker2, directionsService, directionsRenderer;
+    let map1, map2, polyline1, polyline2, marker1, marker2 ;
 
       function initMap() {
       const defaultPos = { lat: 24.7136, lng: 46.6753 };
@@ -188,10 +188,7 @@
         zoom: 12,
       });
       
-      directionsService = new google.maps.DirectionsService();
-      directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
-      directionsRenderer.setMap(map2);
-
+      
        if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -200,20 +197,18 @@
                 lng: position.coords.longitude,
               };
 
-      driverMarker1 = new google.maps.Marker({
-        position: pos,
-        map: map1,
-        title: "موقعك الحالي",
-      });
-
-      driverMarker2 = new google.maps.Marker({
-        position: pos,
-        map: map2,
-        title: "موقعك الحالي",
-      });
-
       map1.setCenter(pos);
       map2.setCenter(pos);
+
+
+            },
+            () => {
+              alert("لم يتم السماح بالحصول على الموقع");
+            }
+          );
+        } else {
+          alert("المتصفح لا يدعم خدمة الموقع");
+        }
 
       map1.addListener("click", (event) => {
        startLat = event.latLng.lat();
@@ -253,14 +248,6 @@
       
     });
 
-            },
-            () => {
-              alert("لم يتم السماح بالحصول على الموقع");
-            }
-          );
-        } else {
-          alert("المتصفح لا يدعم خدمة الموقع");
-        }
 
       polyline1 = new google.maps.Polyline({
         map: map1,
