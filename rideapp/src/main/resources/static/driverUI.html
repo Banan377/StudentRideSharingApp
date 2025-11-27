@@ -146,7 +146,6 @@
 
 
   <script>
-
     function toggleProfileDropdown() {
       document.getElementById('profile-dropdown').classList.toggle('hidden');
     }
@@ -169,7 +168,6 @@
         dropdown.classList.add("hidden");
       }
     });
-
 
     function logout() {
       document.getElementById("profile-dropdown").classList.add("hidden");
@@ -225,7 +223,6 @@
       document.body.style.overflow = "auto";
     }
 
-
     function updateStats(pending, accepted, rejected) {
       document.getElementById("new-requests").textContent = pending;
       document.getElementById("accepted").textContent = accepted;
@@ -237,7 +234,6 @@
       const rejected = parseInt(localStorage.getItem("driverRejectedCount")) || 0;
       updateStats(0, accepted, rejected);
     }
-
 
     function loadDriverRides() {
       const driverEmail = localStorage.getItem("userEmail");
@@ -330,7 +326,6 @@
           loadBookingRequests();
         });
     }
-
 
     function loadBookingRequests() {
       const driverEmail = localStorage.getItem("userEmail");
