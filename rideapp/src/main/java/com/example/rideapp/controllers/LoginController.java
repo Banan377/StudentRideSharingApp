@@ -32,35 +32,31 @@ public class LoginController {
 
             if (email == null || password == null || email.trim().isEmpty() || password.trim().isEmpty()) {
                 return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "البريد الإلكتروني وكلمة المرور مطلوبان"
-                ));
+                        "success", false,
+                        "message", "البريد الإلكتروني وكلمة المرور مطلوبان"));
             }
 
             if (!email.endsWith("@sm.imamu.edu.sa")) {
                 return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "يجب أن يكون البريد الإلكتروني من نطاق جامعة الإمام محمد بن سعود الإسلامية"
-                ));
+                        "success", false,
+                        "message", "يجب أن يكون البريد الإلكتروني من نطاق جامعة الإمام محمد بن سعود الإسلامية"));
             }
 
             Optional<UserModel> userOptional = userRepository.findById(email);
 
             if (userOptional.isEmpty()) {
                 return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "الإيميل غير مسجل في التطبيق"
-                ));
+                        "success", false,
+                        "message", "الإيميل غير مسجل في التطبيق"));
             }
 
             UserModel user = userOptional.get();
-            
+
             // التحقق من حالة الحساب
             if ("inactive".equals(user.getStatus()) || "suspended".equals(user.getStatus())) {
                 return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "الحساب غير نشط أو موقوف. يرجى التواصل مع الإدارة"
-                ));
+                        "success", false,
+                        "message", "الحساب غير نشط أو موقوف. يرجى التواصل مع الإدارة"));
             }
 
             // تحقق من كلمة المرور
@@ -68,12 +64,10 @@ public class LoginController {
 
             if (!passwordMatches) {
                 return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "كلمة المرور غير صحيحة"
-                ));
+                        "success", false,
+                        "message", "كلمة المرور خاطئة"));
             }
 
-           
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "تم تسجيل الدخول بنجاح");
@@ -89,58 +83,45 @@ public class LoginController {
 
             response.put("user", userInfo);
 
-            // تحديد صفحة التوجيه بناءً على الـ role
-            String redirectUrl = determineRedirectUrl(user.getRole());
+            String redirectUrl;
+            if ("admin".equals(user.getRole())) {
+                redirectUrl = "adminDashboard.html";
+
+            } else if ("driver".equals(user.getRole()) && "approved".equals(user.getStatus())) {
+                redirectUrl = "driverUI.html";
+
+            } else {
+                redirectUrl = "passengerRides.html";
+            }
+
             response.put("redirectUrl", redirectUrl);
-
-            System.out.println("تم تسجيل الدخول بنجاح للمستخدم: " + email + " - التوجيه إلى: " + redirectUrl);
-
             return ResponseEntity.ok(response);
+
+           
 
         } catch (Exception e) {
             System.err.println("خطأ في تسجيل الدخول: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.internalServerError().body(Map.of(
-                "success", false,
-                "message", "حدث خطأ غير متوقع أثناء تسجيل الدخول"
-            ));
+                    "success", false,
+                    "message", "حدث خطأ غير متوقع أثناء تسجيل الدخول"));
         }
     }
 
-   
-    private String determineRedirectUrl(String role) {
-        if (role == null) {
-            return "passengerRides.html";
-        }
-        
-        switch (role.toLowerCase()) {
-            case "driver":
-                return "driver.html";
-            case "admin":
-                return "admin.html";
-            case "passenger":
-            default:
-                return "passengerRides.html";
-        }
-    }
-
-   
     @GetMapping("/check-session")
     public ResponseEntity<?> checkSession(@RequestHeader(value = "User-Email", required = false) String email) {
         try {
             if (email == null || email.trim().isEmpty()) {
                 return ResponseEntity.ok(Map.of(
-                    "authenticated", false,
-                    "message", "لا توجد جلسة نشطة"
-                ));
+                        "authenticated", false,
+                        "message", "لا توجد جلسة نشطة"));
             }
 
             Optional<UserModel> userOptional = userRepository.findById(email);
             if (userOptional.isEmpty()) {
                 return ResponseEntity.ok(Map.of(
-                    "authenticated", false,
-                    "message", "المستخدم غير موجود"
-                ));
+                        "authenticated", false,
+                        "message", "المستخدم غير موجود"));
             }
 
             UserModel user = userOptional.get();
@@ -152,20 +133,15 @@ public class LoginController {
             userInfo.put("status", user.getStatus());
 
             return ResponseEntity.ok(Map.of(
-                "authenticated", true,
-                "user", userInfo
-            ));
+                    "authenticated", true,
+                    "user", userInfo));
 
         } catch (Exception e) {
             System.err.println("خطأ في التحقق من الجلسة: " + e.getMessage());
             return ResponseEntity.internalServerError().body(Map.of(
-                "authenticated", false,
-                "message", "خطأ في التحقق من الجلسة"
-            ));
+                    "authenticated", false,
+                    "message", "خطأ في التحقق من الجلسة"));
         }
     }
 
-    
-    
-    
 }

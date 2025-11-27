@@ -4,10 +4,10 @@ import com.example.rideapp.models.OTPModel;
 import com.example.rideapp.repositories.OTPRepository;
 
 import jakarta.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,55 +23,64 @@ public class OTPService {
     @Autowired
     private JavaMailSender mailSender;
 
-    private static final int OTP_EXPIRATION_MINUTES = 5;
+    private static final int OTP_EXP_MINUTES = 2;
 
     @Transactional
     public void deleteOTP(OTPModel otpModel) {
         otpRepository.delete(otpModel);
     }
 
-    public OTPModel generateAndSendOTP(String email) {
-       
+    public OTPModel generateAndSendOTP(String email, String otpType) {
 
-        // إنشاء OTP عشوائي 6 أرقام
+        Optional<OTPModel> existing = otpRepository.findByEmail(email);
+
+        if (existing.isPresent()) {
+            OTPModel oldOtp = existing.get();
+
+            if (oldOtp.getExpirationTime().isAfter(LocalDateTime.now())) {
+                throw new IllegalStateException("OTP_NOT_EXPIRED");
+            }
+
+            otpRepository.delete(oldOtp);
+        }
+
         String otp = String.format("%06d", new Random().nextInt(999999));
 
-        OTPModel otpModel = new OTPModel(email, otp, LocalDateTime.now().plusMinutes(OTP_EXPIRATION_MINUTES));
+        OTPModel otpModel = new OTPModel(
+                email,
+                otp,
+                otpType,
+                LocalDateTime.now().plusMinutes(2));
+
         otpRepository.save(otpModel);
 
-        sendOTPEmail(email, otp);
-        System.out.println("Generated OTP for " + email + ": " + otp);
+        System.out.println(" OTP Generated for " + email + ": " + otp);
+
+        //sendOTPEmail(email, otp);
 
         return otpModel;
     }
 
-    public boolean verifyOTP(String email, String otpCode) {
-        Optional<OTPModel> existingOTP = otpRepository.findByEmail(email);
-
-        if (existingOTP.isPresent()) {
-            OTPModel otpModel = existingOTP.get();
-
-            if (otpModel.getOtpCode().equals(otpCode) &&
-                otpModel.getExpirationTime().isAfter(LocalDateTime.now())) {
-
-                // حذف OTP بعد التحقق
-                 deleteOTP(otpModel);
-                return true;
-            }
-        }
-        return false;
-    }
+    @Async
 
     private void sendOTPEmail(String email, String otp) {
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(email);
-            message.setSubject("رمز التحقق OTP");
-            message.setText("كود التحقق الخاص بك هو: " + otp +
-                    "\nصالح لمدة " + OTP_EXPIRATION_MINUTES + " دقائق.");
-            mailSender.send(message);
+            System.out.println("OTP GENERATED = " + otp);
+            SimpleMailMessage msg = new SimpleMailMessage();
+            msg.setTo(email);
+            msg.setSubject("رمز التحقق");
+            msg.setText("رمز التحقق الخاص بك هو: " + otp
+                    + "\nصالح لمدة " + OTP_EXP_MINUTES + " دقائق.");
+
+            mailSender.send(msg);
+
         } catch (Exception e) {
             System.out.println("Error sending email: " + e.getMessage());
         }
     }
+
+    public OTPModel getOTPByEmail(String email) {
+        return otpRepository.findByEmail(email).orElse(null);
+    }
+
 }

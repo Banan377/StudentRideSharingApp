@@ -4,54 +4,87 @@
 <head>
   <meta charset="UTF-8">
   <title>واجهة السائق</title>
-
-
   <link rel="stylesheet" href="driver.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
-  <!-- القائمة  -->
+
+  <!-- القائمة الجانبية -->
   <div class="sidebar">
     <div class="logo"></div>
     <ul class="menue">
       <li><a href="driverUI.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a></li>
-      <li><a href="#"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
+      <li><a href="driverRiedsHistory.html"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
       <li><a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a></li>
-      <li><a href="#"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
+      <li><a href="driverEvents.html"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
     </ul>
-
-
   </div>
 
-
-
-  <div class="container">
-    <div class="header">
+  <!-- المحتوى الرئيسي -->
+  <div class="main-content">
+    <div class="top-bar">
       <button type="button" class="create-btn" onclick="window.location.href='creatRide.html'">
         إنشاء رحلة
       </button>
 
-      <!-- الملف الشخصي -->
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <!-- زر التبديل بين الأدوار -->
+        <button class="switch-role-btn" onclick="showSwitchRoleConfirmation()">تبديل إلى راكب</button>
 
-      <div class="profile-section">
-        <button onclick="toggleProfileDropdown()" class="profile-btn">
-          <i class="fas fa-user-circle"></i>
-        </button>
-        <div id="profile-dropdown" class="dropdown-menu hidden">
-          <ul>
-            <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل التقييمات</span></a></li>
-            <li><a href="#" onclick="showSettingsPage()"><i class="fas fa-cog"></i><span>الإعدادات</span></a></li>
-            <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
-          </ul>
+        <!-- الملف الشخصي -->
+        <div class="profile-section">
+          <button onclick="toggleProfileDropdown()" class="profile-btn">
+            <i class="fas fa-user-circle"></i>
+          </button>
+
+          <div id="profile-dropdown" class="dropdown-menu hidden">
+            <ul>
+              <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل التقييمات</span></a></li>
+              <li><a href="driverSetting.html"><i class="fas fa-cog"></i><span>الإعدادات</span></a></li>
+              <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
+
+
+    <div class="content-area">
+
+      <!-- الإحصائيات -->
+      <div class="stats-card">
+
+        <div class="stat-box">
+          <p>الطلبات الجديدة</p>
+          <span id="new-requests">0</span>
+        </div>
+
+        <div class="stat-box">
+          <p>المقبولة</p>
+          <span id="accepted">0</span>
+        </div>
+
+        <div class="stat-box">
+          <p>المرفوضة</p>
+          <span id="rejected">0</span>
+        </div>
+
+      </div>
+
+      <div id="driver-rides-area" class="rides-grid"></div>
+
+    </div>
+
+
+
+    <!-- حاوية الرحلات -->
+    <div class="trips-container" id="trips-container">
+    </div>
   </div>
 
-
-  <!-- التقييمات -->
+  <!-- صفحة التقييمات -->
   <div id="rating-page" class="full-page hidden">
     <div class="container-form">
       <div class="form-box">
@@ -85,32 +118,27 @@
     </div>
   </div>
 
-  <!--  الإعدادات -->
-  <div id="settings-page" class="full-page hidden">
-    <div class="container-form">
-      <div class="form-box">
-        <div class="page-header">
-          <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
-          <h2>الإعدادات</h2>
-        </div>
+  <!-- بوب أب معلومات -->
+  <div id="popup" class="full-page hidden">
+    <div class="form-box">
+      <h2 id="popup-name"></h2>
+      <p>موقع الانطلاق: <span id="popup-start"></span></p>
+      <p>الوجهة: <span id="popup-end"></span></p>
+      <p>الوقت: <span id="popup-time"></span></p>
+      <button class="update-btn" onclick="closePopup()">إغلاق</button>
+    </div>
+  </div>
 
-        <div class="settings-form">
-          <div class="form-group">
-            <label for="name">الاسم</label>
-            <input type="text" id="name" placeholder="أدخل اسمك">
-          </div>
-
-          <div class="form-group">
-            <label for="password">كلمة المرور</label>
-            <input type="password" id="password" placeholder="أدخل كلمة المرور الجديدة">
-          </div>
-
-          <div class="form-group">
-            <label for="emergency-contact">جهة اتصال الطوارئ</label>
-            <input type="tel" id="emergency-contact" placeholder="رقم الهاتف للطوارئ">
-          </div>
-
-          <button onclick="updateSettings()" class="update-btn">تحديث المعلومات</button>
+  <!-- تأكيد التبديل -->
+  <div id="switch-role-confirmation" class="logout-overlay hidden">
+    <div class="logout-modal">
+      <div class="logout-content">
+        <i class="fas fa-sync-alt logout-icon"></i>
+        <h3>تبديل الدور</h3>
+        <p>هل أنت متأكد من التبديل إلى وضع الراكب؟</p>
+        <div class="logout-buttons">
+          <button onclick="confirmSwitchRole()" class="confirm-logout-btn">نعم</button>
+          <button onclick="cancelSwitchRole()" class="cancel-logout-btn">إلغاء</button>
         </div>
       </div>
     </div>
@@ -118,6 +146,7 @@
 
 
   <script>
+
     function toggleProfileDropdown() {
       document.getElementById('profile-dropdown').classList.toggle('hidden');
     }
@@ -128,88 +157,474 @@
       document.body.style.overflow = 'hidden';
     }
 
-    function showSettingsPage() {
-      document.getElementById('profile-dropdown').classList.add('hidden');
-      document.getElementById('settings-page').classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
-
     function closePage() {
-      document.querySelectorAll('.full-page').forEach(page => page.classList.add('hidden'));
+      document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
       document.body.style.overflow = 'auto';
     }
 
-    function updateSettings() {
-      const name = document.getElementById('name').value;
-      const password = document.getElementById('password').value;
-      const contact = document.getElementById('emergency-contact').value;
-
-      if (!name && !password && !contact) {
-        alert('يرجى ملء حقل واحد على الأقل');
-        return;
+    document.addEventListener("click", function (event) {
+      const profileArea = document.querySelector(".profile-section");
+      const dropdown = document.getElementById("profile-dropdown");
+      if (!profileArea.contains(event.target)) {
+        dropdown.classList.add("hidden");
       }
+    });
 
-      alert('تم تحديث المعلومات بنجاح');
-      closePage();
-    }
 
     function logout() {
-      document.getElementById('profile-dropdown').classList.add('hidden');
-      showLogoutConfirmation();
-    }
-
-    function showLogoutConfirmation() {
-      const overlay = document.createElement('div');
-      overlay.className = 'logout-overlay';
+      document.getElementById("profile-dropdown").classList.add("hidden");
+      const overlay = document.createElement("div");
+      overlay.className = "logout-overlay";
       overlay.innerHTML = `
-        <div class="logout-modal">
-          <div class="logout-content">
-            <i class="fas fa-sign-out-alt logout-icon"></i>
-            <h3>تسجيل الخروج</h3>
-            <p>هل أنت متأكد من تسجيل الخروج؟</p>
-            <div class="logout-buttons">
-              <button onclick="confirmLogout()" class="confirm-logout-btn">نعم، تسجيل الخروج</button>
-              <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
-            </div>
+      <div class="logout-modal">
+        <div class="logout-content">
+          <i class="fas fa-sign-out-alt logout-icon"></i>
+          <h3>تسجيل الخروج</h3>
+          <p>هل أنت متأكد؟</p>
+          <div class="logout-buttons">
+            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
+            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
           </div>
-        </div>`;
+        </div>
+      </div>`;
       document.body.appendChild(overlay);
     }
 
     function confirmLogout() {
-      document.querySelector('.logout-overlay').remove();
-      showLogoutSuccess();
+      localStorage.clear();
+      const overlay = document.querySelector(".logout-overlay");
+      overlay.innerHTML = `
+      <div class="logout-modal">
+        <div class="logout-content success">
+          <i class="fas fa-check-circle success-icon"></i>
+          <h3>تم تسجيل الخروج</h3>
+          <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
+        </div>
+      </div>`;
     }
 
     function cancelLogout() {
-      document.querySelector('.logout-overlay').remove();
-    }
-
-    function showLogoutSuccess() {
-      const overlay = document.createElement('div');
-      overlay.className = 'logout-overlay';
-      overlay.innerHTML = `
-        <div class="logout-modal">
-          <div class="logout-content success">
-            <i class="fas fa-check-circle success-icon"></i>
-            <h3>تم تسجيل الخروج بنجاح</h3>
-            <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
-          </div>
-        </div>`;
-      document.body.appendChild(overlay);
+      document.querySelector(".logout-overlay").remove();
     }
 
     function closeLogoutSuccess() {
-      document.querySelector('.logout-overlay').remove();
+      window.location.href = "login.html";
     }
 
-    document.addEventListener('click', function (event) {
-      const profileSection = document.querySelector('.profile-section');
-      if (!profileSection.contains(event.target)) {
-        document.getElementById('profile-dropdown').classList.add('hidden');
-      }
+    function showSwitchRoleConfirmation() {
+      document.getElementById("switch-role-confirmation").classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+
+    function confirmSwitchRole() {
+      window.location.href = "passengerRides.html";
+    }
+
+    function cancelSwitchRole() {
+      document.getElementById("switch-role-confirmation").classList.add("hidden");
+      document.body.style.overflow = "auto";
+    }
+
+
+    function updateStats(pending, accepted, rejected) {
+      document.getElementById("new-requests").textContent = pending;
+      document.getElementById("accepted").textContent = accepted;
+      document.getElementById("rejected").textContent = rejected;
+    }
+
+    function initStats() {
+      const accepted = parseInt(localStorage.getItem("driverAcceptedCount")) || 0;
+      const rejected = parseInt(localStorage.getItem("driverRejectedCount")) || 0;
+      updateStats(0, accepted, rejected);
+    }
+
+
+    function loadDriverRides() {
+      const driverEmail = localStorage.getItem("userEmail");
+
+      fetch(`http://localhost:8083/api/rides/driver-rides?email=${driverEmail}`)
+        .then(res => res.json())
+        .then(rides => {
+          const mainArea = document.getElementById("driver-rides-area");
+          mainArea.innerHTML = "";
+
+          if (rides.length === 0) {
+            mainArea.innerHTML = `<p style="text-align:center; color:#777;">لا توجد رحلات منشورة</p>`;
+            return;
+          }
+
+          rides.forEach(ride => {
+            const rideCard = document.createElement("div");
+            rideCard.className = "ride-details-card";
+            rideCard.style = `
+            background:white;
+            padding:20px;
+            border-radius:15px;
+            box-shadow:0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom:25px;
+          `;
+
+            rideCard.innerHTML = `
+<div class="trip-card">
+
+    <div class="card-header">
+        <h3 class="card-title">رحلة منشورة</h3>
+        <div class="chat-icon"><i class="fas fa-comment"></i></div>
+    </div>
+
+    <div class="trip-info-grid">
+
+        <div class="info-box">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+                <span class="label">نقطة الانطلاق:</span>
+                <span class="value">${ride.currentLocation}</span>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <i class="fas fa-flag"></i>
+            <div>
+                <span class="label">نقطة الوصول:</span>
+                <span class="value">${ride.destination}</span>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <i class="fas fa-calendar"></i>
+            <div>
+                <span class="label">اليوم:</span>
+                <span class="value">${ride.date}</span>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <i class="fas fa-clock"></i>
+            <div>
+                <span class="label">الوقت:</span>
+                <span class="value">${ride.time}</span>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <i class="fas fa-users"></i>
+            <div>
+                <span class="label">المقاعد المتبقية:</span>
+                <span class="value">${ride.seatsAvailable}/${ride.totalSeats}</span>
+            </div>
+        </div>
+
+    </div>
+
+    <h3 class="sub-title">طلبات الحجز</h3>
+    <div id="requests-${ride.rideId}" class="requests-container"></div>
+
+</div>
+`;
+
+
+
+            mainArea.appendChild(rideCard);
+          });
+
+          loadBookingRequests();
+        });
+    }
+
+
+    function loadBookingRequests() {
+      const driverEmail = localStorage.getItem("userEmail");
+
+      fetch(`http://localhost:8083/api/bookings/driver-requests?driverEmail=${driverEmail}`)
+        .then(res => res.json())
+        .then(requests => {
+
+          const pendingCount = requests.length;
+          const accepted = parseInt(localStorage.getItem("driverAcceptedCount")) || 0;
+          const rejected = parseInt(localStorage.getItem("driverRejectedCount")) || 0;
+
+          updateStats(pendingCount, accepted, rejected);
+
+          if (requests.length === 0) return;
+
+          const grouped = {};
+          requests.forEach(req => {
+            const rId = req.ride.rideId;
+            if (!grouped[rId]) grouped[rId] = [];
+            grouped[rId].push(req);
+          });
+
+          Object.keys(grouped).forEach(rId => {
+            const container = document.getElementById(`requests-${rId}`);
+            if (!container) return;
+
+            container.innerHTML = "";
+
+            grouped[rId].forEach(req => {
+
+              const card = document.createElement("div");
+              card.className = "booking-request-card";
+              card.id = `booking-${req.bookingId}`;
+              card.className = "booking-request-card";
+              card.style = `
+              border:1px solid #ddd;
+              padding:15px;
+              border-radius:10px;
+              background:white;
+              display:flex;
+              justify-content:space-between;
+              align-items:center;
+            `;
+
+              card.innerHTML = `
+              <div class="request-info" style="width:100%;">
+                <h3 style="font-size:20px;color:#333;">طلب من: ${req.passenger.name}</h3>
+                <p><b>موقع الانطلاق:</b> ${req.ride.currentLocation}</p>
+              </div>
+
+              <div class="request-actions" style="display:flex; gap:10px;">
+                <button onclick="respondToBooking(${req.bookingId}, 'accepted')"
+                  style="background:#28a745; color:white; padding:8px 15px; border-radius:5px;">
+                  قبول
+                </button>
+
+                <button onclick="respondToBooking(${req.bookingId}, 'rejected')"
+                  style="background:#dc3545; color:white; padding:8px 15px; border-radius:5px;">
+                  رفض
+                </button>
+              </div>
+            `;
+
+              container.appendChild(card);
+            });
+          });
+
+        });
+    }
+
+    function respondToBooking(bookingId, status) {
+      fetch(`http://localhost:8083/api/bookings/respond?bookingId=${bookingId}&status=${status}`, {
+        method: "POST"
+      })
+        .then(res => {
+          if (!res.ok) {
+            alert("فشل الرد على الطلب");
+            return;
+          }
+
+          alert(status === "accepted" ? "تم قبول الحجز" : "تم رفض الحجز");
+
+          let accepted = parseInt(localStorage.getItem("driverAcceptedCount")) || 0;
+          let rejected = parseInt(localStorage.getItem("driverRejectedCount")) || 0;
+
+          if (status === "accepted") {
+            localStorage.setItem("driverAcceptedCount", ++accepted);
+          } else {
+            localStorage.setItem("driverRejectedCount", ++rejected);
+
+            //  حذف كارد الراكب فقط إذا كان مرفوض
+            const card = document.getElementById(`booking-${bookingId}`);
+            if (card) card.remove();
+          }
+
+          // الاحتفاظ بتحميل طلبات القبول فقط
+          if (status === "accepted") {
+            loadDriverRides();
+          }
+        });
+    }
+
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initStats();
+      loadDriverRides();
     });
+
   </script>
+
+
+  <style>
+    .booking-request-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .request-info h4 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+
+    .request-info p {
+      margin: 5px 0;
+      color: #666;
+    }
+
+    .request-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .accept-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .reject-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .accept-btn:hover {
+      background: #218838;
+    }
+
+    .reject-btn:hover {
+      background: #c82333;
+    }
+
+    .trip-card {
+
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      border: 1px solid #ebebeb;
+      min-height: 320px;
+      width: 100%;
+    }
+
+    .trip-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .location-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .location-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .details-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .driver-section {
+      border-top: 1px solid #f0f0f0;
+      padding-top: 12px;
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chat-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #487788;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #265262;
+      margin-bottom: 15px;
+    }
+
+    .trip-info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .info-box {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .info-box i {
+      color: #487788;
+      font-size: 18px;
+      margin-top: 3px;
+    }
+
+    .label {
+      font-size: 12px;
+      color: #666;
+      display: block;
+    }
+
+    .value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .sub-title {
+      margin-top: 20px;
+      font-size: 17px;
+      font-weight: bold;
+      color: #265262;
+    }
+
+    .requests-container {
+      margin-top: 10px;
+      display: grid;
+      gap: 15px;
+    }
+
+    .rides-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      margin-top: 25px;
+    }
+  </style>
+  </div>
 </body>
 
 </html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>أنشطة الجامعة</title>
-    <link rel="stylesheet" href="passenger.css" />
+    <link rel="stylesheet" href="Pevents.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -14,10 +14,10 @@
     <div class="sidebar">
         <div class="logo"></div>
         <ul class="menue">
-            <li><a href="bookingPage.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a></li>
-            <li><a href="#"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
+            <li><a href="passengerRides.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a></li>
+            <li><a href="passengerRidesHistory.html"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
             <li><a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a></li>
-            <li><a href="#"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
+            <li><a href="passengerEvents.html"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
         </ul>
     </div>
 
@@ -35,8 +35,9 @@
                         <ul>
                             <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل
                                         التقييمات</span></a></li>
-                            <li><a href="#" onclick="showSettingsPage()"><i
-                                        class="fas fa-cog"></i><span>الإعدادات</span></a></li>
+                            <li><a href="passengerSetting.html"><i class="fas fa-cog"></i><span>الإعدادات</span></a>
+                            </li>
+
                             <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل
                                         الخروج</span></a></li>
                         </ul>
@@ -77,31 +78,6 @@
             </div>
         </div>
 
-        <div id="settings-page" class="full-page hidden">
-            <div class="container-form">
-                <div class="form-box">
-                    <div class="page-header">
-                        <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
-                        <h2>الإعدادات</h2>
-                    </div>
-                    <div class="settings-form">
-                        <div class="form-group">
-                            <label for="name">الاسم</label>
-                            <input type="text" id="name" placeholder="أدخل اسمك" />
-                        </div>
-                        <div class="form-group">
-                            <label for="password">كلمة المرور</label>
-                            <input type="password" id="password" placeholder="أدخل كلمة المرور الجديدة" />
-                        </div>
-                        <div class="form-group">
-                            <label for="emergency-contact">جهة الاتصال الطارئة</label>
-                            <input type="tel" id="emergency-contact" placeholder="رقم الهاتف للطوارئ" />
-                        </div>
-                        <button onclick="updateSettings()" class="update-btn">تحديث المعلومات</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- EVENTS SECTION -->
         <section class="trips-section">
@@ -111,13 +87,14 @@
                         <div class="card-header">
                             <h3>ملتقى المشاريع الطلابية</h3>
                             <div class="driver-info">
-                            <div class="default-avatar driver-avatar"><i class="fas fa-star"></i></div>
-                        </div>
+                                <div class="default-avatar driver-avatar"><i class="fas fa-star"></i></div>
+                            </div>
                         </div>
                         <div class="trip-info">
                             <div class="eventDescription-row">
                                 <div class="eventDescription-item"> <i class="fas fa-flag"></i>
-                                    <div><span class="label">وصف النشاط</span><span class="value">سيتم عرض مشاريع التخرج لعام 2024، سيشمل المعرض مشاريع جميع الكليات. لا يُسمح بحضور الزوار.</span>
+                                    <div><span class="label">وصف النشاط</span><span class="value">سيتم عرض مشاريع التخرج
+                                            لعام 2024، سيشمل المعرض مشاريع جميع الكليات. لا يُسمح بحضور الزوار.</span>
                                     </div>
                                 </div>
                             </div>
@@ -126,9 +103,10 @@
                                     <div><span class="label">التاريخ: </span><span class="value">2025\12\04</span></div>
                                 </div>
                                 <div class="detail-item"><i class="fas fa-clock"></i>
-                                    <div><span class="label">الوقت: </span><span class="value">من 8:00ص إلى 12:00م</span></div>
+                                    <div><span class="label">الوقت: </span><span class="value">من 8:00ص إلى
+                                            12:00م</span></div>
                                 </div>
-                                 <div class="detail-item"><i class="fas fa-map-marker-alt"></i>
+                                <div class="detail-item"><i class="fas fa-map-marker-alt"></i>
                                     <div><span class="label">الموقع: </span><span class="value">البهو الرئيس</span>
                                     </div>
                                 </div>
@@ -138,7 +116,7 @@
                     <div class="eventCard-bottom">
                         <div class="card-book-btn">الرحلات المتاحة</div>
                     </div>
-                </article> 
+                </article>
             </div>
         </section>
     </main>
@@ -172,58 +150,51 @@
             closePage();
         }
 
-        // Logout functions
         function logout() {
             document.getElementById('profile-dropdown').classList.add('hidden');
-            showLogoutConfirmation();
-        }
-
-        function showLogoutConfirmation() {
             const overlay = document.createElement('div');
             overlay.className = 'logout-overlay';
+            overlay.id = 'logout-confirmation';
+
             overlay.innerHTML = `
-                <div class="logout-modal">
-                    <div class="logout-content">
-                        <i class="fas fa-sign-out-alt logout-icon"></i>
-                        <h3>تسجيل الخروج</h3>
-                        <p>هل أنت متأكد من تسجيل الخروج؟</p>
-                        <div class="logout-buttons">
-                            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم، تسجيل الخروج</button>
-                            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
-                        </div>
-                    </div>
-                </div>
-            `;
+      <div class="logout-modal">
+        <div class="logout-content">
+          <i class="fas fa-sign-out-alt logout-icon"></i>
+          <h3>تسجيل الخروج</h3>
+          <p>هل أنت متأكد؟</p>
+          <div class="logout-buttons">
+            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
+            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
+          </div>
+        </div>
+      </div>`;
+
             document.body.appendChild(overlay);
         }
 
         function confirmLogout() {
-            document.querySelector('.logout-overlay').remove();
-            showLogoutSuccess();
+            localStorage.removeItem("currentUser");
+            localStorage.removeItem("userEmail");
+            localStorage.removeItem("resetPasswordMode");
+
+            const overlay = document.getElementById('logout-confirmation');
+            overlay.innerHTML = `
+      <div class="logout-modal">
+        <div class="logout-content success">
+          <i class="fas fa-check-circle success-icon"></i>
+          <h3>تم تسجيل الخروج</h3>
+          <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
+        </div>
+      </div>`;
         }
 
         function cancelLogout() {
-            document.querySelector('.logout-overlay').remove();
-        }
-
-        function showLogoutSuccess() {
-            const overlay = document.createElement('div');
-            overlay.className = 'logout-overlay';
-            overlay.innerHTML = `
-                <div class="logout-modal">
-                    <div class="logout-content success">
-                        <i class="fas fa-check-circle success-icon"></i>
-                        <h3>تم تسجيل الخروج بنجاح</h3>
-                        <p>شكراً لاستخدام التطبيق</p>
-                        <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(overlay);
+            const overlay = document.getElementById('logout-confirmation');
+            if (overlay) overlay.remove();
         }
 
         function closeLogoutSuccess() {
-            document.querySelector('.logout-overlay').remove();
+            window.location.href = "login.html";
         }
 
 

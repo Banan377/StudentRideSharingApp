@@ -6,9 +6,10 @@
   <title>إنشاء رحلة</title>
 
   <link rel="stylesheet" href="driver.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=PASTEHERE"></script>
 
   <style>
     .container-form {
@@ -109,13 +110,13 @@
         <a href="driverUI.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a>
       </li>
       <li>
-        <a href="#"><i class="fas fa-history"></i><span>سجل الرحلات</span></a>
+        <a href="driverRiedsHistory.html"><i class="fas fa-history"></i><span>سجل الرحلات</span></a>
       </li>
       <li>
         <a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a>
       </li>
       <li>
-        <a href="#"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a>
+        <a href="driverEvents.html"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a>
       </li>
     </ul>
   </div>
@@ -129,23 +130,19 @@
           <div class="row">
             <div class="field">
               <label>نقطة الانطلاق</label>
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3623.9023029394794!2d46.675295215002004!3d24.71355158411983!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f0fa3bca3b6f1%3A0x5e86d6c5a2d88b1b!2sRiyadh!5e0!3m2!1sar!2ssa!4v1698856484476!5m2!1sar!2ssa"
-                allowfullscreen="" loading="lazy"></iframe>
+              <div id="map1" style="width:450px;height:200px"></div>
             </div>
 
             <div class="field">
               <label>الوجهة</label>
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.5901550334483!2d46.71263111499533!3d24.782277084085617!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2ef1a51b8c9a4d%3A0x72f19e5d64efc1b1!2sKing%20Saud%20University!5e0!3m2!1sar!2ssa!4v1698856501543!5m2!1sar!2ssa"
-                allowfullscreen="" loading="lazy"></iframe>
+              <div id="map2" style="width:450px;height:200px"></div>
             </div>
           </div>
 
           <div class="row">
             <div class="field">
               <label for="date">تاريخ الرحلة</label>
-              <input type="date" id="date" name="date" required>
+              <input type="date" id="rideDate" name="date" required>
             </div>
             <div class="field">
               <label for="seats">عدد المقاعد</label>
@@ -157,7 +154,6 @@
             <div class="field">
               <label for="gender">تفضيل الجنس</label>
               <select id="gender" name="gender">
-                <option value="any">الكل</option>
                 <option value="male">ذكور فقط</option>
                 <option value="female">إناث فقط</option>
               </select>
@@ -165,16 +161,117 @@
 
             <div class="field">
               <label for="time">وقت الرحلة</label>
-              <input type="time" id="time" name="time" required>
+              <input type="time" id="rideTime" name="time" required>
             </div>
           </div>
 
 
-          <button type="submit">نشر</button>
+          <button type="button" onclick="submitRide()">نشر</button>
         </form>
       </div>
     </div>
   </div>
+  <script>
+    function submitRide() {
+      const ride = {
+        destination: "King Saud University",
+        date: document.getElementById("rideDate").value,
+        time: document.getElementById("rideTime").value,
+        seatsAvailable: document.getElementById("seats").value,
+        genderPreference: document.getElementById("gender").value,
+        status: "ACTIVE",
+        currentLocation: "Riyadh",
+        distance: 0.0,
+        driverEmail: localStorage.getItem("userEmail")   
+      };
+
+
+      fetch(`http://localhost:8083/api/rides/createRide?driverEmail=${encodeURIComponent(localStorage.getItem("userEmail"))}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(ride)
+      })
+
+        .then(response => {
+          if (response.ok) {
+            alert(" تم إنشاء الرحلة بنجاح!");
+            console.log("بيحول للواجهة...");
+            window.location.href = "driverUI.html";
+          } else {
+            alert(" فشل في إنشاء الرحلة.");
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          alert(" حدث خطأ.");
+        });
+    }
+
+    const rideId = 1; // ضع ديناميكيًا
+    let map1, map2, driverMarker, polyline;
+    function initMap() {
+      const defaultPos = { lat: 24.7136, lng: 46.6753 };
+      map1 = new google.maps.Map(document.getElementById("map1"), {
+        center: defaultPos,
+        zoom: 12,
+      });
+
+      map2 = new google.maps.Map(document.getElementById("map2"), {
+        center: defaultPos,
+        zoom: 12,
+      });
+
+       if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              };
+
+      driverMarker = new google.maps.Marker({
+        position: pos,
+        map1: map1,
+        title: "موقعك الحالي",
+      });
+
+      driverMarker = new google.maps.Marker({
+        position: pos,
+        map2: map2,
+        title: "موقع الحالي",
+      });
+
+      map1.setCenter(pos);
+      map2.setCenter(pos);
+            },
+            () => {
+              alert("لم يتم السماح بالحصول على الموقع");
+            }
+          );
+        } else {
+          alert("المتصفح لا يدعم خدمة الموقع");
+        }
+
+      polyline = new google.maps.Polyline({
+        map1: map1,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+      });
+
+      polyline = new google.maps.Polyline({
+        map2: map2,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+      });
+    }initMap();
+    
+
+  </script>
+
 </body>
 
 </html>

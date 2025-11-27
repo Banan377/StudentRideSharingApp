@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>طلبات السائقين</title>
+  <link rel="stylesheet" href="passenger.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .admin-title {
+      color: #265262;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .requests-wrapper {
+      max-width: 1000px;
+      margin: 20px auto 30px;
+    }
+
+    .request-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      border: 1px solid #edf0f2;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .request-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .request-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #265262;
+    }
+
+    .request-email {
+      font-size: 13px;
+      color: #666;
+    }
+
+    .badge-pending {
+      background: #fff7e6;
+      color: #b9770e;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-pending i {
+      font-size: 12px;
+    }
+
+    .request-body {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      font-size: 13px;
+      color: #444;
+    }
+
+    .info-item {
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+
+    .info-label {
+      font-size: 11px;
+      color: #777;
+      margin-bottom: 2px;
+    }
+
+    .info-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .request-files {
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .file-link {
+      color: #265262;
+      text-decoration: underline;
+      margin-left: 10px;
+    }
+
+    .request-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-approve {
+      background: #265262;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .btn-reject {
+      background: #c0392b;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo"></div>
+    <ul class="menue">
+      <li><a href="adminDashboard.html"><i class="fas fa-chart-line"></i><span>لوحة التحكم</span></a></li>
+      <li class="active"><a href="adminPendingDrivers.html"><i class="fas fa-id-card"></i><span>طلبات السائقين</span></a></li>
+      <li><a href="adminUsers.html"><i class="fas fa-users"></i><span>إدارة المستخدمين</span></a></li>
+      <li><a href="#"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
+    </ul>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- HEADER -->
+    <div class="container">
+      <div class="header">
+        <h2 class="admin-title" style="margin-right:20px;">طلبات السائقين</h2>
+
+        <div class="profile-section">
+          <button onclick="toggleProfileDropdown()" class="profile-btn">
+            <i class="fas fa-user-circle"></i>
+          </button>
+          <div id="profile-dropdown" class="dropdown-menu hidden">
+            <ul>
+              <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="requests-wrapper">
+      <div id="requestsContainer"></div>
+    </section>
+
+  </main>
+
+  <script>
+    function toggleProfileDropdown() {
+      document.getElementById('profile-dropdown').classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', function (event) {
+      const profile = document.querySelector('.profile-section');
+      if (!profile.contains(event.target)) {
+        document.getElementById('profile-dropdown').classList.add('hidden');
+      }
+    });
+
+     function logout() {
+      document.getElementById('profile-dropdown').classList.add('hidden');
+      const overlay = document.createElement('div');
+      overlay.className = 'logout-overlay';
+      overlay.id = 'logout-confirmation';
+
+      overlay.innerHTML = `
+      <div class="logout-modal">
+        <div class="logout-content">
+          <i class="fas fa-sign-out-alt logout-icon"></i>
+          <h3>تسجيل الخروج</h3>
+          <p>هل أنت متأكد؟</p>
+          <div class="logout-buttons">
+            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
+            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
+          </div>
+        </div>
+      </div>`;
+
+      document.body.appendChild(overlay);
+    }
+
+    function confirmLogout() {
+      localStorage.removeItem("currentUser");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("resetPasswordMode");
+
+      const overlay = document.getElementById('logout-confirmation');
+      overlay.innerHTML = `
+      <div class="logout-modal">
+        <div class="logout-content success">
+          <i class="fas fa-check-circle success-icon"></i>
+          <h3>تم تسجيل الخروج</h3>
+          <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
+        </div>
+      </div>`;
+    }
+
+    function cancelLogout() {
+      const overlay = document.getElementById('logout-confirmation');
+      if (overlay) overlay.remove();
+    }
+
+    function closeLogoutSuccess() {
+      window.location.href = "login.html";
+    }
+
+    async function loadPendingDrivers() {
+      try {
+        const res = await fetch('/api/admin/pending-drivers');
+        const data = await res.json();
+
+        const container = document.getElementById('requestsContainer');
+        container.innerHTML = "";
+
+        if (!data || data.length === 0) {
+          container.innerHTML = `
+            <p style="text-align:center; color:#666; padding:20px;">
+              لا توجد طلبات سائقين معلّقة حالياً.
+            </p>
+          `;
+          return;
+        }
+
+        data.forEach(driver => {
+          container.innerHTML += `
+            <div class="request-card">
+              <div class="request-header">
+                <div>
+                  <div class="request-name">${driver.firstName || ''} ${driver.lastName || ''}</div>
+                  <div class="request-email"><i class="fas fa-envelope"></i> ${driver.email}</div>
+                </div>
+                <span class="badge-pending">
+                  <i class="fas fa-clock"></i> بانتظار المراجعة
+                </span>
+              </div>
+
+              <div class="request-body">
+                <div class="info-item">
+                  <div class="info-label">الكلية</div>
+                  <div class="info-value">${driver.college || 'غير محدد'}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">موديل السيارة</div>
+                  <div class="info-value">${driver.carModel || '-'}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">لون السيارة</div>
+                  <div class="info-value">${driver.carColor || '-'}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">رقم اللوحة</div>
+                  <div class="info-value">${driver.carPlate || '-'}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">المقاعد المتاحة</div>
+                  <div class="info-value">${driver.seatsAvailable ?? '-'}</div>
+                </div>
+              </div>
+
+              <div class="request-files">
+                <span><strong>الملفات:</strong></span>
+                <a class="file-link" href="${driver.licenseUrl}" target="_blank">رخصة القيادة</a>
+                <a class="file-link" href="${driver.registrationUrl}" target="_blank">استمارة السيارة</a>
+              </div>
+
+              <div class="request-actions">
+                <button class="btn-approve" onclick="approveDriver('${driver.email}')">موافقة</button>
+                <button class="btn-reject" onclick="rejectDriver('${driver.email}')">رفض</button>
+              </div>
+            </div>
+          `;
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function approveDriver(email) {
+      if (!confirm("هل تريد الموافقة على هذا الطلب؟")) return;
+      await fetch(`/api/admin/approve?email=${encodeURIComponent(email)}`, { method: 'PUT' });
+      alert("تمت الموافقة بنجاح");
+      loadPendingDrivers();
+    }
+
+    async function rejectDriver(email) {
+      if (!confirm("هل تريد رفض هذا الطلب؟")) return;
+      await fetch(`/api/admin/reject?email=${encodeURIComponent(email)}`, { method: 'PUT' });
+      alert("تم رفض الطلب");
+      loadPendingDrivers();
+    }
+
+    loadPendingDrivers();
+  </script>
+
+</body>
+</html>
