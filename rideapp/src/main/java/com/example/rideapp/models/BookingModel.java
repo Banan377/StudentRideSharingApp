@@ -21,7 +21,8 @@ public class BookingModel {
     private PassengerModel passenger;
 
     private String paymentStatus;
-    private String status; // إضافة الحالة: pending, accepted, rejected
+    private String status; // statuses: pending, accepted, rejected, repeat_request
+
 
     public BookingModel() {
     }

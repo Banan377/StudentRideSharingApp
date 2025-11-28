@@ -29,26 +29,24 @@ public class NotificationService {
         System.out.println("SMS Sent Successfully to " + EMERGENCY_PHONE);
     }
 
-   public void sendEmergencySMSTo(String phone, String passengerName, Long rideId) {
-    try {
-        String body = " Emergency Alert!\n"
-                + "Passenger: " + passengerName + "\n"
-                + "Ride ID: " + rideId + "\n"
-                + "Needs immediate assistance.";
+    public void sendEmergencySMSTo(String phone, String passengerName, Long rideId) {
+        try {
+            String body = " Emergency Alert!\n"
+                    + "Passenger: " + passengerName + "\n"
+                    + "Ride ID: " + rideId + "\n"
+                    + "Needs immediate assistance.";
 
-        Message.creator(
-                new PhoneNumber(phone),
-                new PhoneNumber(TWILIO_NUMBER),
-                body
-        ).create();
+            Message.creator(
+                    new PhoneNumber(phone), // رقم الطوارئ السعودي
+                    new PhoneNumber("+12679152009"), // رقم Twilio حقك (from)
+                    body).create();
 
-        System.out.println("SMS Sent Successfully to " + phone);
+            System.out.println("SMS Sent Successfully to " + phone);
 
-    } catch (Exception e) {
-        System.out.println(" ERROR SENDING SMS:");
-        e.printStackTrace();  // <<<<< الأهم
+        } catch (Exception e) {
+            System.out.println(" ERROR SENDING SMS:");
+            e.printStackTrace();
+        }
     }
-}
-
 
 }

@@ -9,7 +9,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=PASETHERE&callback=initMap" async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=PH&callback=initMap"
+    async defer></script>
 
   <style>
     .container-form {
@@ -283,6 +284,55 @@
     }
 
     async function submitRide() {
+      const date = document.getElementById("rideDate").value;
+      const time = document.getElementById("rideTime").value;
+      const seats = document.getElementById("seats").value;
+      const gender = document.getElementById("gender").value;
+
+      const now = new Date();
+      const selectedDate = new Date(date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); 
+
+      if (!date) {
+        alert("يجب اختيار تاريخ الرحلة");
+        return;
+      }
+
+      if (selectedDate < today) {
+        alert("لا يمكن اختيار تاريخ قديم");
+        return;
+      }
+
+      if (!time) {
+        alert("يجب اختيار وقت الرحلة");
+        return;
+      }
+
+      if (selectedDate.getTime() === today.getTime()) {
+        const selectedTime = new Date(`${date}T${time}`);
+
+        if (selectedTime < now) {
+          alert("وقت الرحلة خاطئ");
+          return;
+        }
+      }
+
+    
+
+      // 5) عدد المقاعد
+      if (!seats || seats < 1) {
+        alert("يجب إدخال عدد المقاعد بشكل صحيح");
+        return;
+      }
+
+
+      // التحقق من الجنس
+      if (!gender) {
+        alert("يجب تحديد تفضيل الجنس");
+        return;
+      }
+
       if (!startLat || !startLng) {
         alert("يجب اختيار نقطة الانطلاق على الخريطة");
         return;
@@ -300,15 +350,16 @@
 
       const ride = {
         destination: destinationLocation,
-        date: document.getElementById("rideDate").value,
-        time: document.getElementById("rideTime").value,
-        seatsAvailable: document.getElementById("seats").value,
-        genderPreference: document.getElementById("gender").value,
+        date: date,
+        time: time,
+        seatsAvailable: seats,
+        genderPreference: gender,
         status: "ACTIVE",
         currentLocation: startLocation,
         distance: distanceKm,
         driverEmail: localStorage.getItem("userEmail")
       };
+
 
 
       fetch(`http://localhost:8083/api/rides/createRide?driverEmail=${encodeURIComponent(localStorage.getItem("userEmail"))}`, {
