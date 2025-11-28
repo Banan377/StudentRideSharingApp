@@ -9,7 +9,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=PH&callback=initMap" async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=PH&callback=initMap"
+    async defer></script>
 
   <style>
     .container-form {
@@ -175,9 +176,9 @@
     let rideId = null; let startLat = null, startLng = null; let destLat = null, destLng = null; let startLocation = null; let destinationLocation = null;
     let map1, map2, driverMarker1, driverMarker2, polyline1, polyline2, marker1, marker2;
 
-        function initMap() {
+    function initMap() {
       const defaultPos = { lat: 24.7136, lng: 46.6753 };
-      
+
       map1 = new google.maps.Map(document.getElementById("map1"), {
         center: defaultPos,
         zoom: 12,
@@ -188,71 +189,71 @@
         zoom: 12,
       });
 
-       if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-              };
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
 
-      driverMarker1 = new google.maps.Marker({
-        position: pos,
-        map: map1,
-        title: "موقعك الحالي",
-      });
+            driverMarker1 = new google.maps.Marker({
+              position: pos,
+              map: map1,
+              title: "موقعك الحالي",
+            });
 
-      driverMarker2 = new google.maps.Marker({
-        position: pos,
-        map: map2,
-        title: "موقعك الحالي",
-      });
+            driverMarker2 = new google.maps.Marker({
+              position: pos,
+              map: map2,
+              title: "موقعك الحالي",
+            });
 
-      map1.setCenter(pos);
-      map2.setCenter(pos);
+            map1.setCenter(pos);
+            map2.setCenter(pos);
 
-      map1.addListener("click", (event) => {
-       startLat = event.latLng.lat();
-       startLng = event.latLng.lng();
+            map1.addListener("click", (event) => {
+              startLat = event.latLng.lat();
+              startLng = event.latLng.lng();
 
-      if (marker1) marker1.setMap(null);
+              if (marker1) marker1.setMap(null);
 
-      marker1 = new google.maps.Marker({
-        position: { lat:startLat, lng:startLng },
-        map: map1,
-      });
+              marker1 = new google.maps.Marker({
+                position: { lat: startLat, lng: startLng },
+                map: map1,
+              });
 
-      startLocation = { lat: startLat, lng: startLng };
-      console.log("Start location:", startLat, startLng);
+              startLocation = { lat: startLat, lng: startLng };
+              console.log("Start location:", startLat, startLng);
 
-     
-    });
 
-    map2.addListener("click", (event) => {
-      destLat = event.latLng.lat();
-      destLng = event.latLng.lng();
+            });
 
-      if (marker2) marker2.setMap(null);
+            map2.addListener("click", (event) => {
+              destLat = event.latLng.lat();
+              destLng = event.latLng.lng();
 
-      marker2 = new google.maps.Marker({
-        position: { lat:destLat, lng:destLng },
-        map: map2,
-      });
+              if (marker2) marker2.setMap(null);
 
-      destinationLocation = { lat: destLat, lng: destLng };
-      console.log("Destination:", destLat, destLng);
+              marker2 = new google.maps.Marker({
+                position: { lat: destLat, lng: destLng },
+                map: map2,
+              });
 
-      
-    });
+              destinationLocation = { lat: destLat, lng: destLng };
+              console.log("Destination:", destLat, destLng);
 
-            },
-            () => {
-              alert("لم يتم السماح بالحصول على الموقع");
-            }
-          );
-        } else {
-          alert("المتصفح لا يدعم خدمة الموقع");
-        }
+
+            });
+
+          },
+          () => {
+            alert("لم يتم السماح بالحصول على الموقع");
+          }
+        );
+      } else {
+        alert("المتصفح لا يدعم خدمة الموقع");
+      }
 
       polyline1 = new google.maps.Polyline({
         map: map1,
@@ -269,18 +270,18 @@
       });
     }
 
-   async function submitRide() {
-         if (!startLat || !startLng) {
-          alert("يجب اختيار نقطة الانطلاق على الخريطة");
-          return;
-         }
+    async function submitRide() {
+      if (!startLat || !startLng) {
+        alert("يجب اختيار نقطة الانطلاق على الخريطة");
+        return;
+      }
 
-        if (!destLat || !destLng) {
-          alert("يجب اختيار الوجهة على الخريطة");
-          return;
-        }
+      if (!destLat || !destLng) {
+        alert("يجب اختيار الوجهة على الخريطة");
+        return;
+      }
 
-        const ride = {
+      const ride = {
         destination: destinationLocation,
         date: document.getElementById("rideDate").value,
         time: document.getElementById("rideTime").value,
@@ -289,7 +290,7 @@
         status: "ACTIVE",
         currentLocation: "Riyadh",
         distance: 0.0,
-        driverEmail: localStorage.getItem("userEmail")   
+        driverEmail: localStorage.getItem("userEmail")
       };
 
 
@@ -301,27 +302,27 @@
         body: JSON.stringify(ride)
       })
 
-        .then(response =>{
-           if (!response.ok) throw new Error(" فشل في إنشاء الرحلة.");
-           return response.json();
+        .then(response => {
+          if (!response.ok) throw new Error(" فشل في إنشاء الرحلة.");
+          return response.json();
         })
         .then(data => {
           rideId = data.id;
-           // إرسال نقطة الانطلاق
+          // إرسال نقطة الانطلاق
           fetch(`http://localhost:8083/api/rides/${rideId}/updateStartLocation`, {
-           method: "POST",
-           headers: { "Content-Type": "application/json" },
-           body: JSON.stringify({ latitude: startLat, longitude: startLng })
-        });
-        // إرسال الوجهة
-           fetch(`http://localhost:8083/api/rides/${rideId}/updateDestination`, {
-           method: "POST",
-           headers: { "Content-Type": "application/json" },
-           body: JSON.stringify({ latitude: destLat, longitude: destLng })
-         });
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ latitude: startLat, longitude: startLng })
+          });
+          // إرسال الوجهة
+          fetch(`http://localhost:8083/api/rides/${rideId}/updateDestination`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ latitude: destLat, longitude: destLng })
+          });
         })
         .then(() => {
-           alert(" تم إنشاء الرحلة بنجاح!");
+          alert(" تم إنشاء الرحلة بنجاح!");
           window.location.href = "driverUI.html";
         })
         .catch(error => {
@@ -330,16 +331,16 @@
         });
     }
 
-    
-    
 
 
-      async function sendStartLocation(startLat, startLng) {
-       if (!rideId) {
+
+
+    async function sendStartLocation(startLat, startLng) {
+      if (!rideId) {
         console.error("Ride ID غير موجود بعد!");
         return;
       }
-      
+
       fetch(`http://localhost:8083/api/rides/${rideId}/sendStartLocation`, {
         method: "POST",
         headers: {
@@ -360,11 +361,11 @@
     }
 
     async function sendDestination(destLat, destLng) {
-       if (!rideId) {
+      if (!rideId) {
         console.error("Ride ID غير موجود بعد!");
         return;
       }
-      
+
       fetch(`http://localhost:8083/api/rides/${rideId}/sendDestination`, {
         method: "POST",
         headers: {

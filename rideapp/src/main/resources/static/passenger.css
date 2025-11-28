@@ -2007,19 +2007,20 @@ textarea {
   font-weight: bold;
 }
 
-.emergency-btn {
-  background-color: #d90429;
+.emergency-bar {
+  display: inline-block;
+  background: #d90429;
   color: white;
-  width: 100%;
-  padding: 12px;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
+  padding: 12px 22px;
   border-radius: 10px;
-  margin-top: 15px;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 15px 0;
   cursor: pointer;
+  transition: 0.3s ease;
 }
 
-.emergency-btn:hover {
-  background-color: #a3001d;
+.emergency-bar:hover {
+  background: #b80322;
+  transform: scale(1.03);
 }

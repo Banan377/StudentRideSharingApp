@@ -265,7 +265,9 @@
 
     <div class="card-header">
         <h3 class="card-title">رحلة منشورة</h3>
-        <div class="chat-icon"><i class="fas fa-comment"></i></div>
+<div class="chat-icon" onclick="openChatPage()">
+  <i class="fas fa-comment"></i>
+</div>
     </div>
 
     <div class="trip-info-grid">
@@ -457,6 +459,9 @@
             container.appendChild(div);
           });
         });
+    }
+    function openChatPage() {
+      window.location.href = "chat.html"; // ضع اسم صفحة الشات
     }
 
 
