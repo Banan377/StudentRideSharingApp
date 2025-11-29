@@ -132,4 +132,15 @@ public class BookingService {
         return bookings;
     }
 
+    public void notifyPassengersRideCancelled(Long rideId) {
+        List<BookingModel> bookings = bookingRepository.findByRide_RideId(rideId);
+
+        bookings.forEach(b -> {
+            b.setStatus("cancelled");
+            bookingRepository.save(b);
+
+            System.out.println("Notified passenger: " + b.getPassenger().getEmail());
+        });
+    }
+
 }

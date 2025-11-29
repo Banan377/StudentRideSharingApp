@@ -13,13 +13,19 @@
 
   <!-- SIDEBAR -->
   <div class="sidebar">
+    <!-- زر طوارئ عام أعلى الصفحة -->
+    <div id="global-emergency" class="emergency-bar" onclick="openEmergencyPopupGlobal()">
+      🚨 إرسال بلاغ طوارئ
+    </div>
     <div class="logo"></div>
     <ul class="menue">
       <li><a href="passengerRides.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a></li>
       <li><a href="passengerRidesHistory.html"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
       <li><a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a></li>
       <li><a href="passengerEvents.html"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
+
     </ul>
+
   </div>
 
   <!-- MAIN CONTENT -->
@@ -199,7 +205,23 @@
         </form>
 
       </div>
+
     </div>
+    <div id="emergencyPopup" class="logout-overlay hidden">
+      <div class="logout-modal" style="max-width:400px;">
+        <div class="logout-content">
+          <i class="fas fa-exclamation-triangle logout-icon" style="color:#d90429;"></i>
+          <h3>بلاغ طوارئ</h3>
+          <p>هل أنت متأكد أنك تريد إرسال بلاغ طوارئ؟</p>
+
+          <div class="logout-buttons">
+            <button id="confirmEmergency" class="confirm-logout-btn">إرسال البلاغ</button>
+            <button onclick="closeEmergencyPopup()" class="cancel-logout-btn">إلغاء</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <section id="myBookings" class="trips-section">
       <div class="trips-grid" id="passenger-bookings"></div>
     </section>
@@ -225,28 +247,6 @@
 
     function closePage() {
       document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
-    }
-
-    function logout() {
-      document.getElementById('profile-dropdown').classList.add('hidden');
-      const overlay = document.createElement('div');
-      overlay.className = 'logout-overlay';
-      overlay.id = 'logout-confirmation';
-
-      overlay.innerHTML = `
-      <div class="logout-modal">
-        <div class="logout-content">
-          <i class="fas fa-sign-out-alt logout-icon"></i>
-          <h3>تسجيل الخروج</h3>
-          <p>هل أنت متأكد؟</p>
-          <div class="logout-buttons">
-            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
-            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
-          </div>
-        </div>
-      </div>`;
-
-      document.body.appendChild(overlay);
     }
 
     function logout() {
@@ -540,9 +540,9 @@
           </div>
 </div>
 
-<button class="emergency-btn" onclick="openEmergency(${booking.ride.rideId})">
-   🚨 زر الطوارئ
-</button>
+
+
+
 
 </article>
 
@@ -552,8 +552,9 @@
                     <div>
                         <div class="card-header">
                             <h3>رحلتك</h3>
-                            <div class="chat-icon"><i class="fas fa-comment"></i></div>
-                        </div>
+<button class="chat-icon" onclick="openPassengerChat(${booking.ride.rideId})" style="border:none; background:none; cursor:pointer;">
+    <i class="fas fa-comment"></i>
+</button>                         </div>
 
                         <div class="trip-info">
 
@@ -615,6 +616,7 @@
                             </div>
                         </div>
                     </div>
+                    
 
                 </article>
                 `;
@@ -715,58 +717,64 @@
         });
     }
 
-
-
     let selectedRideId = null;
 
-    // فتح البوب أب
-    function openEmergency(rideId) {
+    function openEmergencyPopup(rideId) {
       selectedRideId = rideId;
       document.getElementById("emergencyPopup").classList.remove("hidden");
     }
 
-    // إغلاق البوب أب
     function closeEmergencyPopup() {
       document.getElementById("emergencyPopup").classList.add("hidden");
       selectedRideId = null;
     }
+    function openEmergencyPopupGlobal() {
+      document.getElementById("emergencyPopup").classList.remove("hidden");
+    }
 
-    // إرسال البلاغ
-    document.getElementById("confirmEmergency").addEventListener("click", async () => {
 
-      const userEmail = localStorage.getItem("userEmail");
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("confirmEmergency");
 
-      const url = `/api/safety/trigger?rideId=${selectedRideId}&userId=${userEmail}&message=Help`;
+      if (btn) {
+        btn.onclick = () => {
+          const userEmail = localStorage.getItem("userEmail");
 
-      try {
-        await fetch(url, { method: "POST" });
+          fetch(`/api/safety/trigger?userId=${userEmail}&message=Emergency`, {
+            method: "POST"
+          })
 
-        alert(" تم إرسال بلاغ الطوارئ بنجاح!");
+            .then(res => {
+              if (res.ok) {
+                alert(" تم إرسال بلاغ الطوارئ بنجاح!");
+              } else {
+                alert(" حدث خطأ أثناء إرسال البلاغ");
+              }
 
-      } catch (error) {
-        alert("حدث خطأ أثناء إرسال البلاغ");
+              closeEmergencyPopup();
+            });
+        };
       }
-
-      closeEmergencyPopup();
     });
+
+
+
+
+
+
+    function openPassengerChat(rideId) {
+      // حفظ رقم الرحلة
+      localStorage.setItem('currentRideId', rideId);
+      localStorage.setItem('currentUserId', 'PASSENGER_' + localStorage.getItem("userEmail"));
+      // الانتقال لصفحة المحادثة
+      window.location.href = 'chat.html';
+    }
+
 
 
 
   </script>
 
-  <div id="emergencyPopup" class="logout-overlay hidden">
-    <div class="logout-modal">
-      <div class="logout-content">
-        <i class="fas fa-exclamation-triangle logout-icon" style="color:#d90429;"></i>
-        <h3>تنبيه طوارئ</h3>
-        <p>هل أنت متأكد أنك تريد إرسال بلاغ الطوارئ؟</p>
-        <div class="logout-buttons">
-          <button id="confirmEmergency" class="confirm-logout-btn">نعم</button>
-          <button onclick="closeEmergencyPopup()" class="cancel-logout-btn">إلغاء</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
 </body>
 

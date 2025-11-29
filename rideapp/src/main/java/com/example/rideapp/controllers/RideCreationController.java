@@ -68,4 +68,21 @@ public class RideCreationController {
         return ResponseEntity.ok(rides);
     }
 
+    @PostMapping("/{id}/complete")
+    public ResponseEntity<Void> completeRide(@PathVariable Long id) {
+        boolean completed = rideService.completeRide(id);
+        if (completed) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    // الرحلات السابقة للسائق
+    @GetMapping("/driver-past")
+    public ResponseEntity<List<RideModel>> getDriverPastRides(@RequestParam String email) {
+
+        List<RideModel> rides = rideService.getPastRidesForDriver(email);
+        return ResponseEntity.ok(rides);
+    }
+
 }

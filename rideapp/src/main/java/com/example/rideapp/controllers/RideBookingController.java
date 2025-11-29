@@ -65,4 +65,10 @@ public class RideBookingController {
         return ResponseEntity.ok(bookingService.getAcceptedPassengersForRide(rideId));
     }
 
+    @GetMapping("/ride-cancelled")
+    public ResponseEntity<Void> notifyCancelled(@RequestParam Long rideId) {
+        bookingService.notifyPassengersRideCancelled(rideId);
+        return ResponseEntity.ok().build();
+    }
+
 }

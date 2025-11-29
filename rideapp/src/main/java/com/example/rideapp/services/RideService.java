@@ -45,6 +45,7 @@ public class RideService {
     }
 
     public List<RideModel> getAllAvailableRides() {
+
         return rideRepository.findBySeatsAvailableGreaterThan(0);
     }
 
@@ -82,6 +83,7 @@ public class RideService {
         // فلترة الرحلات
         List<RideModel> rides = allRides.stream()
                 .filter(ride -> ride.getSeatsAvailable() > 0)
+                .filter(ride -> "ACTIVE".equalsIgnoreCase(ride.getStatus()))
                 .filter(ride -> !bookedRideIds.contains(ride.getRideId()))
                 .collect(Collectors.toList());
 
@@ -109,18 +111,20 @@ public class RideService {
 
     public List<RideModel> getPastRidesForPassenger(String passengerEmail) {
 
-        // جلب كل الحجوزات المقبولة للراكب
+        // 1) جلب كل الحجوزات المقبولة للراكب
         List<BookingModel> bookings = bookingRepository.findByPassenger_Email(passengerEmail)
                 .stream()
-                .filter(b -> "accepted".equals(b.getStatus()))
+                .filter(b -> "accepted".equals(b.getStatus())) // الراكب كان راكب فعلاً
+                .filter(b -> b.getRide() != null) // حماية من null
+                .filter(b -> "COMPLETED".equals(b.getRide().getStatus()))
                 .collect(Collectors.toList());
 
-        // تحويل الحجوزات إلى رحلات
+        // 2) تحويل الحجوزات إلى رحلات
         List<RideModel> rides = bookings.stream()
                 .map(BookingModel::getRide)
                 .collect(Collectors.toList());
 
-        // إضافة اسم السائق للرحلات
+        // 3) إضافة معلومات السائق
         rides.forEach(ride -> {
             UserModel driver = userRepository.findByEmail(ride.getDriverEmail()).orElse(null);
             if (driver != null) {
@@ -133,7 +137,34 @@ public class RideService {
     }
 
     public List<RideModel> getRidesForDriver(String driverEmail) {
-        return rideRepository.findByDriverEmail(driverEmail);
+        return rideRepository.findByDriverEmailAndStatusNot(driverEmail, "CANCELLED");
+    }
+
+    public boolean completeRide(Long rideId) {
+        return rideRepository.findById(rideId).map(ride -> {
+            ride.setStatus("COMPLETED");
+            rideRepository.save(ride);
+            return true;
+        }).orElse(false);
+    }
+
+    public List<RideModel> getPastRidesForDriver(String driverEmail) {
+
+        // 1) جلب كل رحلات السائق
+        List<RideModel> rides = rideRepository.findByDriverEmail(driverEmail)
+                .stream()
+                .filter(r -> "COMPLETED".equalsIgnoreCase(r.getStatus()))
+                .collect(Collectors.toList());
+
+        rides.forEach(ride -> {
+            UserModel driver = userRepository.findByEmail(ride.getDriverEmail()).orElse(null);
+            if (driver != null) {
+                ride.setDriverName(driver.getName());
+                ride.setDriverRating(driver.getRateAverage());
+            }
+        });
+
+        return rides;
     }
 
 }
