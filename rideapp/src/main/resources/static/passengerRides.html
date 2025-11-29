@@ -13,6 +13,7 @@
 
   <!-- SIDEBAR -->
   <div class="sidebar">
+<<<<<<< HEAD
     <!-- زر طوارئ عام أعلى الصفحة -->
     <div id="global-emergency" class="emergency-bar hidden" onclick="openEmergencyPopupGlobal()">
       🚨 إرسال بلاغ طوارئ
@@ -24,9 +25,7 @@
       <li><a href="passengerRidesHistory.html"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
       <li><a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a></li>
       <li><a href="passengerEvents.html"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
-
     </ul>
-
   </div>
 
   <!-- MAIN CONTENT -->
@@ -248,6 +247,28 @@
 
     function closePage() {
       document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
+    }
+
+    function logout() {
+      document.getElementById('profile-dropdown').classList.add('hidden');
+      const overlay = document.createElement('div');
+      overlay.className = 'logout-overlay';
+      overlay.id = 'logout-confirmation';
+
+      overlay.innerHTML = `
+      <div class="logout-modal">
+        <div class="logout-content">
+          <i class="fas fa-sign-out-alt logout-icon"></i>
+          <h3>تسجيل الخروج</h3>
+          <p>هل أنت متأكد؟</p>
+          <div class="logout-buttons">
+            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
+            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
+          </div>
+        </div>
+      </div>`;
+
+      document.body.appendChild(overlay);
     }
 
     function logout() {
@@ -554,8 +575,9 @@
                     <div>
                         <div class="card-header">
                             <h3>رحلتك</h3>
-                            <div class="chat-icon" ><i class="fas fa-comment"></i></div>
-                        </div>
+<button class="chat-icon" onclick="openPassengerChat(${booking.ride.rideId})" style="border:none; background:none; cursor:pointer;">
+    <i class="fas fa-comment"></i>
+</button>                        </div>
 
                         <div class="trip-info">
 
@@ -617,7 +639,6 @@
                             </div>
                         </div>
                     </div>
-                    
 
                 </article>
                 `;
@@ -793,6 +814,13 @@
         console.error("Error checking trip start:", err);
       }
     }
+   function openPassengerChat(rideId) {
+    // حفظ رقم الرحلة
+    localStorage.setItem('currentRideId', rideId);
+    localStorage.setItem('currentUserId', 'PASSENGER_' + localStorage.getItem("userEmail"));
+    // الانتقال لصفحة المحادثة
+    window.location.href = 'chat.html';
+}
 
   </script>
 
