@@ -28,7 +28,6 @@ public class AdminService {
     @Autowired
     private DriverRepository driverRepository;
 
-
     public List<DriverModel> getPendingDrivers() {
         return driverRepository.findByStatus("pending");
     }
@@ -48,7 +47,6 @@ public class AdminService {
         return true;
     }
 
-    
     public List<UserModel> getAllUsers() {
         return userRepository.findAll();
     }
@@ -77,4 +75,3 @@ public class AdminService {
         return true;
     }
 }
-

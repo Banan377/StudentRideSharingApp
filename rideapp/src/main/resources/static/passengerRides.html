@@ -14,9 +14,10 @@
   <!-- SIDEBAR -->
   <div class="sidebar">
     <!-- زر طوارئ عام أعلى الصفحة -->
-    <div id="global-emergency" class="emergency-bar" onclick="openEmergencyPopupGlobal()">
+    <div id="global-emergency" class="emergency-bar hidden" onclick="openEmergencyPopupGlobal()">
       🚨 إرسال بلاغ طوارئ
     </div>
+
     <div class="logo"></div>
     <ul class="menue">
       <li><a href="passengerRides.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a></li>
@@ -503,6 +504,7 @@
     });
     window.addEventListener("DOMContentLoaded", () => {
       loadPassengerBookings();
+      checkIfTripStarted();
     });
 
     function loadPassengerBookings() {
@@ -756,6 +758,41 @@
       }
     });
 
+    async function checkIfTripStarted() {
+      const passengerEmail = localStorage.getItem("userEmail");
+      if (!passengerEmail) return;
+
+      try {
+        const res = await fetch(`http://localhost:8083/api/passenger/my-bookings?passengerEmail=${encodeURIComponent(passengerEmail)}`);
+        const bookings = await res.json();
+
+        const emergencyButton = document.getElementById("global-emergency");
+        emergencyButton.classList.add("hidden"); // نخفيه مبدئياً
+
+        if (!Array.isArray(bookings)) return;
+
+        const now = new Date();
+
+        for (let b of bookings) {
+          if (b.status === "accepted") {
+
+            const rideDate = b.ride.date;       // مثال: 2025-11-30
+            const rideTime = b.ride.time;       // مثال: 15:30
+
+            const rideDateTime = new Date(`${rideDate}T${rideTime}`);
+
+            // إذا الوقت الحالي >= وقت الرحلة → الرحلة بدأت
+            if (now >= rideDateTime) {
+              emergencyButton.classList.remove("hidden");
+              return; // لا نحتاج نبحث في الباقي
+            }
+          }
+        }
+
+      } catch (err) {
+        console.error("Error checking trip start:", err);
+      }
+    }
 
   </script>
 

@@ -2024,3 +2024,7 @@ textarea {
   background: #b80322;
   transform: scale(1.03);
 }
+
+.hidden {
+  display: none !important;
+}
