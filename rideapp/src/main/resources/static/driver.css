@@ -1050,3 +1050,265 @@ textarea {
 #popup.full-page {
   transform: rgba(0, 0, 0, 0.1);
 }
+ .booking-request-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .request-info h4 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+
+    .request-info p {
+      margin: 5px 0;
+      color: #666;
+    }
+
+    .request-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .accept-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .reject-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .accept-btn:hover {
+      background: #218838;
+    }
+
+    .reject-btn:hover {
+      background: #c82333;
+    }
+
+    .trip-card {
+
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      border: 1px solid #ebebeb;
+      min-height: 320px;
+      width: 100%;
+    }
+
+    .trip-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .location-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .location-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .details-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .driver-section {
+      border-top: 1px solid #f0f0f0;
+      padding-top: 12px;
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+
+    .passenger-box {
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 20px;
+      border: 1px solid #e5e5e5;
+    }
+
+    .passenger-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding: 5px 0;
+
+    }
+
+    .sub-title {
+      margin: 0;
+      padding: 0;
+      font-size: 17px;
+      font-weight: bold;
+      color: #265262;
+    }
+
+
+    .chat-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: #eef3f4;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #487788;
+      font-size: 18px;
+      transition: 0.2s;
+    }
+
+    .chat-icon:hover {
+      background: #dce9ee;
+    }
+
+    .accepted-passengers p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #265262;
+      margin-bottom: 15px;
+    }
+
+    .trip-info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .info-box {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .info-box i {
+      color: #487788;
+      font-size: 18px;
+      margin-top: 3px;
+    }
+
+    .label {
+      font-size: 12px;
+      color: #666;
+      display: block;
+    }
+
+    .value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .sub-title {
+      margin-top: 20px;
+      font-size: 17px;
+      font-weight: bold;
+      color: #265262;
+    }
+
+    .requests-container {
+      margin-top: 10px;
+      display: grid;
+      gap: 15px;
+    }
+
+    .rides-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      margin-top: 25px;
+    }
+
+    .delete-icon,
+    .chat-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: #f0f0f0;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #487788;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+
+    .delete-icon:hover {
+      background: #ffdddd;
+      color: #c0392b;
+    }
+
+    .chat-icon:hover {
+      background: #ccddea;
+      color: #265262;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+      gap: 15px;
+    }
+
+    .passenger-box .sub-title {
+      margin: 0 !important;
+      padding: 0;
+    }

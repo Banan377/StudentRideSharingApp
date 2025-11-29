@@ -86,7 +86,7 @@
       <div class="events-grid"></div>
     </section>
 
-  </div> 
+  </div>
 
   <script>
     function toggleProfileDropdown() {
@@ -176,7 +176,9 @@
         card.innerHTML = `
           <div class="card-header">
             <h3 class="card-title">رحلة سابقة</h3>
-            <div class="chat-icon"><i class="fas fa-comment"></i></div>
+             <button class="delete-icon" onclick="cancelRide(${ride.rideId})">
+    <i class="fas fa-trash"></i>
+</button>
           </div>
 
           <div class="trip-info-grid">
@@ -220,8 +222,15 @@
               </div>
             </div>
           </div>
-
+     <div class="passenger-header">
+      <h3 class="sub-title">الركاب المنضمون</h3>
+      <button class="chat-icon" onclick="openChat(${ride.rideId})">
+          <i class="fas fa-comment"></i>
+      </button>
+    </div>
           <h3 class="sub-title">طلبات إعادة الركوب</h3>
+                      <div class="chat-icon"><i class="fas fa-comment"></i></div>
+
           <div class="requests-container" id="again-requests-${ride.rideId}"></div>
         `;
 
@@ -267,16 +276,42 @@
         method: "POST"
       }).then(() => location.reload());
     }
+
+
+
+    function cancelRide(rideId) {
+      if (!confirm("هل أنت متأكد من حذف الرحلة?.")) return;
+
+      fetch(`http://localhost:8083/api/rides/${rideId}/cancel`, {
+        method: "POST"
+      })
+        .then(res => {
+          if (!res.ok) {
+            alert("فشل إلغاء الرحلة");
+            return;
+          }
+
+          alert("تم إلغاء الرحلة بنجاح");
+
+          // حذف الكارد من الشاشة مباشرة
+          const card = document.getElementById(`ride-${rideId}`);
+          if (card) card.remove();
+
+        });
+    }
+
+
+
   </script>
 
   <!-- تصميم الكارد -->
   <style>
     .top-bar {
-    display: flex;
-    justify-content: space-between !important;
-    padding: 15px;
-    align-items: center;
-}
+      display: flex;
+      justify-content: space-between !important;
+      padding: 15px;
+      align-items: center;
+    }
 
     .trip-card {
       background: white;

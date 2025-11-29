@@ -18,4 +18,6 @@ public interface RideRepository extends JpaRepository<RideModel, Long> {
 
     List<RideModel> findByDriverEmailAndStatus(String driverEmail, String status);
 
+    List<RideModel> findByDriverEmailAndStatusNot(String email, String status);
+
 }
