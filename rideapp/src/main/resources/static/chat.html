@@ -1,62 +1,138 @@
+
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
-    <title>الدردشة</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محادثة الرحلة</title>
     <link rel="stylesheet" href="chat.css">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
-
     <div class="chat-container">
-
         <div class="chat-header">
-            <button class="back-btn" onclick="goBack()">
-                <i class="fas fa-arrow-right"></i>
-            </button>
-
-            <i class="fas fa-user-circle"></i> أحمد محمد
+            <button class="back-btn" onclick="goBack()">← رجوع</button>
+            <span id="chatTitle">محادثة الرحلة</span>
         </div>
-
-        <div class="messages" id="messagesBox">
-            <div class="msg other">السلام عليكم، وصلت؟</div>
-            <div class="msg me">ايه على الطريق</div>
+        
+        <div class="messages" id="messagesContainer">
+            <!-- الرسائل تظهر هنا -->
         </div>
-
+        
         <div class="chat-input">
-            <input type="text" id="msgInput" placeholder="اكتب رسالة...">
-            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+            <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">إرسال</button>
         </div>
-
     </div>
 
+    <script>
+        let currentRideId = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            currentRideId = localStorage.getItem('currentRideId');
+            if (currentRideId) {
+                document.getElementById('chatTitle').textContent = `محادثة الرحلة #${currentRideId}`;
+                loadChat();
+                setInterval(loadChat, 3000);
+            } else {
+                alert('لم يتم تحديد رحلة');
+            }
+        });
+
+        async function loadChat() {
+            if (!currentRideId) return;
+            try {
+                const response = await fetch(`/api/chat/room/${currentRideId}/messages`);
+                const messages = await response.json();
+                const container = document.getElementById('messagesContainer');
+                container.innerHTML = '';
+                
+                if (messages.length === 0) {
+                    container.innerHTML = '<div class="no-messages">لا توجد رسائل بعد. ابدأ المحادثة!</div>';
+                    return;
+                }
+
+                messages.forEach(msg => {
+                    const messageDiv = document.createElement('div');
+                    const isMe = checkIfMessageIsMine(msg.senderId);
+                    messageDiv.className = `msg ${isMe ? 'me' : 'other'}`;
+                    messageDiv.innerHTML = `
+                        <div class="message-content">${msg.content}</div>
+                        <div class="message-time">${formatTime(msg.timestamp)}</div>
+                    `;
+                    container.appendChild(messageDiv);
+                });
+                
+                container.scrollTop = container.scrollHeight;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const content = messageInput.value.trim();
+            if (!content || !currentRideId) return;
+
+            try {
+                let roomResponse = await fetch(`/api/chat/room/${currentRideId}`);
+                let room = await roomResponse.json();
+                if (!room || !room.id) {
+                    roomResponse = await fetch(`/api/chat/room/create?rideId=${currentRideId}`, {method: 'POST'});
+                    room = await roomResponse.json();
+                }
+
+                await fetch('/api/chat/message/send', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        roomId: room.id,
+                        senderId: getCurrentSenderId(),
+                        content: content
+                    })
+                });
+
+                messageInput.value = '';
+                loadChat();
+            } catch (error) {
+                alert('فشل في إرسال الرسالة');
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') sendMessage();
+        }
+
+        function formatTime(timestamp) {
+            if (!timestamp) return '';
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString('ar-SA', {hour: '2-digit', minute: '2-digit'});
+        }
+
+        function checkIfMessageIsMine(senderId) {
+            const currentUser = localStorage.getItem('currentUserId');
+            
+            if (currentUser && currentUser.startsWith('DRIVER_')) {
+                return senderId == 2;
+            } else if (currentUser && currentUser.startsWith('PASSENGER_')) {
+                return senderId == 1;
+            } else {
+                return false;
+            }
+        }
+
+        function getCurrentSenderId() {
+            const currentUser = localStorage.getItem('currentUserId');
+            if (currentUser && currentUser.startsWith('DRIVER_')) {
+                return 2;
+            } else {
+                return 1;
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </body>
-
-<script>
-    function goBack() {
-        window.history.back();
-    }
-
-    function sendMessage() {
-        const input = document.getElementById("msgInput");
-        const text = input.value.trim();
-        if (text === "") return;
-
-        const box = document.getElementById("messagesBox");
-
-        const bubble = document.createElement("div");
-        bubble.className = "msg me";
-        bubble.textContent = text;
-
-        box.appendChild(bubble);
-        input.value = "";
-
-        box.scrollTop = box.scrollHeight;
-    }
-</script>
-
 </html>
