@@ -193,27 +193,31 @@
         zoom: 12,
       });
       
-      
-       if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-              };
-
-      map1.setCenter(pos);
-      map2.setCenter(pos);
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+      directionsRenderer.setMap(map2);
 
 
-            },
-            () => {
-              alert("لم يتم السماح بالحصول على الموقع");
-            }
-          );
-        } else {
-          alert("المتصفح لا يدعم خدمة الموقع");
-        }
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
+
+            map1.setCenter(pos);
+            map2.setCenter(pos);
+
+
+          },
+          () => {
+            alert("لم يتم السماح بالحصول على الموقع");
+          }
+        );
+      } else {
+        alert("المتصفح لا يدعم خدمة الموقع");
+      }
 
       map1.addListener("click", (event) => {
         startLat = event.latLng.lat();

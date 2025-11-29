@@ -75,6 +75,7 @@
                 <span>ستظهر تقييمات الركاب هنا بعد إكمال الرحلات</span>
               </div>
             </div>
+          </div>
 
         </div>
       </div>
@@ -115,9 +116,7 @@
               <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
             </div>
           </div>
-        </div>
-      </div>`;
-
+        </div>`;
       document.body.appendChild(overlay);
     }
 
@@ -145,7 +144,7 @@
     function closeLogoutSuccess() {
       window.location.href = "login.html";
     }
-    
+
     document.addEventListener('click', function (event) {
       const profileSection = document.querySelector('.profile-section');
       if (!profileSection.contains(event.target)) {

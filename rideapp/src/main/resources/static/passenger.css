@@ -2007,28 +2007,6 @@ textarea {
   font-weight: bold;
 }
 
-<<<<<<< HEAD
-.emergency-bar {
-  display: inline-block;
-  background: #d90429;
-  color: white;
-  padding: 12px 22px;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: bold;
-  margin: 15px 0;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.emergency-bar:hover {
-  background: #b80322;
-  transform: scale(1.03);
-}
-
-.hidden {
-  display: none !important;
-=======
 .emergency-btn {
   background-color: #d90429;
   color: white;
@@ -2044,5 +2022,4 @@ textarea {
 
 .emergency-btn:hover {
   background-color: #a3001d;
->>>>>>> 1a8785a (update saety)
 }
