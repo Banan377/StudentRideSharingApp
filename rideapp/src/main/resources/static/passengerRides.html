@@ -13,19 +13,19 @@
 
   <!-- SIDEBAR -->
   <div class="sidebar">
-<<<<<<< HEAD
     <!-- زر طوارئ عام أعلى الصفحة -->
-    <div id="global-emergency" class="emergency-bar hidden" onclick="openEmergencyPopupGlobal()">
+    <div id="global-emergency" class="emergency-bar" onclick="openEmergencyPopupGlobal()">
       🚨 إرسال بلاغ طوارئ
     </div>
-
     <div class="logo"></div>
     <ul class="menue">
       <li><a href="passengerRides.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a></li>
       <li><a href="passengerRidesHistory.html"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
       <li><a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a></li>
       <li><a href="passengerEvents.html"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
+
     </ul>
+
   </div>
 
   <!-- MAIN CONTENT -->
@@ -247,28 +247,6 @@
 
     function closePage() {
       document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
-    }
-
-    function logout() {
-      document.getElementById('profile-dropdown').classList.add('hidden');
-      const overlay = document.createElement('div');
-      overlay.className = 'logout-overlay';
-      overlay.id = 'logout-confirmation';
-
-      overlay.innerHTML = `
-      <div class="logout-modal">
-        <div class="logout-content">
-          <i class="fas fa-sign-out-alt logout-icon"></i>
-          <h3>تسجيل الخروج</h3>
-          <p>هل أنت متأكد؟</p>
-          <div class="logout-buttons">
-            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
-            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
-          </div>
-        </div>
-      </div>`;
-
-      document.body.appendChild(overlay);
     }
 
     function logout() {
@@ -525,7 +503,6 @@
     });
     window.addEventListener("DOMContentLoaded", () => {
       loadPassengerBookings();
-      checkIfTripStarted();
     });
 
     function loadPassengerBookings() {
@@ -575,9 +552,8 @@
                     <div>
                         <div class="card-header">
                             <h3>رحلتك</h3>
-<button class="chat-icon" onclick="openPassengerChat(${booking.ride.rideId})" style="border:none; background:none; cursor:pointer;">
-    <i class="fas fa-comment"></i>
-</button>                        </div>
+                            <div class="chat-icon" ><i class="fas fa-comment"></i></div>
+                        </div>
 
                         <div class="trip-info">
 
@@ -639,6 +615,7 @@
                             </div>
                         </div>
                     </div>
+                    
 
                 </article>
                 `;
@@ -779,48 +756,6 @@
       }
     });
 
-    async function checkIfTripStarted() {
-      const passengerEmail = localStorage.getItem("userEmail");
-      if (!passengerEmail) return;
-
-      try {
-        const res = await fetch(`http://localhost:8083/api/passenger/my-bookings?passengerEmail=${encodeURIComponent(passengerEmail)}`);
-        const bookings = await res.json();
-
-        const emergencyButton = document.getElementById("global-emergency");
-        emergencyButton.classList.add("hidden"); // نخفيه مبدئياً
-
-        if (!Array.isArray(bookings)) return;
-
-        const now = new Date();
-
-        for (let b of bookings) {
-          if (b.status === "accepted") {
-
-            const rideDate = b.ride.date;       // مثال: 2025-11-30
-            const rideTime = b.ride.time;       // مثال: 15:30
-
-            const rideDateTime = new Date(`${rideDate}T${rideTime}`);
-
-            // إذا الوقت الحالي >= وقت الرحلة → الرحلة بدأت
-            if (now >= rideDateTime) {
-              emergencyButton.classList.remove("hidden");
-              return; // لا نحتاج نبحث في الباقي
-            }
-          }
-        }
-
-      } catch (err) {
-        console.error("Error checking trip start:", err);
-      }
-    }
-   function openPassengerChat(rideId) {
-    // حفظ رقم الرحلة
-    localStorage.setItem('currentRideId', rideId);
-    localStorage.setItem('currentUserId', 'PASSENGER_' + localStorage.getItem("userEmail"));
-    // الانتقال لصفحة المحادثة
-    window.location.href = 'chat.html';
-}
 
   </script>
 
