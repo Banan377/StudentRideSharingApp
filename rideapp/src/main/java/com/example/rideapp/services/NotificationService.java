@@ -37,8 +37,8 @@ public class NotificationService {
                     + "Needs immediate assistance.";
 
             Message.creator(
-                    new PhoneNumber(phone), // رقم الطوارئ السعودي
-                    new PhoneNumber("+12679152009"), // رقم Twilio حقك (from)
+                    new PhoneNumber(phone), 
+                    new PhoneNumber("+12679152009"),
                     body).create();
 
             System.out.println("SMS Sent Successfully to " + phone);

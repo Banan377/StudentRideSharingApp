@@ -17,7 +17,7 @@ public class SafetyController {
 
     @PostMapping("/trigger")
     public ResponseEntity<?> triggerAlert(
-            @RequestParam(required = false) Long rideId, //  rideId OPTIONAL
+            @RequestParam(required = false) Long rideId, 
             @RequestParam String userId,
             @RequestParam(required = false) String message,
             @RequestParam(required = false) Double lat,
