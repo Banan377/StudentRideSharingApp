@@ -2,117 +2,117 @@
 <html lang="ar" dir="rtl">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>صفحة الحجز</title>
-    <link rel="stylesheet" href="passenger.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <title>صفحة الحجز</title>
+  <link rel="stylesheet" href="passenger.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
 
-    <div class="sidebar">
-        <div class="logo"></div>
-        <ul class="menue">
-            <li><a href="passengerRides.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a></li>
-            <li><a href="passengerRidesHistory.html"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
-            <li><a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a></li>
-            <li><a href="passengerEvents.html"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
-        </ul>
+  <div class="sidebar">
+    <div class="logo"></div>
+    <ul class="menue">
+      <li><a href="passengerRides.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a></li>
+      <li><a href="passengerRidesHistory.html"><i class="fas fa-history"></i><span>سجل الرحلات</span></a></li>
+      <li><a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a></li>
+      <li><a href="passengerEvents.html"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
+    </ul>
+  </div>
+
+  <main class="main-content">
+
+    <div class="container">
+      <div class="header">
+        <div class="search-box">
+          <input id="searchInput" type="text" placeholder=" ابحث هنا" oninput="searchRides()" />
+          <i class="fas fa-search"></i>
+        </div>
+
+        <div class="profile-section">
+          <button onclick="toggleProfileDropdown()" class="profile-btn">
+            <i class="fas fa-user-circle"></i>
+          </button>
+
+          <div id="profile-dropdown" class="dropdown-menu hidden" aria-hidden="true">
+            <ul>
+              <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل
+                    التقييمات</span></a></li>
+              <li><a href="passengerSetting.html"><i class="fas fa-cog"></i><span>الإعدادات</span></a>
+              </li>
+              <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل
+                    الخروج</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <main class="main-content">
-
-        <div class="container">
-            <div class="header">
-                <div class="search-box">
-                    <input type="text" placeholder="ابحث هنا" />
-                    <i class="fas fa-search"></i>
+    <!-- صفحة التقييم -->
+    <div id="rating-page" class="full-page hidden">
+      <div class="container-form">
+        <div class="form-box">
+          <div class="page-header">
+            <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
+            <h2>سجل التقييمات</h2>
+          </div>
+          <div class="rating-history">
+            <div class="rating-summary">
+              <div class="average-rating">
+                <span class="rating-number">0.0</span>
+                <div class="stars-display">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i>
                 </div>
-
-                <div class="profile-section">
-                    <button onclick="toggleProfileDropdown()" class="profile-btn">
-                        <i class="fas fa-user-circle"></i>
-                    </button>
-
-                    <div id="profile-dropdown" class="dropdown-menu hidden" aria-hidden="true">
-                        <ul>
-                            <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل
-                                        التقييمات</span></a></li>
-                            <li><a href="passengerSetting.html"><i class="fas fa-cog"></i><span>الإعدادات</span></a>
-                            </li>
-                            <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل
-                                        الخروج</span></a></li>
-                        </ul>
-                    </div>
-                </div>
+                <span class="total-reviews">(0 تقييم)</span>
+                <p>ستظهر تقييماتك هنا بعد إكمال الرحلات</p>
+              </div>
             </div>
+            <div class="reviews-list">
+              <div class="no-reviews">
+                <i class="fas fa-star"></i>
+                <p>لا توجد تقييمات بعد</p>
+                <span>ستظهر تقييمات الركاب هنا بعد إكمال الرحلات</span>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <!-- صفحة التقييم -->
-        <div id="rating-page" class="full-page hidden">
-            <div class="container-form">
-                <div class="form-box">
-                    <div class="page-header">
-                        <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
-                        <h2>سجل التقييمات</h2>
-                    </div>
-                    <div class="rating-history">
-                        <div class="rating-summary">
-                            <div class="average-rating">
-                                <span class="rating-number">0.0</span>
-                                <div class="stars-display">
-                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                </div>
-                                <span class="total-reviews">(0 تقييم)</span>
-                                <p>ستظهر تقييماتك هنا بعد إكمال الرحلات</p>
-                            </div>
-                        </div>
-                        <div class="reviews-list">
-                            <div class="no-reviews">
-                                <i class="fas fa-star"></i>
-                                <p>لا توجد تقييمات بعد</p>
-                                <span>ستظهر تقييمات الركاب هنا بعد إكمال الرحلات</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- كروت الرحلات -->
+    <section class="trips-section">
+      <div class="trips-grid">
+        <!-- الكروت تجي من JavaScript -->
+      </div>
+    </section>
 
-        <!-- كروت الرحلات -->
-        <section class="trips-section">
-            <div class="trips-grid">
-                <!-- الكروت تجي من JavaScript -->
-            </div>
-        </section>
+    <div id="driver-modal-root"></div>
 
-        <div id="driver-modal-root"></div>
+    <script>
+      // ====== القائمة والبروفايل ======
+      function toggleProfileDropdown() {
+        document.getElementById('profile-dropdown').classList.toggle('hidden');
+      }
 
-        <script>
-            // ====== القائمة والبروفايل ======
-            function toggleProfileDropdown() {
-                document.getElementById('profile-dropdown').classList.toggle('hidden');
-            }
+      function showRatingPage() {
+        document.getElementById('profile-dropdown').classList.add('hidden');
+        document.getElementById('rating-page').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
 
-            function showRatingPage() {
-                document.getElementById('profile-dropdown').classList.add('hidden');
-                document.getElementById('rating-page').classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            }
+      function closePage() {
+        document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
+        document.body.style.overflow = 'auto';
+      }
 
-            function closePage() {
-                document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
-                document.body.style.overflow = 'auto';
-            }
+      function logout() {
+        document.getElementById('profile-dropdown').classList.add('hidden');
 
-            function logout() {
-                document.getElementById('profile-dropdown').classList.add('hidden');
-
-                const overlay = document.createElement('div');
-                overlay.className = 'logout-overlay';
-                overlay.innerHTML = `
+        const overlay = document.createElement('div');
+        overlay.className = 'logout-overlay';
+        overlay.innerHTML = `
           <div class="logout-modal">
             <div class="logout-content">
               <i class="fas fa-sign-out-alt logout-icon"></i>
@@ -124,16 +124,16 @@
               </div>
             </div>
           </div>`;
-                document.body.appendChild(overlay);
-            }
+        document.body.appendChild(overlay);
+      }
 
-            function confirmLogout() {
-                localStorage.removeItem("currentUser");
-                localStorage.removeItem("userEmail");
-                localStorage.removeItem("resetPasswordMode");
+      function confirmLogout() {
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("resetPasswordMode");
 
-                const overlay = document.querySelector('.logout-overlay');
-                overlay.innerHTML = `
+        const overlay = document.querySelector('.logout-overlay');
+        overlay.innerHTML = `
           <div class="logout-modal">
             <div class="logout-content success">
               <i class="fas fa-check-circle success-icon"></i>
@@ -141,58 +141,59 @@
               <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
             </div>
           </div>`;
+      }
+
+      function cancelLogout() {
+        const overlay = document.querySelector('.logout-overlay');
+        if (overlay) overlay.remove();
+      }
+
+      function closeLogoutSuccess() {
+        const overlay = document.querySelector('.logout-overlay');
+        if (overlay) overlay.remove();
+        window.location.href = "login.html";
+      }
+
+      document.addEventListener('click', function (event) {
+        const profileSection = document.querySelector('.profile-section');
+        const dropdown = document.getElementById('profile-dropdown');
+        if (!profileSection.contains(event.target)) {
+          dropdown.classList.add('hidden');
+        }
+      });
+
+      // ====== تحميل الرحلات عند فتح الصفحة ======
+      window.addEventListener("DOMContentLoaded", () => {
+        loadAvailableRides();
+      });
+
+      function loadAvailableRides() {
+        const passengerEmail = localStorage.getItem("userEmail");
+
+        fetch(`http://localhost:8083/api/rides/available?passengerEmail=${passengerEmail}`)
+
+
+          .then(res => res.json())
+          .then(data => {
+            const container = document.querySelector(".trips-grid");
+            if (!container) return;
+
+            container.innerHTML = ""; // امسح القديم
+
+            if (!Array.isArray(data) || data.length === 0) {
+              container.innerHTML = `<p style="padding:20px; text-align:center; color:#666;">لا توجد رحلات متاحة حالياً</p>`;
+              return;
             }
 
-            function cancelLogout() {
-                const overlay = document.querySelector('.logout-overlay');
-                if (overlay) overlay.remove();
-            }
+            data.forEach(ride => {
+              const card = document.createElement("article");
+              card.className = "trip-card";
 
-            function closeLogoutSuccess() {
-                const overlay = document.querySelector('.logout-overlay');
-                if (overlay) overlay.remove();
-                window.location.href = "login.html";
-            }
-
-            document.addEventListener('click', function (event) {
-                const profileSection = document.querySelector('.profile-section');
-                const dropdown = document.getElementById('profile-dropdown');
-                if (!profileSection.contains(event.target)) {
-                    dropdown.classList.add('hidden');
-                }
-            });
-
-            // ====== تحميل الرحلات عند فتح الصفحة ======
-            window.addEventListener("DOMContentLoaded", () => {
-                loadAvailableRides();
-            });
-
-            function loadAvailableRides() {
-               const passengerEmail = localStorage.getItem("userEmail");
-
-fetch(`http://localhost:8083/api/rides/available?passengerEmail=${passengerEmail}`)
-
-
-                    .then(res => res.json())
-                    .then(data => {
-                        const container = document.querySelector(".trips-grid");
-                        if (!container) return;
-
-                        container.innerHTML = ""; // امسح القديم
-
-                        if (!Array.isArray(data) || data.length === 0) {
-                            container.innerHTML = `<p style="padding:20px; text-align:center; color:#666;">لا توجد رحلات متاحة حالياً</p>`;
-                            return;
-                        }
-
-                        data.forEach(ride => {
-                            const card = document.createElement("article");
-                            card.className = "trip-card";
-
-                            card.innerHTML = `
+              card.innerHTML = `
                 <div>
                   <div class="card-header">
                     <h3>رحلة متاحة</h3>
+                    <div class="chat-icon"><i class="fas fa-comment"></i></div>
                   </div>
                   <div class="trip-info">
                     <div class="location-row">
@@ -240,56 +241,151 @@ fetch(`http://localhost:8083/api/rides/available?passengerEmail=${passengerEmail
                   <div class="driver-info">
                     <div class="default-avatar driver-avatar"><i class="fas fa-user"></i></div>
                     <div class="driver-details">
-                      <div class="driver-name">${ride.driverEmail || 'سائق'}</div>
+                          <div class="driver-name">${ride.driverName || ride.driverEmail || 'سائق'}</div>
                     </div>
                   </div>
                   <button class="book-btn" data-ride-id="${ride.rideId}">حجز</button>
                 </div>
               `;
 
-                            container.appendChild(card);
-                        });
+              container.appendChild(card);
+            });
 
-                        // تفعيل أزرار الحجز بعد إنشاء الكروت
-                        document.querySelectorAll(".book-btn").forEach(btn => {
-                            btn.addEventListener("click", () => {
-                                const rideId = btn.getAttribute("data-ride-id");
-                                const card = btn.closest(".trip-card");
-                                sendBookingRequest(rideId, card);
-                            });
-                        });
-                    })
-                    .catch(err => {
-                        console.error("فشل في جلب الرحلات:", err);
-                    });
-            }
+            // تفعيل أزرار الحجز بعد إنشاء الكروت
+            document.querySelectorAll(".book-btn").forEach(btn => {
+              btn.addEventListener("click", () => {
+                const rideId = btn.getAttribute("data-ride-id");
+                const card = btn.closest(".trip-card");
+                sendBookingRequest(rideId, card);
+              });
+            });
+          })
+          .catch(err => {
+            console.error("فشل في جلب الرحلات:", err);
+          });
+      }
 
-   // ====== إرسال طلب الحجز ======
-function sendBookingRequest(rideId, cardElement) {
-    const passengerEmail = localStorage.getItem("userEmail");
+      // ====== إرسال طلب الحجز ======
+      function sendBookingRequest(rideId, cardElement) {
+        const passengerEmail = localStorage.getItem("userEmail");
 
-    fetch(`http://localhost:8083/api/bookings/request?passengerEmail=${encodeURIComponent(passengerEmail)}&rideId=${rideId}`, {
-        method: "POST"
-    })
-    .then(async res => {
-        if (res.ok) {
-            alert("تم إرسال طلب الحجز للسائق!");
-            if (cardElement) {
+        fetch(`http://localhost:8083/api/bookings/request?passengerEmail=${encodeURIComponent(passengerEmail)}&rideId=${rideId}`, {
+          method: "POST"
+        })
+          .then(async res => {
+            if (res.ok) {
+              alert("تم إرسال طلب الحجز للسائق!");
+              if (cardElement) {
                 cardElement.remove();
+              }
+            } else {
+              const errorMessage = await res.text();  
+              alert(errorMessage);  
             }
-        } else {
-            const errorMessage = await res.text();  //  هنا نقرأ الرسالة القادمة من السيرفر
-            alert(errorMessage);  //  تظهر نفس رسالة الخطأ مثل: الجنس غير مسموح
+          })
+          .catch(err => {
+            console.error("خطأ في طلب الحجز:", err);
+            alert("حدث خطأ غير متوقع");
+          });
+      }
+      function searchRides() {
+        const keyword = document.getElementById("searchInput").value.trim();
+        const passengerEmail = localStorage.getItem("userEmail");
+
+        // لو فاضي... رجّعي كل الرحلات
+        if (keyword === "") {
+          loadAvailableRides();
+          return;
         }
-    })
-    .catch(err => {
-        console.error("خطأ في طلب الحجز:", err);
-        alert("حدث خطأ غير متوقع");
-    });
-}
 
+        fetch(`http://localhost:8083/api/rides/search?destination=${encodeURIComponent(keyword)}`)
+          .then(res => res.json())
+          .then(data => {
+            const container = document.querySelector(".trips-grid");
+            container.innerHTML = "";
 
-        </script>
+            if (!data || data.length === 0) {
+              container.innerHTML = `
+                    <p style="padding:20px; text-align:center; color:#666;">
+                        لا توجد نتائج مطابقة
+                    </p>`;
+              return;
+            }
+
+            // إعادة رسم الكروت نفس loadAvailableRides()
+            data.forEach(ride => {
+              const card = document.createElement("article");
+              card.className = "trip-card";
+
+              card.innerHTML = `
+                    <div>
+                        <div class="card-header">
+                            <h3>رحلة متاحة</h3>
+                        </div>
+                        <div class="trip-info">
+                            <div class="location-row">
+                                <div class="location-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <div>
+                                        <span class="label">نقطة الانطلاق:</span>
+                                        <span class="value">${ride.currentLocation || 'غير محدد'}</span>
+                                    </div>
+                                </div>
+                                <div class="location-item">
+                                    <i class="fas fa-flag"></i>
+                                    <div>
+                                        <span class="label">نقطة الوصول:</span>
+                                        <span class="value">${ride.destination || 'غير محددة'}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="details-row">
+                                <div class="detail-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <div><span class="label">اليوم:</span> <span class="value">${ride.date || ''}</span></div>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-clock"></i>
+                                    <div><span class="label">الوقت:</span> <span class="value">${ride.time || ''}</span></div>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-users"></i>
+                                    <div><span class="label">المقاعد المتاحة:</span> <span class="value">${ride.seatsAvailable ?? ''}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="driver-section">
+                        <div class="driver-info">
+                            <div class="default-avatar driver-avatar"><i class="fas fa-user"></i></div>
+                            <div class="driver-details">
+                               <div class="driver-name">${ride.driverName || ride.driverEmail || 'سائق'}</div>
+                            </div>
+                        </div>
+                        <button class="book-btn" data-ride-id="${ride.rideId}">حجز</button>
+                    </div>
+                `;
+
+              container.appendChild(card);
+            });
+
+            // تفعيل الحجز للكروت
+            document.querySelectorAll(".book-btn").forEach(btn => {
+              btn.addEventListener("click", () => {
+                const rideId = btn.getAttribute("data-ride-id");
+                const card = btn.closest(".trip-card");
+                sendBookingRequest(rideId, card);
+              });
+            });
+          })
+          .catch(err => {
+            console.error("خطأ في البحث:", err);
+          });
+      }
+
+    </script>
 
 </body>
 
