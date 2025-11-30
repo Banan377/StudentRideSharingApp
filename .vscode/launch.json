@@ -1,9 +1,12 @@
 {
     "configurations": [
-        
-
-
-        
+        {
+            "type": "java",
+            "name": "RideappApplication",
+            "request": "launch",
+            "mainClass": "com.example.rideapp.RideappApplication",
+            "projectName": ""
+        },
         {
             "type": "java",
             "name": "Spring Boot-RideappApplication<rideapp>",
