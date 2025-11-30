@@ -31,3 +31,18 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# تجاهل ملفات Maven المحلية
+.m2/
+
+# تجاهل ملفات IDE
+.vscode/
+*.log
+
+# تجاهل ملفات النظام والمجلدات خارج المشروع
+*.dat
+AppData/
+Cookies/
+Local Settings/
+My Documents/

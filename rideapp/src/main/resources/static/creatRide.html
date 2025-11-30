@@ -175,11 +175,15 @@
   
   <script>
     let rideId = null; let startLat = null, startLng = null; let destLat = null, destLng = null; let startLocation = null; let destinationLocation = null; let distanceKm = 0; let durationText = "";
+<<<<<<< HEAD
     let map1, map2, marker1, marker2 ;
+=======
+    let map1, map2, polyline1, polyline2, marker1, marker2;
+>>>>>>> 46603cd2f5bfb3f1a4f48d6f8a81add578db07eb
 
-      function initMap() {
+    function initMap() {
       const defaultPos = { lat: 24.7136, lng: 46.6753 };
-      
+
       map1 = new google.maps.Map(document.getElementById("map1"), {
         center: defaultPos,
         zoom: 12,
@@ -190,33 +194,49 @@
         zoom: 12,
       });
       
-      
-       if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-              };
-
-      map1.setCenter(pos);
-      map2.setCenter(pos);
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+      directionsRenderer.setMap(map2);
 
 
-            },
-            () => {
-              alert("لم يتم السماح بالحصول على الموقع");
-            }
-          );
-        } else {
-          alert("المتصفح لا يدعم خدمة الموقع");
-        }
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
+
+            map1.setCenter(pos);
+            map2.setCenter(pos);
+
+
+          },
+          () => {
+            alert("لم يتم السماح بالحصول على الموقع");
+          }
+        );
+      } else {
+        alert("المتصفح لا يدعم خدمة الموقع");
+      }
 
       map1.addListener("click", (event) => {
-       startLat = event.latLng.lat();
-       startLng = event.latLng.lng();
+        startLat = event.latLng.lat();
+        startLng = event.latLng.lng();
 
-      if (marker1) marker1.setMap(null);
+        if (marker1) marker1.setMap(null);
+
+        marker1 = new google.maps.Marker({
+          position: { lat: startLat, lng: startLng },
+          map: map1,
+          label: "نقطة الانطلاق"
+        });
+
+
+
+        startLocation = startLat + ", " + startLng;
+        console.log("Start location:", startLat, startLng);
+
 
       marker1 = new google.maps.Marker({
         position: { lat:startLat, lng:startLng },
@@ -232,11 +252,15 @@
      
     });
 
-    map2.addListener("click", (event) => {
-      destLat = event.latLng.lat();
-      destLng = event.latLng.lng();
+        marker2 = new google.maps.Marker({
+          position: { lat: destLat, lng: destLng },
+          map: map2,
+          label: "الوجهة"
+        });
 
-      if (marker2) marker2.setMap(null);
+        destinationLocation = destLat + ", " + destLng;
+        console.log("Destination:", destLat, destLng);
+
 
       marker2 = new google.maps.Marker({
         position: { lat:destLat, lng:destLng },
@@ -248,9 +272,28 @@
       console.log("Destination:", destLat, destLng);
      
       
+<<<<<<< HEAD
     });
 
     }
+=======
+    }
+
+      polyline1 = new google.maps.Polyline({
+        map: map1,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+      });
+
+      polyline2 = new google.maps.Polyline({
+        map: map2,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+      });
+    
+>>>>>>> 46603cd2f5bfb3f1a4f48d6f8a81add578db07eb
 
     function calculateDistance(startLat, startLng, destLat, destLng) {
       if (!startLat || !startLng || !destLat || !destLng )return;
@@ -276,27 +319,107 @@
           return;
          }
 
-        if (!destLat || !destLng) {
-          alert("يجب اختيار الوجهة على الخريطة");
+      const R = 6371; // نصف قطر الأرض بالكيلومتر
+      const dLat = (destLat - startLat) * Math.PI / 180;
+      const dLon = (destLng - startLng) * Math.PI / 180;
+
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(startLat * Math.PI / 180) *
+        Math.cos(destLat * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+      return R * c; // المسافة بالكيلومتر
+    }
+
+    async function submitRide() {
+      const date = document.getElementById("rideDate").value;
+      const time = document.getElementById("rideTime").value;
+      const seats = document.getElementById("seats").value;
+      const gender = document.getElementById("gender").value;
+
+      const now = new Date();
+      const selectedDate = new Date(date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); 
+
+      if (!date) {
+        alert("يجب اختيار تاريخ الرحلة");
+        return;
+      }
+
+      if (selectedDate < today) {
+        alert("لا يمكن اختيار تاريخ قديم");
+        return;
+      }
+
+      if (!time) {
+        alert("يجب اختيار وقت الرحلة");
+        return;
+      }
+
+      if (selectedDate.getTime() === today.getTime()) {
+        const selectedTime = new Date(`${date}T${time}`);
+
+        if (selectedTime < now) {
+          alert("وقت الرحلة خاطئ");
           return;
         }
+      }
 
-       distanceKm = calculateDistance(startLat,   
-       startLng, destLat, destLng);
-       
-       console.log("Distance:", distanceKm, "km");
+    
 
+<<<<<<< HEAD
         const ride = {
         destination: destinationLocation.lat + "," + destinationLocation.lng,
         date: document.getElementById("rideDate").value,
         time: document.getElementById("rideTime").value,
         seatsAvailable: document.getElementById("seats").value,
         genderPreference: document.getElementById("gender").value,
+=======
+      // 5) عدد المقاعد
+      if (!seats || seats < 1) {
+        alert("يجب إدخال عدد المقاعد بشكل صحيح");
+        return;
+      }
+
+
+      // التحقق من الجنس
+      if (!gender) {
+        alert("يجب تحديد تفضيل الجنس");
+        return;
+      }
+
+      if (!startLat || !startLng) {
+        alert("يجب اختيار نقطة الانطلاق على الخريطة");
+        return;
+      }
+
+      if (!destLat || !destLng) {
+        alert("يجب اختيار الوجهة على الخريطة");
+        return;
+      }
+
+      distanceKm = calculateDistance(startLat,
+        startLng, destLat, destLng);
+
+      console.log("Distance:", distanceKm, "km");
+
+      const ride = {
+        destination: destinationLocation,
+        date: date,
+        time: time,
+        seatsAvailable: seats,
+        genderPreference: gender,
+>>>>>>> 46603cd2f5bfb3f1a4f48d6f8a81add578db07eb
         status: "ACTIVE",
         currentLocation: startLocation.lat + "," + startLocation.lng,
         distance: distanceKm,
-        driverEmail: localStorage.getItem("userEmail")   
+        driverEmail: localStorage.getItem("userEmail")
       };
+
 
 
       fetch(`http://localhost:8083/api/rides/createRide?driverEmail=${encodeURIComponent(localStorage.getItem("userEmail"))}`, {
@@ -307,29 +430,29 @@
         body: JSON.stringify(ride)
       })
 
-        .then(response =>{
-           if (!response.ok) throw new Error(" فشل في إنشاء الرحلة.");
-           return response.json();
+        .then(response => {
+          if (!response.ok) throw new Error(" فشل في إنشاء الرحلة.");
+          return response.json();
         })
         .then(data => {
           rideId = data.id;
-           // إرسال نقطة الانطلاق
+          // إرسال نقطة الانطلاق
           return Promise.all([
-          fetch(`http://localhost:8083/api/rides/${rideId}/updateStartLocation`, {
-           method: "POST",
-           headers: { "Content-Type": "application/json" },
-           body: JSON.stringify({ latitude: startLat, longitude: startLng })
-        }),
-        // إرسال الوجهة
-           fetch(`http://localhost:8083/api/rides/${rideId}/updateDestination`, {
-           method: "POST",
-           headers: { "Content-Type": "application/json" },
-           body: JSON.stringify({ latitude: destLat, longitude: destLng })
-           })
-         ]);
-         })
+            fetch(`http://localhost:8083/api/rides/${rideId}/updateStartLocation`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ latitude: startLat, longitude: startLng })
+            }),
+            // إرسال الوجهة
+            fetch(`http://localhost:8083/api/rides/${rideId}/updateDestination`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ latitude: destLat, longitude: destLng })
+            })
+          ]);
+        })
         .then(() => {
-           alert(" تم إنشاء الرحلة بنجاح!");
+          alert(" تم إنشاء الرحلة بنجاح!");
           window.location.href = "driverUI.html";
         })
         .catch(error => {
@@ -338,16 +461,16 @@
         });
     }
 
-    
-    
 
 
-      async function sendStartLocation(startLat, startLng) {
-       if (!rideId) {
+
+
+    async function sendStartLocation(startLat, startLng) {
+      if (!rideId) {
         console.error("Ride ID غير موجود بعد!");
         return;
       }
-      
+
       fetch(`http://localhost:8083/api/rides/${rideId}/sendStartLocation`, {
         method: "POST",
         headers: {
@@ -368,11 +491,11 @@
     }
 
     async function sendDestination(destLat, destLng) {
-       if (!rideId) {
+      if (!rideId) {
         console.error("Ride ID غير موجود بعد!");
         return;
       }
-      
+
       fetch(`http://localhost:8083/api/rides/${rideId}/sendDestination`, {
         method: "POST",
         headers: {
@@ -391,7 +514,6 @@
           console.error("Error:", error);
         });
 
-        
 
     }
 

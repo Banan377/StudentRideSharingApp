@@ -1,42 +1,52 @@
 package com.example.rideapp.services;
 
-import com.example.rideapp.models.SafetyModel;
-import com.example.rideapp.models.UserModel;
-import com.twilio.Twilio;
-import com.twilio.rest.api.v2010.account.Message;
 import org.springframework.stereotype.Service;
+
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 
 @Service
 public class NotificationService {
 
-    // ضعي معلومات Twilio هنا
-    private static final String ACCOUNT_SID = "YOUR_TWILIO_SID";
-    private static final String AUTH_TOKEN = "YOUR_TWILIO_AUTH_TOKEN";
-    private static final String FROM_NUMBER = "+1234567890"; // رقم Twilio اللي اشتريتيه
+    // رقم الطوارئ
+    private final String EMERGENCY_PHONE = "+966557910117";
 
-    public void sendEmergencyNotification(UserModel user, SafetyModel alert) {
+    // رقم Twilio الخاص بك
+    private final String TWILIO_NUMBER = "+12679152009";
 
-        if (user.getEmergencyContacts() == null || user.getEmergencyContacts().isEmpty()) {
-            System.out.println("لا يوجد رقم للطوارئ لهذا الراكب.");
-            return;
-        }
+    public void sendEmergencySMS(String passengerName, Long rideId) {
 
-        String emergencyNumber = user.getEmergencyContacts();
-
-        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-
-        String msg = "🚨 Emergency Alert!\n"
-                + "Passenger: " + user.getName() + "\n"
-                + "Needs help during a ride.\n"
-                + "Location: https://maps.google.com/?q="
-                + alert.getLatitude() + "," + alert.getLongitude();
+        String body = " Emergency Alert!\n"
+                + "Passenger: " + passengerName + "\n"
+                + "Ride ID: " + rideId + "\n"
+                + "Needs immediate assistance.";
 
         Message.creator(
-                new com.twilio.type.PhoneNumber(emergencyNumber),
-                new com.twilio.type.PhoneNumber(FROM_NUMBER),
-                msg
-        ).create();
+                new PhoneNumber(EMERGENCY_PHONE), // to
+                new PhoneNumber(TWILIO_NUMBER), // from
+                body).create();
 
-        System.out.println("Emergency SMS sent to: " + emergencyNumber);
+        System.out.println("SMS Sent Successfully to " + EMERGENCY_PHONE);
     }
+
+    public void sendEmergencySMSTo(String phone, String passengerName, Long rideId) {
+        try {
+            String body = " Emergency Alert!\n"
+                    + "Passenger: " + passengerName + "\n"
+                    + "Ride ID: " + rideId + "\n"
+                    + "Needs immediate assistance.";
+
+            Message.creator(
+                    new PhoneNumber(phone), 
+                    new PhoneNumber("+12679152009"),
+                    body).create();
+
+            System.out.println("SMS Sent Successfully to " + phone);
+
+        } catch (Exception e) {
+            System.out.println(" ERROR SENDING SMS:");
+            e.printStackTrace();
+        }
+    }
+
 }

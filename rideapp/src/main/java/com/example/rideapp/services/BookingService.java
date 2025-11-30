@@ -132,4 +132,24 @@ public class BookingService {
         return bookings;
     }
 
+    public void notifyPassengersRideCancelled(Long rideId) {
+        List<BookingModel> bookings = bookingRepository.findByRide_RideId(rideId);
+
+        bookings.forEach(b -> {
+            b.setStatus("cancelled");
+            bookingRepository.save(b);
+
+            System.out.println("Notified passenger: " + b.getPassenger().getEmail());
+        });
+    }
+
+    public void notifyPassengerRejected(Long bookingId) {
+        BookingModel booking = bookingRepository.findById(bookingId).orElse(null);
+        if (booking == null)
+            return;
+
+        String passengerEmail = booking.getPassenger().getEmail();
+        System.out.println(" تم رفض طلب الرحلة" + passengerEmail);
+    }
+
 }

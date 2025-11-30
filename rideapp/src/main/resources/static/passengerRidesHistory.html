@@ -35,7 +35,7 @@
                             <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل
                                         التقييمات</span></a></li>
                             <li><a href="passengerSetting.html"><i class="fas fa-cog"></i><span>الإعدادات</span></a>
-
+                            </li>
                             <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل
                                         الخروج</span></a></li>
                         </ul>
@@ -43,6 +43,16 @@
                 </div>
             </div>
         </div>
+
+
+        <section class="trips-section">
+            <div class="trips-grid">
+            </div>
+        </section>
+
+
+
+
 
         <!-- صفحات كاملة (مخفية افتراضياً) -->
         <div id="rating-page" class="full-page hidden">
@@ -225,10 +235,10 @@
 
 
         function renderPastRides(rides) {
-            const container = document.querySelector('.events-grid');
-            container.innerHTML = ""; 
+            const container = document.querySelector('.trips-grid'); // التعديل هنا
+            container.innerHTML = "";
 
-            if (rides.length === 0) {
+            if (!rides || rides.length === 0) {
                 container.innerHTML = "<p class='no-data'>لا توجد رحلات سابقة.</p>";
                 return;
             }
@@ -236,14 +246,13 @@
             rides.forEach(ride => {
                 const card = document.createElement("article");
                 card.className = "trip-card";
-                card.setAttribute("data-driver-name", ride.driverName || "السائق");
-                card.setAttribute("data-driver-rating", ride.driverRating || "0");
 
                 card.innerHTML = `
             <div>
                 <div class="card-header">
                     <h3>رحلة سابقة</h3>
-                    <div class="chat-icon"><i class="fas fa-comment"></i></div>
+                     <div class="chat-icon" ><i class="fas fa-comment"></i></div>
+
                 </div>
                 <div class="trip-info">
                     <div class="location-row">
@@ -251,10 +260,9 @@
                             <i class="fas fa-map-marker-alt"></i>
                             <div>
                                 <span class="label">نقطة الانطلاق:</span>
-                                <span class="value">${ride.currentLocation}</span>
+                                <span class="value">${ride.startArea || ride.currentLocation}</span>
                             </div>
                         </div>
-
                         <div class="location-item">
                             <i class="fas fa-flag"></i>
                             <div>
@@ -276,12 +284,6 @@
                             <div><span class="label">الوقت:</span>
                                 <span class="value">${ride.time}</span></div>
                         </div>
-
-                        <div class="detail-item">
-                            <i class="fas fa-users"></i>
-                            <div><span class="label">المقاعد:</span>
-                                <span class="value">${ride.seatsAvailable}/${ride.totalSeats}</span></div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -292,20 +294,37 @@
                     <div class="driver-details">
                         <div class="driver-name">${ride.driverName || "غير معروف"}</div>
                         <div class="driver-rating">
-                            <div class="stars"><i class="fas fa-star"></i></div>
                             <span class="rating-text">${ride.driverRating || "0"}</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="card-profile-btn">عرض البروفايل</div>
-                <div class="card-book-btn">طلب إعادة الرحلة</div>
+                <button class="book-btn" onclick="requestAgain(${ride.rideId})">
+                    إعادة طلب الرحلة
+                </button>
             </div>
         `;
 
                 container.appendChild(card);
             });
         }
+
+        function requestAgain(rideId) {
+            const email = localStorage.getItem("userEmail");
+
+            fetch(`http://localhost:8083/api/ride-again/request?passengerEmail=${email}&rideId=${rideId}`, {
+                method: "POST"
+            })
+                .then(res => res.text())
+                .then(msg => {
+                    alert("تم إرسال طلب إعادة الرحلة للسائق!");
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    alert("حدث خطأ أثناء إرسال الطلب");
+                });
+        }
+
 
     </script>
 

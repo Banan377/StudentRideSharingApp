@@ -1,3 +1,4 @@
+
 package com.example.rideapp.controllers;
 
 import com.example.rideapp.models.SafetyModel;
@@ -16,15 +17,15 @@ public class SafetyController {
 
     @PostMapping("/trigger")
     public ResponseEntity<?> triggerAlert(
-            @RequestParam Long rideId,
+            @RequestParam(required = false) Long rideId, 
             @RequestParam String userId,
             @RequestParam(required = false) String message,
             @RequestParam(required = false) Double lat,
-            @RequestParam(required = false) Double lng
-    ) {
+            @RequestParam(required = false) Double lng) {
 
         SafetyModel alert = safetyService.triggerAlert(rideId, userId, message, lat, lng);
 
         return ResponseEntity.ok(alert);
     }
+
 }
