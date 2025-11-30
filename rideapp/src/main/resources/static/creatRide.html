@@ -9,7 +9,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=PASETHERE&callback=initMap" async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=PASTEHERE&callback=initMap"
+    async defer></script>
 
   <style>
     .container-form {
@@ -173,7 +174,7 @@
   </div>
   <script>
     let rideId = null; let startLat = null, startLng = null; let destLat = null, destLng = null; let startLocation = null; let destinationLocation = null; let distanceKm = 0; let durationText = "";
-    let map1, map2, polyline1, polyline2, marker1, marker2;
+    let map1, map2, marker1, marker2;
 
     function initMap() {
       const defaultPos = { lat: 24.7136, lng: 46.6753 };
@@ -187,10 +188,6 @@
         center: defaultPos,
         zoom: 12,
       });
-      
-      directionsService = new google.maps.DirectionsService();
-      directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
-      directionsRenderer.setMap(map2);
 
 
       if (navigator.geolocation) {
@@ -228,23 +225,17 @@
 
 
 
-        startLocation = startLat + ", " + startLng;
+        startLocation = { lat: startLat, lng: startLng };
         console.log("Start location:", startLat, startLng);
 
 
-      marker1 = new google.maps.Marker({
-        position: { lat:startLat, lng:startLng },
-        map: map1,
-        label: "نقطة الانطلاق"
       });
 
-      
+      map2.addListener("click", (event) => {
+        destLat = event.latLng.lat();
+        destLng = event.latLng.lng();
 
-      startLocation =  startLat+", "+ startLng ;
-      console.log("Start location:", startLat, startLng);
-     
-     
-    });
+        if (marker2) marker2.setMap(null);
 
         marker2 = new google.maps.Marker({
           position: { lat: destLat, lng: destLng },
@@ -252,60 +243,16 @@
           label: "الوجهة"
         });
 
-        destinationLocation = destLat + ", " + destLng;
+        destinationLocation = { lat: destLat, lng: destLng };
         console.log("Destination:", destLat, destLng);
 
 
-      marker2 = new google.maps.Marker({
-        position: { lat:destLat, lng:destLng },
-        map: map2,
-        label: "الوجهة"
       });
-      
-      destinationLocation = destLat+", "+ destLng;
-      console.log("Destination:", destLat, destLng);
-     
-      
+
     }
 
-      polyline1 = new google.maps.Polyline({
-        map: map1,
-        strokeColor: "#FF0000",
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-      });
-
-      polyline2 = new google.maps.Polyline({
-        map: map2,
-        strokeColor: "#FF0000",
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-      });
-    
-
     function calculateDistance(startLat, startLng, destLat, destLng) {
-      if (!startLat || !startLng || !destLat || !destLng )return;
-
-      const R = 6371; // نصف قطر الأرض بالكيلومتر
-      const dLat = (destLat - startLat) * Math.PI / 180;
-      const dLon = (destLng - startLng) * Math.PI / 180;
-
-      const a =
-       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-       Math.cos(startLat * Math.PI / 180) *
-       Math.cos(destLat * Math.PI / 180) *
-       Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
-       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-      return R * c; // المسافة بالكيلومتر
- }
-
-   async function submitRide() {
-         if (!startLat || !startLng) {
-          alert("يجب اختيار نقطة الانطلاق على الخريطة");
-          return;
-         }
+      if (!startLat || !startLng || !destLat || !destLng) return;
 
       const R = 6371; // نصف قطر الأرض بالكيلومتر
       const dLat = (destLat - startLat) * Math.PI / 180;
@@ -322,6 +269,7 @@
       return R * c; // المسافة بالكيلومتر
     }
 
+
     async function submitRide() {
       const date = document.getElementById("rideDate").value;
       const time = document.getElementById("rideTime").value;
@@ -331,7 +279,7 @@
       const now = new Date();
       const selectedDate = new Date(date);
       const today = new Date();
-      today.setHours(0, 0, 0, 0); 
+      today.setHours(0, 0, 0, 0);
 
       if (!date) {
         alert("يجب اختيار تاريخ الرحلة");
@@ -357,7 +305,7 @@
         }
       }
 
-    
+
 
       // 5) عدد المقاعد
       if (!seats || seats < 1) {
@@ -388,13 +336,13 @@
       console.log("Distance:", distanceKm, "km");
 
       const ride = {
-        destination: destinationLocation,
-        date: date,
-        time: time,
-        seatsAvailable: seats,
-        genderPreference: gender,
+        destination: destinationLocation.lat + "," + destinationLocation.lng,
+        date: document.getElementById("rideDate").value,
+        time: document.getElementById("rideTime").value,
+        seatsAvailable: document.getElementById("seats").value,
+        genderPreference: document.getElementById("gender").value,
         status: "ACTIVE",
-        currentLocation: startLocation,
+        currentLocation: startLocation.lat + "," + startLocation.lng,
         distance: distanceKm,
         driverEmail: localStorage.getItem("userEmail")
       };

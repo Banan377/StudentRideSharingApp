@@ -46,3 +46,6 @@ AppData/
 Cookies/
 Local Settings/
 My Documents/
+
+# تجاهل ملفات التكوين الحساسة
+src/main/resources/application-local.yml

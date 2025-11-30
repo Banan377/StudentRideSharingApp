@@ -1312,3 +1312,21 @@ textarea {
       margin: 0 !important;
       padding: 0;
     }
+
+    .startRideBtn {
+      background: #487788;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: background 0.2s ease-in-out;
+    }
+    .startRideBtn:hover {
+      background: #265262;
+    }
+    .value {
+  word-break: break-all;
+}

@@ -170,13 +170,13 @@
     });
 
     function logout() {
-  document.getElementById("profile-dropdown").classList.add("hidden");
+      document.getElementById("profile-dropdown").classList.add("hidden");
 
-  const overlay = document.createElement("div");
-  overlay.id = "logout-overlay";
-  overlay.className = "overlay";  // class عام للتصميم فقط
+      const overlay = document.createElement("div");
+      overlay.id = "logout-overlay";
+      overlay.className = "overlay";  // class عام للتصميم فقط
 
-  overlay.innerHTML = `
+      overlay.innerHTML = `
     <div class="logout-modal">
       <div class="logout-content">
         <i class="fas fa-sign-out-alt logout-icon"></i>
@@ -189,14 +189,14 @@
       </div>
     </div>`;
 
-  document.body.appendChild(overlay);
-}
+      document.body.appendChild(overlay);
+    }
 
-function confirmLogout() {
-  localStorage.clear();
+    function confirmLogout() {
+      localStorage.clear();
 
-  const overlay = document.getElementById("logout-overlay");
-  overlay.innerHTML = `
+      const overlay = document.getElementById("logout-overlay");
+      overlay.innerHTML = `
     <div class="logout-modal">
       <div class="logout-content success">
         <i class="fas fa-check-circle success-icon"></i>
@@ -204,16 +204,16 @@ function confirmLogout() {
         <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
       </div>
     </div>`;
-}
+    }
 
-function cancelLogout() {
-  const overlay = document.getElementById("logout-overlay");
-  if (overlay) overlay.remove();
-}
+    function cancelLogout() {
+      const overlay = document.getElementById("logout-overlay");
+      if (overlay) overlay.remove();
+    }
 
-function closeLogoutSuccess() {
-  window.location.href = "login.html";
-}
+    function closeLogoutSuccess() {
+      window.location.href = "login.html";
+    }
 
 
     function showSwitchRoleConfirmation() {
@@ -319,6 +319,7 @@ function closeLogoutSuccess() {
                 <span class="value">${ride.seatsAvailable}/${ride.totalSeats}</span>
             </div>
         </div>
+            <button class="startRideBtn" onclick="startRide(${ride.rideId}, '${ride.destination}')">بدء الرحلة</button>
 
     </div>
 <div class="passenger-box">
@@ -479,6 +480,13 @@ function closeLogoutSuccess() {
           });
         });
     }
+
+    function startRide(rideId, destination) {
+      // ننتقل للصفحة مع تمرير المتغيرات في رابط URL
+      window.location.href = `driverCurrentRide.html?rideId=${rideId}&destination=${encodeURIComponent(destination)}`;
+    }
+
+
 
     function openChat(rideId) {
       // حفظ رقم الرحلة

@@ -1,16 +1,32 @@
 spring:
+  profiles:
+    active: local
+
   datasource:
     url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/ride_db}
     username: ${DB_USER:postgres}
     password: ${DB_PASS:password}
+
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${GMAIL_NAME}
+    password: ${GMAIL_APP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 server:
   port: 8083
 
 google:
   maps:
-    api-key: ${GOOGLE_MAPS_API_KEY:PASETHERE}
+    api-key: ${GOOGLE_MAPS_API_KEY:PASTEHERE}

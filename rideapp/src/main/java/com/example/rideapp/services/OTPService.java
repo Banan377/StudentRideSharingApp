@@ -56,14 +56,13 @@ public class OTPService {
 
         System.out.println(" OTP Generated for " + email + ": " + otp);
 
-        //sendOTPEmail(email, otp);
+        sendOTPEmail(email, otp);
 
         return otpModel;
     }
 
     @Async
-
-    private void sendOTPEmail(String email, String otp) {
+    public void sendOTPEmail(String email, String otp) {
         try {
             System.out.println("OTP GENERATED = " + otp);
             SimpleMailMessage msg = new SimpleMailMessage();
