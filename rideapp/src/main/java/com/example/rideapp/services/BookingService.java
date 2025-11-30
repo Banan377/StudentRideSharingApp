@@ -143,4 +143,13 @@ public class BookingService {
         });
     }
 
+    public void notifyPassengerRejected(Long bookingId) {
+        BookingModel booking = bookingRepository.findById(bookingId).orElse(null);
+        if (booking == null)
+            return;
+
+        String passengerEmail = booking.getPassenger().getEmail();
+        System.out.println(" تم رفض طلب الرحلة" + passengerEmail);
+    }
+
 }

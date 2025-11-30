@@ -511,6 +511,7 @@
       fetch(`http://localhost:8083/api/passenger/my-bookings?passengerEmail=${encodeURIComponent(passengerEmail)}`)
         .then(res => res.json())
         .then(bookings => {
+          checkEmergencyVisibility(bookings);
 
           const container = document.getElementById("passenger-bookings");
           container.innerHTML = "";
@@ -521,6 +522,10 @@
           }
 
           bookings.forEach(booking => {
+            if (booking.status === "rejected") {
+              return;  
+            }
+
 
             let statusColor = "";
             let statusText = "";
@@ -537,22 +542,14 @@
             }
 
             const card = `
-          </div>
-</div>
-
-
-
-
-
-</article>
-
 
                 <article class="trip-card">
 
                     <div>
                         <div class="card-header">
                             <h3>رحلتك</h3>
-<button class="chat-icon" onclick="openPassengerChat(${booking.ride.rideId})" style="border:none; background:none; cursor:pointer;">
+<button class="chat-icon" 
+    onclick="openPassengerChat(${booking.ride.rideId}, '${booking.status}')">
     <i class="fas fa-comment"></i>
 </button>                         </div>
 
@@ -758,17 +755,50 @@
     });
 
 
+    function checkEmergencyVisibility(bookings) {
+      const emergencyBar = document.getElementById("global-emergency");
+
+      let hasActiveRide = false;
+
+      const nowDate = new Date();
+      const today = nowDate.toISOString().split("T")[0];
+      const currentTime = nowDate.toTimeString().split(":").slice(0, 2).join(":");
+
+      bookings.forEach(b => {
+        if (b.status === "accepted") {
+          const rideDate = b.ride.date;
+          const rideTime = b.ride.time;
+
+          if (rideDate === today && rideTime <= currentTime) {
+            hasActiveRide = true;
+          }
+        }
+      });
+
+      if (hasActiveRide) {
+        emergencyBar.style.display = "block";
+      } else {
+        emergencyBar.style.display = "none";
+      }
+    }
 
 
 
 
-    function openPassengerChat(rideId) {
+    function openPassengerChat(rideId, bookingStatus) {
+
+      if (bookingStatus !== "accepted") {
+        alert("لا يمكن بدء المحادثة الا بعد قبول الرحلة ");
+        return;
+      }
+
       // حفظ رقم الرحلة
       localStorage.setItem('currentRideId', rideId);
       localStorage.setItem('currentUserId', 'PASSENGER_' + localStorage.getItem("userEmail"));
-      // الانتقال لصفحة المحادثة
+
       window.location.href = 'chat.html';
     }
+
 
 
 
