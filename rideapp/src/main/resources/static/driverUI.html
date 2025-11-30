@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="driver.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
+
+
 </head>
 
 <body>
@@ -314,6 +316,7 @@
 
     <h3 class="sub-title">الركاب المنضمون</h3>
     <div id="passengers-${ride.rideId}" class="accepted-passengers" style="margin-bottom:20px;"></div>
+    <button class="startRideBtn" onclick="startRide(${ride.rideId}, '${ride.destination}')">بدء الرحلة</button>
 
     <h3 class="sub-title">طلبات الحجز</h3>
     <div id="requests-${ride.rideId}" class="requests-container"></div>
@@ -439,6 +442,7 @@
       fetch(`http://localhost:8083/api/bookings/accepted-passengers?rideId=${rideId}`)
         .then(res => res.json())
         .then(passengers => {
+          
           const container = document.getElementById(`passengers-${rideId}`);
           container.innerHTML = "";
 
@@ -459,6 +463,11 @@
         });
     }
 
+
+    function startRide(rideId, destination) {
+      // ننتقل للصفحة مع تمرير المتغيرات في رابط URL
+      window.location.href = `driverCurrentRide.html?rideId=${rideId}&destination=${encodeURIComponent(destination)}`;
+    }
 
   </script>
 

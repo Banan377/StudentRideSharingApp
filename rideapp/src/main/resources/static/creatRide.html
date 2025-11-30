@@ -171,9 +171,11 @@
       </div>
     </div>
   </div>
+
+  
   <script>
     let rideId = null; let startLat = null, startLng = null; let destLat = null, destLng = null; let startLocation = null; let destinationLocation = null; let distanceKm = 0; let durationText = "";
-    let map1, map2, polyline1, polyline2, marker1, marker2 ;
+    let map1, map2, marker1, marker2 ;
 
       function initMap() {
       const defaultPos = { lat: 24.7136, lng: 46.6753 };
@@ -224,7 +226,7 @@
 
       
 
-      startLocation =  startLat+", "+ startLng ;
+      startLocation =  {lat: startLat,lng: startLng};
       console.log("Start location:", startLat, startLng);
      
      
@@ -242,26 +244,12 @@
         label: "الوجهة"
       });
       
-      destinationLocation = destLat+", "+ destLng;
+      destinationLocation = {lat:destLat, lng:destLng};
       console.log("Destination:", destLat, destLng);
      
       
     });
 
-
-      polyline1 = new google.maps.Polyline({
-        map: map1,
-        strokeColor: "#FF0000",
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-      });
-
-      polyline2 = new google.maps.Polyline({
-        map: map2,
-        strokeColor: "#FF0000",
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-      });
     }
 
     function calculateDistance(startLat, startLng, destLat, destLng) {
@@ -299,13 +287,13 @@
        console.log("Distance:", distanceKm, "km");
 
         const ride = {
-        destination: destinationLocation,
+        destination: destinationLocation.lat + "," + destinationLocation.lng,
         date: document.getElementById("rideDate").value,
         time: document.getElementById("rideTime").value,
         seatsAvailable: document.getElementById("seats").value,
         genderPreference: document.getElementById("gender").value,
         status: "ACTIVE",
-        currentLocation: startLocation,
+        currentLocation: startLocation.lat + "," + startLocation.lng,
         distance: distanceKm,
         driverEmail: localStorage.getItem("userEmail")   
       };

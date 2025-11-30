@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>الرحلات الحالية</title>
+  <script async src="https://maps.googleapis.com/maps/api/js?key=PASETHERE&callback=initMap"></script>
+  
+  <style>
+    body { font-family: system-ui, Arial; margin: 0; padding: 0; }
+    #map { height: 60vh; width: 100%; }
+    .controls { padding: 12px; }
+    .status { margin-top: 8px; color: #333; }
+    button { padding: 8px 12px; font-size: 14px; }
+  </style>
+</head>
+
+
+  <div class="container">
+    <div class="form-box">
+      <body>
+  <div id="map"></div>
+  <div class="controls">
+    <label>رقم الرحلة: <input id="rideId" value="1" /></label>
+    <div id="status" class="status"></div>
+    <button id="stopBtn" disabled>أوقف الإرسال</button>
+  </div>
+    </div>
+  </div>
+
+
+
+
+  <script>
+    
+  const API_BASE = "http://localhost:8083/api";
+  const urlParams = new URLSearchParams(window.location.search);
+  const rideId  = urlParams.get("rideId"); const destination = urlParams.get("destination");
+  let map, driverMarker, trackingInterval = null;
+
+  console.log("Current rideId:", rideId); document.getElementById("rideId").value = rideId;
+  console.log("Destination:", destination);
+
+  const { destLat, destLng } = parseDestinationString(destination);
+
+  console.log(lat); // 21.485
+  console.log(lng); // 39.246
+ 
+function parseDestinationString(destinationStr) {
+
+    // تقسيم النص إلى lat و lng
+    const [latStr, lngStr] = destinationStr.split(",");
+
+    // تحويل النص إلى أعداد
+    return {
+        lat: parseFloat(latStr),
+        lng: parseFloat(lngStr)
+    };
+}  
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById("map"), {
+  center: { lat: 24.7136, lng: 46.6753 },
+  zoom: 12
+  });
+
+  startTracking(); // يبدأ التتبع مباشرة عند تحميل الخريطة
+}
+
+async function sendLocation(lat, lng) {
+  try {
+    await fetch(`${API_BASE}/locations/ride/${rideId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ latitude: lat, longitude: lng })
+    });
+    setStatus("تم إرسال الموقع");
+  } catch (e) {
+    setStatus("خطأ في إرسال الموقع");
+  }
+}
+
+function getDistanceMeters(lat1, lng1, lat2, lng2) {
+  const R = 6371000;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat/2) ** 2 +
+    Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) *
+    Math.sin(dLng/2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function startTracking() {
+  if (!navigator.geolocation) {
+    alert("المتصفح لا يدعم GPS");
+    return;
+  }
+
+  setStatus("بدء التتبع...");
+
+   trackingInterval = setInterval(() => {
+    navigator.geolocation.getCurrentPosition(pos => {
+
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      console.log("GPS:", lat, lng, new Date().toLocaleTimeString());
+
+      // تحديث الخريطة
+      const p = { lat, lng };
+
+      if (!driverMarker) {
+        driverMarker = new google.maps.Marker({
+         position: p, map, title: "موقع السائق"
+        });
+        map.setCenter(p);
+      } else {
+        driverMarker.setPosition(p);
+      }
+
+      sendLocation(lat, lng);
+
+    // تحقق من الوصول
+      const dist = getDistanceMeters(lat, lng, destLat, destLng);
+      if (dist <= 20) {   // 20 متر تقريبًا
+        stopTracking();
+        setStatus("تم الوصول إلى الوجهة — تم إيقاف التتبع");
+      }
+
+      }, err => {
+          setStatus("فشل الحصول على الموقع");
+        }, { enableHighAccuracy:true});
+    }, 1000);  
+  }
+
+  function stopTracking() {
+    if (trackingInterval !== null) {
+      clearInterval(trackingInterval);
+       trackingInterval = null;
+    }
+  }
+
+  function setStatus(text) {
+    document.getElementById("status").textContent = text;
+  } 
+</script>
+
+</body>
+
+</html>
