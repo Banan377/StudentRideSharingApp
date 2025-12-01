@@ -29,4 +29,5 @@ server:
 
 google:
   maps:
-    api-key: ${GOOGLE_MAPS_API_KEY=PASTEHERE}
+    api-key: google.maps.api-key=${GOOGLE_MAPS_API_KEY:}
+

@@ -227,7 +227,7 @@
         //cards
         document.addEventListener("DOMContentLoaded", () => {
             const userEmail = localStorage.getItem("userEmail");
-            fetch(`http://localhost:8083/api/rides/past?passengerEmail=${userEmail}`)
+            fetch(`/api/rides/past?passengerEmail=${userEmail}`)
                 .then(res => res.json())
                 .then(data => renderPastRides(data))
                 .catch(err => console.error(err));
@@ -312,7 +312,7 @@
         function requestAgain(rideId) {
             const email = localStorage.getItem("userEmail");
 
-            fetch(`http://localhost:8083/api/ride-again/request?passengerEmail=${email}&rideId=${rideId}`, {
+            fetch(`/api/ride-again/request?passengerEmail=${email}&rideId=${rideId}`, {
                 method: "POST"
             })
                 .then(res => res.text())

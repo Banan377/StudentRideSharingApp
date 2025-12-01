@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=PASTEHERE&callback=initMap"
+  <script src="https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY:}&callback=initMap"
     async defer></script>
 
   <style>
@@ -349,7 +349,7 @@
 
 
 
-      fetch(`http://localhost:8083/api/rides/createRide?driverEmail=${encodeURIComponent(localStorage.getItem("userEmail"))}`, {
+      fetch(`/api/rides/createRide?driverEmail=${encodeURIComponent(localStorage.getItem("userEmail"))}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -365,13 +365,13 @@
           rideId = data.id;
           // إرسال نقطة الانطلاق
           return Promise.all([
-            fetch(`http://localhost:8083/api/rides/${rideId}/updateStartLocation`, {
+            fetch(`/api/rides/${rideId}/updateStartLocation`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ latitude: startLat, longitude: startLng })
             }),
             // إرسال الوجهة
-            fetch(`http://localhost:8083/api/rides/${rideId}/updateDestination`, {
+            fetch(`/api/rides/${rideId}/updateDestination`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ latitude: destLat, longitude: destLng })
@@ -398,7 +398,7 @@
         return;
       }
 
-      fetch(`http://localhost:8083/api/rides/${rideId}/sendStartLocation`, {
+      fetch(`/api/rides/${rideId}/sendStartLocation`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -423,7 +423,7 @@
         return;
       }
 
-      fetch(`http://localhost:8083/api/rides/${rideId}/sendDestination`, {
+      fetch(`/api/rides/${rideId}/sendDestination`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

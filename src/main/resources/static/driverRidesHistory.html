@@ -155,7 +155,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       const driverEmail = localStorage.getItem("userEmail");
 
-      fetch(`http://localhost:8083/api/rides/driver-past?email=${driverEmail}`)
+      fetch(`/api/rides/driver-past?email=${driverEmail}`)
         .then(res => res.json())
         .then(rides => renderHistoryCards(rides));
     });
@@ -240,7 +240,7 @@
     }
 
     function loadRepeatRequests(rideId) {
-      fetch(`http://localhost:8083/api/ride-again/driver-requests?rideId=${rideId}`)
+      fetch(`/api/ride-again/driver-requests?rideId=${rideId}`)
         .then(res => res.json())
         .then(requests => {
           const container = document.getElementById(`again-requests-${rideId}`);
@@ -272,7 +272,7 @@
     }
 
     function respondRepeat(bookingId, status) {
-      fetch(`http://localhost:8083/api/ride-again/respond?bookingId=${bookingId}&status=${status}`, {
+      fetch(`/api/ride-again/respond?bookingId=${bookingId}&status=${status}`, {
         method: "POST"
       }).then(() => location.reload());
     }
@@ -282,7 +282,7 @@
     function cancelRide(rideId) {
       if (!confirm("هل أنت متأكد من حذف الرحلة?.")) return;
 
-      fetch(`http://localhost:8083/api/rides/${rideId}/cancel`, {
+      fetch(`/api/rides/${rideId}/cancel`, {
         method: "POST"
       })
         .then(res => {

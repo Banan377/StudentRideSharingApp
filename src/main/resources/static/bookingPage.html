@@ -170,7 +170,7 @@
       function loadAvailableRides() {
         const passengerEmail = localStorage.getItem("userEmail");
 
-        fetch(`http://localhost:8083/api/rides/available?passengerEmail=${passengerEmail}`)
+        fetch(`/api/rides/available?passengerEmail=${passengerEmail}`)
 
 
           .then(res => res.json())
@@ -269,7 +269,7 @@
       function sendBookingRequest(rideId, cardElement) {
         const passengerEmail = localStorage.getItem("userEmail");
 
-        fetch(`http://localhost:8083/api/bookings/request?passengerEmail=${encodeURIComponent(passengerEmail)}&rideId=${rideId}`, {
+        fetch(`/api/bookings/request?passengerEmail=${encodeURIComponent(passengerEmail)}&rideId=${rideId}`, {
           method: "POST"
         })
           .then(async res => {
@@ -298,7 +298,7 @@
           return;
         }
 
-        fetch(`http://localhost:8083/api/rides/search?destination=${encodeURIComponent(keyword)}`)
+        fetch(`/api/rides/search?destination=${encodeURIComponent(keyword)}`)
           .then(res => res.json())
           .then(data => {
             const container = document.querySelector(".trips-grid");

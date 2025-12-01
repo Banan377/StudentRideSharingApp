@@ -245,7 +245,7 @@
     function loadDriverRides() {
       const driverEmail = localStorage.getItem("userEmail");
 
-      fetch(`http://localhost:8083/api/rides/driver-rides?email=${driverEmail}`)
+      fetch(`/api/rides/driver-rides?email=${driverEmail}`)
         .then(res => res.json())
         .then(rides => {
 
@@ -353,7 +353,7 @@
     function loadBookingRequests() {
       const driverEmail = localStorage.getItem("userEmail");
 
-      fetch(`http://localhost:8083/api/bookings/driver-requests?driverEmail=${driverEmail}`)
+      fetch(`/api/bookings/driver-requests?driverEmail=${driverEmail}`)
         .then(res => res.json())
         .then(requests => {
 
@@ -421,7 +421,7 @@
     }
 
     function respondToBooking(bookingId, status) {
-      fetch(`http://localhost:8083/api/bookings/respond?bookingId=${bookingId}&status=${status}`, {
+      fetch(`/api/bookings/respond?bookingId=${bookingId}&status=${status}`, {
         method: "POST"
       })
         .then(res => {
@@ -458,7 +458,7 @@
     });
 
     function loadAcceptedPassengers(rideId) {
-      fetch(`http://localhost:8083/api/bookings/accepted-passengers?rideId=${rideId}`)
+      fetch(`/api/bookings/accepted-passengers?rideId=${rideId}`)
         .then(res => res.json())
         .then(passengers => {
           const container = document.getElementById(`passengers-${rideId}`);
@@ -499,7 +499,7 @@
     function cancelRide(rideId) {
       if (!confirm("هل أنت متأكد من إلغاء الرحلة؟ سيتم إعلام الركاب.")) return;
 
-      fetch(`http://localhost:8083/api/rides/${rideId}/cancel`, {
+      fetch(`/api/rides/${rideId}/cancel`, {
         method: "POST"
       })
         .then(res => {
@@ -520,7 +520,7 @@
     }
 
     function notifyPassengersRideCancelled(rideId) {
-      fetch(`http://localhost:8083/api/bookings/ride-cancelled?rideId=${rideId}`)
+      fetch(`/api/bookings/ride-cancelled?rideId=${rideId}`)
         .then(() => {
           console.log("تم إعلام الركاب!");
         });
