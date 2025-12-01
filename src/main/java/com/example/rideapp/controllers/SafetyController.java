@@ -1,4 +1,3 @@
-
 package com.example.rideapp.controllers;
 
 import com.example.rideapp.models.SafetyModel;

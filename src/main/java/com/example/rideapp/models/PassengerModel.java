@@ -59,5 +59,6 @@ public class PassengerModel {
     public String getGender() {
         return null;
     }
+   
 
 }
