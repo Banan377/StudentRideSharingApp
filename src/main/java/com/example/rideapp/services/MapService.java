@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Service
 public class MapService {
-  @Value("${GOOGLE_MAPS_API_KEY}")
+ @Value("${google.maps.api-key:}")
   private String apiKey;
 
   private final RestTemplate restTemplate = new RestTemplate();
