@@ -14,10 +14,16 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
-                )
-                .formLogin(login -> login.disable())   
-                .httpBasic(basic -> basic.disable());  
+                        .requestMatchers(
+                                "/**/*.css",
+                                "/**/*.js",
+                                "/**/*.png",
+                                "/**/*.jpg",
+                                "/**/*.jpeg",
+                                "/**/*.html")
+                        .permitAll()
+                        .anyRequest().permitAll())
+                .headers(headers -> headers.frameOptions().disable());
 
         return http.build();
     }
