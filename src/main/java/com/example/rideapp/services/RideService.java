@@ -67,45 +67,6 @@ public class RideService {
         return rideRepository.findAll();
     }
 
-    public List<RideModel> getAvailableRidesForPassenger(String passengerEmail) {
-
-        // كل الرحلات
-        List<RideModel> allRides = rideRepository.findAll();
-
-        // كل الحجوزات الخاصة بهذا الراكب
-        List<BookingModel> booked = bookingRepository.findByPassenger_Email(passengerEmail);
-
-        // IDs تبع الرحلات اللي حجزها مسبقاً
-        Set<Long> bookedRideIds = booked.stream()
-                .map(b -> b.getRide().getRideId())
-                .collect(Collectors.toSet());
-
-        // فلترة الرحلات
-        List<RideModel> rides = allRides.stream()
-                .filter(ride -> ride.getSeatsAvailable() > 0)
-                .filter(ride -> "ACTIVE".equalsIgnoreCase(ride.getStatus()))
-                .filter(ride -> !bookedRideIds.contains(ride.getRideId()))
-                .collect(Collectors.toList());
-
-        // إضافة اسم السائق
-        rides.forEach(ride -> {
-            UserModel driver = userRepository.findByEmail(ride.getDriverEmail()).orElse(null);
-            if (driver != null) {
-                ride.setDriverName(driver.getName());
-                ride.setDriverRating(driver.getRateAverage());
-            }
-        });
-
-        return rides;
-    }
-
-    public void updateRideLocation(Long rideId, String location) {
-        rideRepository.findById(rideId).ifPresent(ride -> {
-            ride.setCurrentLocation(location);
-            rideRepository.save(ride);
-        });
-    }
-
     @Autowired
     private UserRepository userRepository;
 
