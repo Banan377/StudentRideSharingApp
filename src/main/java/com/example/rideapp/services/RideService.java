@@ -109,22 +109,23 @@ public class RideService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<RideModel> getPastRidesForPassenger(String passengerEmail) {
+    public List<RideModel> getAvailableRidesForPassenger(String passengerEmail) {
 
-        // 1) جلب كل الحجوزات المقبولة للراكب
-        List<BookingModel> bookings = bookingRepository.findByPassenger_Email(passengerEmail)
-                .stream()
-                .filter(b -> "accepted".equals(b.getStatus())) // الراكب كان راكب فعلاً
-                .filter(b -> b.getRide() != null) // حماية من null
-                .filter(b -> "COMPLETED".equals(b.getRide().getStatus()))
+        List<RideModel> allRides = rideRepository.findAll();
+
+        List<BookingModel> booked = bookingRepository.findByPassenger_Email(passengerEmail);
+
+        Set<Long> bookedRideIds = booked.stream()
+                .map(b -> b.getRide().getRideId())
+                .collect(Collectors.toSet());
+
+        List<RideModel> rides = allRides.stream()
+                .filter(ride -> ride.getSeatsAvailable() > 0)
+                .filter(ride -> "ACTIVE".equalsIgnoreCase(ride.getStatus()))
+                .filter(ride -> !bookedRideIds.contains(ride.getRideId()))
+                .filter(ride -> !ride.getDriverEmail().equals(passengerEmail)) 
                 .collect(Collectors.toList());
 
-        // 2) تحويل الحجوزات إلى رحلات
-        List<RideModel> rides = bookings.stream()
-                .map(BookingModel::getRide)
-                .collect(Collectors.toList());
-
-        // 3) إضافة معلومات السائق
         rides.forEach(ride -> {
             UserModel driver = userRepository.findByEmail(ride.getDriverEmail()).orElse(null);
             if (driver != null) {
