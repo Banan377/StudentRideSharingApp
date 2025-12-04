@@ -111,3 +111,19 @@ button:hover {
   font-weight: bold;
   margin-top: 0%;
 }
+
+/* ===== Mobile-only safe overrides (max-width:768px) ===== */
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+  body { flex-direction: column !important; }
+
+  .login-container, .form-box, .container { width: 100% !important; max-width: 100% !important; padding: 1rem !important; }
+  img, .img-fluid { max-width: 100% !important; height: auto !important; }
+
+  .sidebar { position: relative !important; width: 100% !important; display: flex !important; flex-direction: row !important; padding: 0.4rem 0.6rem !important; overflow-x: auto !important; }
+  .sidebar .menue a span { display: none !important; }
+
+  form { gap: 0.6rem !important; }
+  input { padding: 12px !important; }
+  button { padding: 0.7rem 1rem !important; min-height: 44px !important; }
+}

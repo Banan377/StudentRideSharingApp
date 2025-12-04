@@ -10,6 +10,9 @@
 body {
   display: flex;
   background: #ccddea;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
 
 
@@ -84,7 +87,9 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  width: 0;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .container {
@@ -724,6 +729,18 @@ textarea {
   padding: 10px;
 }
 
+@media (min-width: 769px) {
+  .events-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .events-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .trips-section {
   padding: 24px;
   width: 100%;
@@ -981,10 +998,19 @@ textarea {
     font-weight: 600;
 }
  .top-bar {
+      width: 100%;
+      height: 70px;
+      box-sizing: border-box;
+      flex-shrink: 0;
+      padding: 0 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       display: flex;
-      justify-content: space-between !important;
-      padding: 15px;
       align-items: center;
+      justify-content: space-between;
+      background: #f9fbfb;
     }
 
     .trip-card {

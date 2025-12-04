@@ -73,3 +73,13 @@ button:hover {
   color: #020003;
   font-weight: 500;
 }
+
+/* ===== Mobile-only safe overrides (max-width:768px) ===== */
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+  body { padding: 0; }
+
+  .container { width: 100% !important; max-width: 100% !important; margin: 20px auto !important; padding: 1rem !important; }
+  input[type="text"] { padding: 10px !important; }
+  button { padding: 0.8rem !important; min-height: 44px !important; }
+}

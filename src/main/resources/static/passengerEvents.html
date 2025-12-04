@@ -23,28 +23,28 @@
 
     <main class="main-content">
 
-        <div class="container">
-            <div class="header">
+        <!-- Full-width header outside container -->
+        <div class="top-bar">
+            <div class="profile-section">
+                <button onclick="toggleProfileDropdown()" class="profile-btn">
+                    <i class="fas fa-user-circle"></i>
+                </button>
 
-                <div class="profile-section">
-                    <button onclick="toggleProfileDropdown()" class="profile-btn">
-                        <i class="fas fa-user-circle"></i>
-                    </button>
+                <div id="profile-dropdown" class="dropdown-menu hidden" aria-hidden="true">
+                    <ul>
+                        <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل
+                                    التقييمات</span></a></li>
+                        <li><a href="passengerSetting.html"><i class="fas fa-cog"></i><span>الإعدادات</span></a>
+                        </li>
 
-                    <div id="profile-dropdown" class="dropdown-menu hidden" aria-hidden="true">
-                        <ul>
-                            <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل
-                                        التقييمات</span></a></li>
-                            <li><a href="passengerSetting.html"><i class="fas fa-cog"></i><span>الإعدادات</span></a>
-                            </li>
-
-                            <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل
-                                        الخروج</span></a></li>
-                        </ul>
-                    </div>
+                        <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل
+                                    الخروج</span></a></li>
+                    </ul>
                 </div>
             </div>
         </div>
+
+        <div class="container">
 
         <!-- صفحات كاملة (مخفية افتراضياً) -->
         <div id="rating-page" class="full-page hidden">

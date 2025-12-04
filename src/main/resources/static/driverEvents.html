@@ -28,27 +28,27 @@
 
     <main class="main-content">
 
-        <div class="container">
-            <div class="header">
+        <!-- Full-width header outside container -->
+        <div class="top-bar">
+            <!-- الملف الشخصي -->
 
-                <!-- الملف الشخصي -->
-
-                <div class="profile-section">
-                    <button onclick="toggleProfileDropdown()" class="profile-btn">
-                        <i class="fas fa-user-circle"></i>
-                    </button>
-                    <div id="profile-dropdown" class="dropdown-menu hidden">
-                        <ul>
-                            <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل
-                                        التقييمات</span></a></li>
-                            <li><a href="driverSetting.html"><i class="fas fa-cog"></i><span>الإعدادات</span></a></li>
-                            <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل
-                                        الخروج</span></a></li>
-                        </ul>
-                    </div>
+            <div class="profile-section">
+                <button onclick="toggleProfileDropdown()" class="profile-btn">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+                <div id="profile-dropdown" class="dropdown-menu hidden">
+                    <ul>
+                        <li><a href="#" onclick="showRatingPage()"><i class="fas fa-star"></i><span>سجل
+                                    التقييمات</span></a></li>
+                        <li><a href="driverSetting.html"><i class="fas fa-cog"></i><span>الإعدادات</span></a></li>
+                        <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل
+                                    الخروج</span></a></li>
+                    </ul>
                 </div>
             </div>
         </div>
+
+        <div class="container">
 
 
         <!-- التقييمات -->

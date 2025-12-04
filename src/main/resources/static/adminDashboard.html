@@ -159,6 +159,16 @@
       border-radius: 999px;
       font-weight: 600;
     }
+    
+    /* ===== Mobile-only safe overrides (max-width:768px) ===== */
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: 1fr !important; padding: 8px !important; margin: 20px auto !important; }
+      .stat-card { padding: 12px !important; box-shadow: none !important; }
+      .preview-section { padding: 8px !important; }
+      .preview-card { padding: 12px !important; }
+      .admin-title { font-size: 18px !important; }
+      .sidebar .menue a span { display: none !important; }
+    }
   </style>
 </head>
 
@@ -178,22 +188,20 @@
 
   <main class="main-content">
 
-    <div class="container">
-      <div class="header">
+    <!-- Full-width header outside container -->
+    <div class="top-bar">
+      <h2 class="admin-title">لوحة تحكم المشرف</h2>
 
-        <h2 class="admin-title">لوحة تحكم المشرف</h2>
+      <!-- الملف الشخصي -->
+      <div class="profile-section">
+        <button onclick="toggleProfileDropdown()" class="profile-btn">
+          <i class="fas fa-user-circle"></i>
+        </button>
 
-        <!-- الملف الشخصي -->
-        <div class="profile-section">
-          <button onclick="toggleProfileDropdown()" class="profile-btn">
-            <i class="fas fa-user-circle"></i>
-          </button>
-
-          <div id="profile-dropdown" class="dropdown-menu hidden">
-            <ul>
-              <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
-            </ul>
-          </div>
+        <div id="profile-dropdown" class="dropdown-menu hidden">
+          <ul>
+            <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
+          </ul>
         </div>
       </div>
     </div>

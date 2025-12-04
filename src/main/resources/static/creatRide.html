@@ -100,6 +100,15 @@
     button:hover {
       background: #265262;
     }
+    
+    /* ===== Mobile-only safe overrides (max-width:768px) ===== */
+    @media (max-width: 768px) {
+      .form-box { padding: 1rem !important; max-width: 100% !important; box-shadow: none !important; }
+      .row { flex-direction: column !important; gap: 0.6rem !important; }
+      #map1, #map2 { width: 100% !important; height: 240px !important; }
+      iframe { height: 220px !important; }
+      button { padding: 0.8rem !important; min-height: 44px !important; }
+    }
   </style>
 </head>
 

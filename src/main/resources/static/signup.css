@@ -15,6 +15,17 @@ body {
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
 }
 
+
+/* ===== Mobile-only safe overrides (max-width:768px) ===== */
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+  body { padding: 0; }
+
+  .container { width: 100% !important; max-width: 100% !important; margin: 20px auto !important; padding: 1rem !important; }
+  .form-box, .container { padding: 1rem !important; }
+  .row { flex-direction: column !important; gap: 0.5rem !important; }
+  button { padding: 0.8rem !important; min-height: 44px !important; }
+}
 h1 {
   text-align: center;
   color: #265262; 

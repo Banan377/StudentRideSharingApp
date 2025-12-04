@@ -125,6 +125,16 @@
       font-size: 14px;
       font-weight: 600;
     }
+    
+    /* ===== Mobile-only safe overrides (max-width:768px) ===== */
+    @media (max-width: 768px) {
+      .requests-wrapper { padding: 0.75rem !important; }
+      .request-card { padding: 12px !important; box-shadow: none !important; }
+      .request-body { grid-template-columns: 1fr !important; }
+      .request-actions { justify-content: center !important; gap: 0.6rem !important; }
+      .sidebar .menue a span { display: none !important; }
+      .btn-approve, .btn-reject { padding: 10px 12px !important; min-height: 44px !important; }
+    }
   </style>
 </head>
 
@@ -144,20 +154,18 @@
   <!-- MAIN CONTENT -->
   <main class="main-content">
 
-    <!-- HEADER -->
-    <div class="container">
-      <div class="header">
-        <h2 class="admin-title" style="margin-right:20px;">طلبات السائقين</h2>
+    <!-- Full-width header outside container -->
+    <div class="top-bar">
+      <h2 class="admin-title" style="margin-right:20px;">طلبات السائقين</h2>
 
-        <div class="profile-section">
-          <button onclick="toggleProfileDropdown()" class="profile-btn">
-            <i class="fas fa-user-circle"></i>
-          </button>
-          <div id="profile-dropdown" class="dropdown-menu hidden">
-            <ul>
-              <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
-            </ul>
-          </div>
+      <div class="profile-section">
+        <button onclick="toggleProfileDropdown()" class="profile-btn">
+          <i class="fas fa-user-circle"></i>
+        </button>
+        <div id="profile-dropdown" class="dropdown-menu hidden">
+          <ul>
+            <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
+          </ul>
         </div>
       </div>
     </div>

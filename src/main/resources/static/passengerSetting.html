@@ -194,6 +194,18 @@
       box-shadow: none;
       transform: none;
     }
+    
+    /* ===== Mobile-only safe overrides (max-width:768px) ===== */
+    @media (max-width: 768px) {
+      html { font-size: 15px; }
+      body { padding: 0 0.5rem; }
+
+      .container { width: 100% !important; max-width: 100% !important; padding: 1rem !important; box-shadow: none !important; }
+      .form-content { padding: 1rem !important; }
+      .form-actions { flex-direction: column !important; gap: 0.6rem !important; }
+      .radio-group { flex-direction: column !important; gap: 0.5rem !important; }
+      .btn { padding: 12px !important; min-height: 44px !important; }
+    }
   </style>
 </head>
 

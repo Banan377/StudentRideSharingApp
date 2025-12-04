@@ -103,6 +103,16 @@
     .btn:hover {
       background: #1e414d;
     }
+    
+    /* ===== Mobile-only safe overrides (max-width:768px) ===== */
+    @media (max-width: 768px) {
+      html { font-size: 15px; }
+      body { padding: 0 0.5rem; height: auto; }
+
+      .card { padding: 1rem !important; max-width: 100% !important; box-shadow: none !important; }
+      h2 { font-size: 18px !important; }
+      .btn { padding: 0.8rem !important; min-height: 44px !important; }
+    }
   </style>
 </head>
 

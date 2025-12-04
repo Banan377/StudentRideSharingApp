@@ -112,3 +112,17 @@ body {
     from {opacity: 0; transform: translateY(10px);}
     to   {opacity: 1; transform: translateY(0);}
 }
+
+/* ===== Mobile-only safe overrides (max-width:768px) ===== */
+@media (max-width: 768px) {
+    html { font-size: 15px; }
+    body { padding: 0; }
+
+    .chat-container { width: 100% !important; max-width: 100% !important; height: calc(100vh - 120px) !important; margin: 10px auto !important; border-radius: 12px !important; }
+    .chat-header { padding: 12px !important; font-size: 16px !important; }
+    .messages { padding: 14px !important; }
+    .msg { max-width: 85% !important; font-size: 15px !important; }
+    .chat-input { padding: 10px !important; }
+    .chat-input input { padding: 10px !important; }
+    .chat-input button { padding: 10px 12px !important; }
+}

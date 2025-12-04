@@ -14,6 +14,13 @@
     .controls { padding: 12px; }
     .status { margin-top: 8px; color: #333; }
     button { padding: 8px 12px; font-size: 14px; }
+    
+    /* ===== Mobile-only safe overrides (max-width:768px) ===== */
+    @media (max-width: 768px) {
+      #map { height: 40vh !important; }
+      .controls { padding: 10px !important; }
+      button { padding: 10px 12px !important; min-height: 44px !important; }
+    }
   </style>
 </head>
 

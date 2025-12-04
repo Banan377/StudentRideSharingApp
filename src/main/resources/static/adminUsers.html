@@ -57,6 +57,18 @@
       background: #fde7f0;
       color: #ad1457;
     }
+    
+    /* ===== Mobile-only safe overrides (max-width:768px) ===== */
+    @media (max-width: 768px) {
+      .admin-title { font-size: 18px !important; }
+      section[style] { padding: 12px !important; }
+      .users-table { display: block !important; overflow-x: auto !important; }
+      .users-table th, .users-table td { padding: 10px !important; }
+      .sidebar .menue a span { display: none !important; }
+      input[ id="searchInput" ], select[ id="roleFilter" ], select[ id="statusFilter" ] { width: 100% !important; }
+      .users-table { font-size: 14px !important; }
+      button[onclick="applyFilters()"] { padding: 10px 12px !important; min-height: 44px !important; }
+    }
   </style>
 </head>
 
@@ -75,23 +87,22 @@
 
   <main class="main-content">
 
-    <div class="container">
-      <div class="header">
+    <!-- Full-width header outside container -->
+    <div class="top-bar">
 
-        <h2 class="admin-title" style="margin-right:20px;">إدارة المستخدمين</h2>
+      <h2 class="admin-title" style="margin-right:20px;">إدارة المستخدمين</h2>
 
-        <div class="profile-section">
-          <button onclick="toggleProfileDropdown()" class="profile-btn">
-            <i class="fas fa-user-circle"></i>
-          </button>
-          <div id="profile-dropdown" class="dropdown-menu hidden">
-            <ul>
-              <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
-            </ul>
-          </div>
+      <div class="profile-section">
+        <button onclick="toggleProfileDropdown()" class="profile-btn">
+          <i class="fas fa-user-circle"></i>
+        </button>
+        <div id="profile-dropdown" class="dropdown-menu hidden">
+          <ul>
+            <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
+          </ul>
         </div>
-
       </div>
+
     </div>
 
     <section style="padding: 25px; width:100%;">
