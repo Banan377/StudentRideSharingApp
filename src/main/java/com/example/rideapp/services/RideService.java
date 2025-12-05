@@ -21,9 +21,12 @@ public class RideService {
     private BookingRepository bookingRepository;
 
     private final RideRepository rideRepository;
+    private final UserService userService;
 
-    public RideService(RideRepository rideRepository) {
+    @Autowired
+    public RideService(RideRepository rideRepository, UserService userService) {
         this.rideRepository = rideRepository;
+        this.userService = userService;
     }
 
     public RideModel createRide(RideModel ride) {
@@ -49,8 +52,19 @@ public class RideService {
         return rideRepository.findBySeatsAvailableGreaterThan(0);
     }
 
-    public List<RideModel> searchRides(String keyword) {
-        return rideRepository.findByDestinationContainingIgnoreCaseAndStatus(keyword, "ACTIVE");
+    public List<RideModel> searchRides(String destination) {
+
+        List<RideModel> rides = rideRepository
+                .findByDestinationContainingIgnoreCaseAndStatus(destination, "ACTIVE");
+
+        rides.forEach(ride -> {
+            UserModel driver = userService.findByEmail(ride.getDriverEmail()).orElse(null);
+            if (driver != null) {
+                ride.setDriverName(driver.getName());
+            }
+        });
+
+        return rides;
     }
 
     public RideModel getRideById(Long id) {
