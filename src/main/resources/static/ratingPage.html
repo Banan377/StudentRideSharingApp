@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تقييمات السائق - نظام المشاركة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+    * {/* الخلفية العامة */
+body {
+  background: #ccddea;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* الحاوية الرئيسية */
+.app-container {
+  width: 360px;
+  background-color: #f9fbfb;
+  padding-bottom: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+/* الهيدر */
+.header {
+  background: linear-gradient(135deg, #487788, #265262);
+  padding: 18px;
+  text-align: center;
+  color: white;
+}
+
+.header h1 {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+/* صندوق المتوسط */
+.rating-summary {
+  padding: 20px;
+  text-align: center;
+}
+
+.rating-number {
+  font-size: 45px;
+  font-weight: bold;
+  color: #265262;
+}
+
+.stars i {
+  color: #A5D6E8;
+  font-size: 20px;
+}
+
+/* البطاقات */
+.rating-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 10px 15px;
+  border: 1px solid #e3e3e3;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transition: 0.25s ease;
+}
+
+.rating-card:hover {
+  transform: scale(1.01);
+}
+
+/* عنوان السائق والتاريخ */
+.rating-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.driver-name {
+  font-size: 16px;
+  color: #265262;
+}
+
+.rating-date {
+  color: #487788;
+  font-size: 12px;
+}
+
+/* النجوم داخل البطاقات */
+.rating-stars i {
+  color: #A5D6E8;
+  font-size: 16px;
+}
+
+.rating-value {
+  color: #265262;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+/* التعليق */
+.comment {
+  margin-top: 10px;
+  background: #eef5f7;
+  padding: 10px;
+  border-radius: 8px;
+  border-left: 4px solid #487788;
+  color: #265262;
+  line-height: 1.5;
+}
+
+/* لا يوجد تعليق */
+.no-comment {
+  margin-top: 10px;
+  color: #777;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* رسالة لا يوجد تقييمات */
+.empty-state {
+  padding: 40px 20px;
+  text-align: center;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 40px;
+  color: #A5D6E8;
+  margin-bottom: 10px;
+}
+
+.footer {
+  text-align: center;
+  padding: 10px;
+  color: #487788;
+  font-size: 12px;
+}
+
+
+
+}
+</style>
+
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>سجل التقييمات</h1>
+        </div>
+        
+        <div class="rating-summary">
+            <div class="rating-number" id="ratingNumber">0.0</div>
+            <div class="stars" id="starsContainer">
+                <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+            </div>
+            <div class="rating-count" id="ratingCount">تقييم (0)</div>
+        </div>
+        
+        <div class="ratings-container" id="ratingsContainer">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <div>جاري تحميل التقييمات...</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            API_BASE_URL: 'http://localhost:8080/api/ratings',
+            CURRENT_USER_ID: 1,
+            FALLBACK_TO_LOCAL: true
+        };
+
+        class RatingService {
+            constructor() {
+                this.ratings = [];
+                this.averageRating = 0;
+                this.totalRatings = 0;
+                this.isConnected = false;
+            }
+
+            async loadAllRatings() {
+                console.log(' جلب التقييمات من  ...');
+                this.showLoading();
+                
+                try {
+                    this.isConnected = await this.testConnection();
+                    
+                    if (!this.isConnected) {
+                        console.log('   غير متاح، استخدام البيانات المحلية');
+                        this.loadFromLocalStorage();
+                        return true;
+                    }
+
+                    await Promise.all([
+                        this.loadAverageRating(),
+                        this.loadRatingsList()
+                    ]);
+                    
+                    console.log(' تم التحميل بنجاح');
+                    return true;
+                    
+                } catch (error) {
+                    console.error('فشل في التحميل:', error);
+                    this.loadFromLocalStorage();
+                    return true;
+                }
+            }
+
+            async testConnection() {
+                try {
+                    const response = await fetch(`${CONFIG.API_BASE_URL}/health`);
+                    const result = await response.json();
+                    console.log(' اتصال  :', result);
+                    return result.status === 'UP';
+                } catch (error) {
+                    console.log('   غير متوفر:', error.message);
+                    return false;
+                }
+            }
+
+            async loadAverageRating() {
+                try {
+                    const response = await fetch(`${CONFIG.API_BASE_URL}/user/${CONFIG.CURRENT_USER_ID}/average`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        let avg = data.averageRating || 0;
+                        this.averageRating = Math.min(Math.max(avg, 0), 5);
+                        this.totalRatings = data.totalRatings || 0;
+                    }
+                } catch (error) {
+                    console.error(' خطأ في جلب المتوسط:', error);
+                    throw error;
+                }
+            }
+
+            async loadRatingsList() {
+                try {
+                    const response = await fetch(`${CONFIG.API_BASE_URL}/user/${CONFIG.CURRENT_USER_ID}`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.ratings = data.ratings || [];
+                    }
+                } catch (error) {
+                    console.error(' خطأ في جلب القائمة:', error);
+                    throw error;
+                }
+            }
+
+            loadFromLocalStorage() {
+                try {
+                    const localData = JSON.parse(localStorage.getItem('driverRatings') || '[]');
+                    this.ratings = localData;
+                    this.totalRatings = localData.length;
+                    
+                    if (localData.length > 0) {
+                        const totalStars = localData.reduce((sum, item) => sum + (item.stars || 0), 0);
+                        let avg = totalStars / localData.length;
+                        this.averageRating = Math.min(Math.max(avg, 0), 5);
+                    }
+                } catch (error) {
+                    this.ratings = [];
+                    this.averageRating = 0;
+                    this.totalRatings = 0;
+                }
+            }
+
+            async submitNewRating(ratingData) {
+                try {
+                    console.log(' إرسال تقييم جديد:', ratingData);
+                    
+                    const response = await fetch(`${CONFIG.API_BASE_URL}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(ratingData)
+                    });
+
+                    const result = await response.json();
+                    console.log('استجابة:', result);
+                    
+                    return result;
+                } catch (error) {
+                    console.error('خطأ في إرسال التقييم:', error);
+                    throw error;
+                }
+            }
+
+            showLoading() {
+                const container = document.getElementById('ratingsContainer');
+                container.innerHTML = `
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <div>جاري تحميل التقييمات...</div>
+                    </div>
+                `;
+            }
+        }
+
+        class RatingUI {
+            constructor() {
+                this.service = new RatingService();
+            }
+
+            async initialize() {
+                console.log(' بدء تشغيل واجهة التقييمات...');
+                
+                const success = await this.service.loadAllRatings();
+                
+                if (success) {
+                    this.updateRatingSummary();
+                    this.displayRatings();
+                } else {
+                    this.showError();
+                }
+            }
+
+            updateRatingSummary() {
+                document.getElementById('ratingNumber').textContent = this.service.averageRating.toFixed(1);
+                
+                const starsContainer = document.getElementById('starsContainer');
+                starsContainer.innerHTML = '';
+                
+                const fullStars = Math.floor(this.service.averageRating);
+                const hasHalfStar = this.service.averageRating % 1 >= 0.5;
+                
+                for (let i = 0; i < 5; i++) {
+                    const star = document.createElement('i');
+                    if (i < fullStars) {
+                        star.className = 'fas fa-star';
+                    } else if (i === fullStars && hasHalfStar) {
+                        star.className = 'fas fa-star-half-alt';
+                    } else {
+                        star.className = 'far fa-star';
+                    }
+                    starsContainer.appendChild(star);
+                }
+                
+                document.getElementById('ratingCount').textContent = `تقييم (${this.service.totalRatings})`;
+            }
+
+            displayRatings() {
+                const container = document.getElementById('ratingsContainer');
+                
+                if (this.service.ratings.length === 0) {
+                    this.showEmptyState();
+                    return;
+                }
+                
+                container.innerHTML = '';
+                
+                this.service.ratings.forEach((rating, index) => {
+                    const ratingCard = this.createRatingCard(rating, index);
+                    container.appendChild(ratingCard);
+                });
+            }
+
+            createRatingCard(rating, index) {
+                const card = document.createElement('div');
+                card.className = 'rating-card';
+                
+                const isFromBackend = rating.hasOwnProperty('ratingValue');
+                const ratingValue = isFromBackend ? rating.ratingValue : rating.stars;
+                const comment = isFromBackend ? rating.comment : rating.comment;
+                const date = isFromBackend ? 
+                    new Date(rating.createdAt).toLocaleDateString('ar-SA') : 
+                    (rating.date || new Date().toLocaleDateString('ar-SA'));
+                const driverName = isFromBackend ? `السائق #${rating.raterId}` : (rating.driverName || `التقييم ${index + 1}`);
+                
+                let starsHtml = '';
+                for (let i = 1; i <= 5; i++) {
+                    starsHtml += i <= ratingValue ? 
+                        '<i class="fas fa-star"></i>' : 
+                        '<i class="far fa-star"></i>';
+                }
+                
+                card.innerHTML = `
+                    <div class="rating-header">
+                        <div class="driver-name">${driverName}</div>
+                        <div class="rating-date">${date}</div>
+                    </div>
+                    <div class="rating-stars">
+                        <span class="rating-value">${ratingValue}.0</span>
+                        ${starsHtml}
+                    </div>
+                    ${comment ? 
+                        `<div class="comment">${comment}</div>` : 
+                        `<div class="no-comment">لا يوجد تعليق</div>`
+                    }
+                `;
+                
+                return card;
+            }
+
+            showEmptyState() {
+                const container = document.getElementById('ratingsContainer');
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="far fa-comment-alt"></i>
+                        </div>
+                        <h3>لا توجد تقييمات بعد</h3>
+                        <p>ستظهر تقييمات هنا بعد إكمال الرحلات</p>
+                    </div>
+                `;
+            }
+
+            showError() {
+                const container = document.getElementById('ratingsContainer');
+                container.innerHTML = `
+                    <div class="error-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>تعذر تحميل التقييمات</h3>
+                        <p>تحقق من اتصال  </p>
+                    </div>
+                `;
+            }
+
+            async refreshData() {
+                console.log(' تحديث البيانات...');
+                await this.initialize();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            window.ratingApp = new RatingUI();
+            window.ratingApp.initialize();
+        });
+
+        window.submitRatingToBackend = async function(ratingData) {
+            try {
+                const service = new RatingService();
+                const result = await service.submitNewRating(ratingData);
+                
+                if (result.success) {
+                    if (window.ratingApp) {
+                        await window.ratingApp.refreshData();
+                    }
+                    return { success: true, message: 'تم إضافة التقييم بنجاح' };
+                } else {
+                    return { success: false, message: result.error };
+                }
+            } catch (error) {
+                console.error(' خطأ في إرسال التقييم:', error);
+                return { success: false, message: 'فشل في إرسال التقييم' };
+            }
+        };
+
+        console.log(' نظام التقييمات جاهز للاستخدام!');
+    </script>
+
+<script src="rating-bridge.js"></script>
+<script>
+
+
+
+
+console.log(' صفحة التقييمات فتحت!');
+
+document.title = "تقييمات السائق";
+
+setTimeout(function() {
+    const header = document.querySelector('.header h1');
+    if (header) {
+        header.textContent = "سجل تقييمات السائق";
+    }
+    
+    const driverData = sessionStorage.getItem('driverForRatings');
+    if (driverData) {
+        try {
+            const data = JSON.parse(driverData);
+            console.log('تم استلام بيانات السائق:', data);
+            
+            document.title = `تقييمات ${data.name}`;
+            
+            if (header) {
+                header.textContent = `تقييمات ${data.name}`;
+            }
+        } catch(e) {
+            console.error('خطأ في تحليل بيانات السائق:', e);
+        }
+    } else {
+        console.log(' لا توجد بيانات سائق في sessionStorage');
+        
+        const email = localStorage.getItem('userEmail');
+        if (email) {
+            document.title = `تقييمات ${email.split('@')[0]}`;
+        }
+    }
+}, 100);
+
+
+
+// تحقق من البارامتر
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('from') === 'driver') {
+    console.log(' فتحت من واجهة السائق!');
+    document.title = "تقييمات السائق - نظام المشاركة";
+}
+
+
+
+
+document.title = "تقييمات السائق";
+console.log(' صفحة التقييمات جاهزة!');
+</script>
+
+
+
+
+
+<script>
+</script>
+
+<script>
+console.log('صفحة التقييمات جاهزة');
+</script>
+</body>
+</html>
+
+</script>
+</body>
+</html>

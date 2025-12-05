@@ -159,16 +159,6 @@
       border-radius: 999px;
       font-weight: 600;
     }
-    
-    /* ===== Mobile-only safe overrides (max-width:768px) ===== */
-    @media (max-width: 768px) {
-      .stats-grid { grid-template-columns: 1fr !important; padding: 8px !important; margin: 20px auto !important; }
-      .stat-card { padding: 12px !important; box-shadow: none !important; }
-      .preview-section { padding: 8px !important; }
-      .preview-card { padding: 12px !important; }
-      .admin-title { font-size: 18px !important; }
-      .sidebar .menue a span { display: none !important; }
-    }
   </style>
 </head>
 
@@ -188,20 +178,22 @@
 
   <main class="main-content">
 
-    <!-- Full-width header outside container -->
-    <div class="top-bar">
-      <h2 class="admin-title">لوحة تحكم المشرف</h2>
+    <div class="container">
+      <div class="header">
 
-      <!-- الملف الشخصي -->
-      <div class="profile-section">
-        <button onclick="toggleProfileDropdown()" class="profile-btn">
-          <i class="fas fa-user-circle"></i>
-        </button>
+        <h2 class="admin-title">لوحة تحكم المشرف</h2>
 
-        <div id="profile-dropdown" class="dropdown-menu hidden">
-          <ul>
-            <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
-          </ul>
+        <!-- الملف الشخصي -->
+        <div class="profile-section">
+          <button onclick="toggleProfileDropdown()" class="profile-btn">
+            <i class="fas fa-user-circle"></i>
+          </button>
+
+          <div id="profile-dropdown" class="dropdown-menu hidden">
+            <ul>
+              <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -364,10 +356,83 @@
       }
     }
 
+
+
+async function loadLowRatingsAlert() {
+  try {
+    const res = await fetch("http://localhost:8083/api/ratings/low-ratings");
+    const data = await res.json();
+
+    if (data.success && data.count > 0) {
+
+      const grid = document.querySelector(".stats-grid");
+
+      const alertBox = document.createElement("div");
+      alertBox.className = "stat-card";
+      alertBox.style.background = "#ffe5e5";
+      alertBox.style.border = "2px solid #ff4d4d";
+      alertBox.style.boxShadow = "0 0 12px rgba(255,0,0,0.25)";
+
+      alertBox.innerHTML = `
+        <span class="stat-title" style="color:#b30000; font-weight:700;">
+     تنبيه تقييم منخفض
+        </span>
+
+        <span class="stat-number" style="color:#b30000;">
+          ${data.count}
+        </span>
+
+        <span class="stat-sub" style="color:#b30000;">
+          سائقين حصلوا على تقييم 2 أو أقل
+        </span>
+
+        <i class="fas fa-exclamation-triangle stat-icon" style="color:#b30000;"></i>
+      `;
+
+      grid.prepend(alertBox);
+    }
+  } catch (error) {
+    console.error("Error loading low ratings:", error);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     loadDashboardStats();
     loadPendingPreview();
+    loadLowRatingsAlert();
+
   </script>
+
+
+
+
+
+
+
+
 
 </body>
 
 </html>
+
+

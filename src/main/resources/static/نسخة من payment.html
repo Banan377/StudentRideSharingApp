@@ -100,7 +100,80 @@
 
         document.getElementById("successMsg").style.display = "block";  
     }  
+
+
+
+async function sendToBackend(paymentData) {
+    try {
+        console.log('🔄 إرسال للباك إند:', paymentData);
+        
+        const response = await fetch('http://localhost:8083/api/payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(paymentData)
+        });
+        
+        const result = await response.json();
+        console.log(' ند:', result);
+        
+        const msg = document.getElementById("successMsg");
+        msg.innerHTML = `${result.message}<br>رقم المرجع: ${result.transactionId}`;
+        msg.style.display = "block";
+        
+    } catch (error) {
+        console.error(' خطأ:', error);
+        alert('خطأ في الاتصال  ');
+    }
+}
+
+// عدل الدالة الأصلية processPayment
+const originalProcessPayment = processPayment;
+processPayment = async function() {
+    // كودك الأصلي
+    if (!document.querySelector("input[name='pay']:checked")) {
+        alert("الرجاء اختيار وسيلة الدفع");
+        return;
+    }
+    
+    const paymentMethod = document.querySelector("input[name='pay']:checked").value;
+    const paymentData = {
+        amount: 85,
+        method: paymentMethod,
+        timestamp: new Date().toISOString()
+    };
+    
+    if (paymentMethod === "Card") {
+        const number = document.getElementById("cardNumber").value;
+        const expiry = document.getElementById("expiry").value;
+        const cvv = document.getElementById("cvv").value;
+        
+        if (!number || !expiry || !cvv) {
+            alert("الرجاء إدخال بيانات البطاقة كاملة");
+            return;
+        }
+        
+        paymentData.cardNumber = number;
+        paymentData.expiry = expiry;
+        paymentData.cvv = cvv;
+        
+        localStorage.setItem("userCard", JSON.stringify({ number, expiry, cvv }));
+    }
+    
+    await sendToBackend(paymentData);
+};
+
+
+
+
+
+
+
+
+
 </script>  
+<script src="payment-to-rating.js"></script>
 
 </body>  
 </html>  
