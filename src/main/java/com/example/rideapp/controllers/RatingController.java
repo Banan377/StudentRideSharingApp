@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/ratings")
@@ -17,6 +18,7 @@ public class RatingController {
 
     @Autowired
     private RatingRepository ratingRepository;
+    
 
     @GetMapping("/health")
     public ResponseEntity<?> healthCheck() {
@@ -30,24 +32,24 @@ public class RatingController {
     @PostMapping
     public ResponseEntity<?> createRating(@RequestBody Map<String, Object> request) {
         try {
-            System.out.println("📝 استلام طلب تقييم: " + request);
-            
+            System.out.println(" استلام طلب تقييم: " + request);
+
             Rating rating = new Rating();
             rating.setRaterId(Long.valueOf(request.get("raterId").toString()));
             rating.setRatedUserId(Long.valueOf(request.get("ratedUserId").toString()));
             rating.setRideId(Long.valueOf(request.get("rideId").toString()));
             rating.setRatingValue(Integer.valueOf(request.get("ratingValue").toString()));
             rating.setComment((String) request.get("comment"));
-            
+
             Rating savedRating = ratingRepository.save(rating);
-            
+
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "تم إرسال التقييم بنجاح");
             response.put("ratingId", savedRating.getId());
-            
+
             return ResponseEntity.ok(response);
-            
+
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
@@ -60,14 +62,14 @@ public class RatingController {
     public ResponseEntity<?> getUserRatings(@PathVariable Long userId) {
         try {
             List<Rating> ratings = ratingRepository.findByRatedUserId(userId);
-            
+
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("ratings", ratings);
             response.put("count", ratings.size());
-            
+
             return ResponseEntity.ok(response);
-            
+
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
@@ -81,18 +83,18 @@ public class RatingController {
         try {
             List<Rating> ratings = ratingRepository.findByRatedUserId(userId);
             double average = ratings.stream()
-                .mapToInt(Rating::getRatingValue)
-                .average()
-                .orElse(0.0);
-            
+                    .mapToInt(Rating::getRatingValue)
+                    .average()
+                    .orElse(0.0);
+
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("userId", userId);
             response.put("averageRating", Math.round(average * 10.0) / 10.0);
             response.put("totalRatings", ratings.size());
-            
+
             return ResponseEntity.ok(response);
-            
+
         } catch (Exception e) {
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
@@ -106,63 +108,34 @@ public class RatingController {
     @GetMapping
     public ResponseEntity<?> getAllRatings() {
         List<Rating> ratings = ratingRepository.findAll();
-        
+
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
         response.put("ratings", ratings);
         response.put("count", ratings.size());
-        
+
         return ResponseEntity.ok(response);
     }
-}
 
+    @GetMapping("/low-ratings")
+    public ResponseEntity<?> getLowRatings() {
+        try {
+            List<Rating> lowRatings = ratingRepository.findAll().stream()
+                    .filter(r -> r.getRatingValue() <= 2)
+                    .collect(Collectors.toList());
 
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("count", lowRatings.size());
+            response.put("ratings", lowRatings);
 
+            return ResponseEntity.ok(response);
 
-
-
-@GetMapping("/low-ratings")
-public ResponseEntity<?> getLowRatings() {
-    try {
-        List<Rating> allRatings = ratingRepository.findAll();
-        List<Rating> lowRatings = allRatings.stream()
-            .filter(r -> r.getRatingValue() < 2)
-            .collect(Collectors.toList());
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("lowRatings", lowRatings);
-        response.put("count", lowRatings.size());
-        
-        return ResponseEntity.ok(response);
-    } catch (Exception e) {
-        Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("success", false);
-        errorResponse.put("error", e.getMessage());
-        return ResponseEntity.badRequest().body(errorResponse);
-    }
-}
-
-
-
-@GetMapping("/low-ratings")
-public ResponseEntity<?> getLowRatings() {
-    try {
-        List<Rating> lowRatings = ratingRepository.findAll().stream()
-            .filter(r -> r.getRatingValue() <= 2)
-            .collect(Collectors.toList());
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("count", lowRatings.size());
-        response.put("ratings", lowRatings);
-
-        return ResponseEntity.ok(response);
-
-    } catch (Exception e) {
-        Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("success", false);
-        errorResponse.put("error", e.getMessage());
-        return ResponseEntity.badRequest().body(errorResponse);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
     }
 }

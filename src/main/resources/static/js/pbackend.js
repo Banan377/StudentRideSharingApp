@@ -12,7 +12,7 @@ app.use(express.json());
 
 // ========== نظام الدفع ==========
 app.post('/api/process-payment', (req, res) => {
-    console.log('💰 طلب دفع جديد:', req.body);
+    console.log(' طلب دفع جديد:', req.body);
     
     const { amount, method, cardNumber } = req.body;
     
@@ -30,7 +30,7 @@ app.post('/api/process-payment', (req, res) => {
     // الرد الناجح
     res.json({
         success: true,
-        message: '✅ تمت عملية الدفع بنجاح',
+        message: ' تمت عملية الدفع بنجاح',
         transactionId: transactionId,
         amount: amount,
         method: method,
@@ -47,5 +47,5 @@ app.get('/api/check', (req, res) => {
 // شغل السيرفر على 8083
 app.listen(8083, () => {
     console.log('💳 سيرفر الدفع شغال على: http://localhost:8083');
-    console.log('✅ رابط الدفع: POST http://localhost:8083/api/process-payment');
+    console.log(' رابط الدفع: POST http://localhost:8083/api/process-payment');
 });

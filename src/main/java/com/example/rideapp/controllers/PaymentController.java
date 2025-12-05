@@ -1,4 +1,4 @@
-package com.example.rideapp.controller;
+package com.example.rideapp.controllers;
 
 import com.example.rideapp.models.PaymentModel;
 import com.example.rideapp.services.PaymentService;

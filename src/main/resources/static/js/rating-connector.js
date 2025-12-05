@@ -1,6 +1,6 @@
 class RatingSystem {
     constructor() {
-        this.API_URL = 'http://localhost:8080/api/ratings';
+        this.API_URL = '/api/ratings';
         this.userId = 1;
     }
 

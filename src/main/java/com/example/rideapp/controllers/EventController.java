@@ -1,4 +1,4 @@
-package com.example.rideapp.controller;
+package com.example.rideapp.controllers;
 
 import com.example.rideapp.models.EventModel;
 import com.example.rideapp.services.EventService;

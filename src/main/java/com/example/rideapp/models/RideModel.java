@@ -30,6 +30,9 @@ public class RideModel {
     private String driverEmail;
     private int totalSeats; // عدد المقاعد الأصلي
     private boolean isEventRide;
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private EventModel event;
 
     @Column(columnDefinition = "text")
     private String routePolyline; // encoded polyline
@@ -165,4 +168,12 @@ public class RideModel {
     public void setDriverRating(double driverRating) {
         this.driverRating = driverRating;
     }
+    public EventModel getEvent() {
+    return event;
+}
+
+public void setEvent(EventModel event) {
+    this.event = event;
+}
+
 }
