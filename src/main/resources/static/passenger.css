@@ -464,26 +464,29 @@ input[type="number"] {
 
 
 /* تنسيقات زر الحجز */
-.book-btn {
-  width: 100%;
+.trips-grid .trip-card .book-btn {
+  width: 100% !important;
   padding: 12px;
   background: #487788;
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 0;
   text-align: center;
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
 }
+
 
 .book-btn:hover {
   background: #265262;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(38, 82, 98, 0.3);
 }
+
 
 .driver-modal-overlay {
   position: fixed;
@@ -1074,7 +1077,7 @@ input[type="number"] {
   padding-bottom: 15px;
 }
 
-.book-btn {
+.booking-btn {
   width: 75%;
   height: 42px;
   background: #487788;
@@ -1091,7 +1094,7 @@ input[type="number"] {
   margin-right: 15px;
 }
 
-.book-btn:hover {
+.booking-btn:hover {
   background: #265262;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(38, 82, 98, 0.3);
@@ -2308,10 +2311,22 @@ textarea {
 
 /* ===== Mobile-only safe overrides (max-width:768px) ===== */
 @media (max-width: 768px) {
-  html { font-size: 15px; }
-  body { flex-direction: column !important; }
+  html {
+    font-size: 15px;
+  }
 
-  .container, .form-box, .login-container, .chat-container, .main-content, .content-wrapper, .card, .trip-card {
+  body {
+    flex-direction: column !important;
+  }
+
+  .container,
+  .form-box,
+  .login-container,
+  .chat-container,
+  .main-content,
+  .content-wrapper,
+  .card,
+  .trip-card {
     width: 100% !important;
     max-width: 100% !important;
     padding-left: 1rem !important;
@@ -2319,23 +2334,74 @@ textarea {
     box-shadow: none !important;
   }
 
-  img, .img-fluid { max-width: 100% !important; height: auto !important; }
+  img,
+  .img-fluid {
+    max-width: 100% !important;
+    height: auto !important;
+  }
 
-  .sidebar { position: relative !important; width: 100% !important; height: auto !important; display: flex !important; flex-direction: row !important; padding: 0.4rem 0.6rem !important; overflow-x: auto !important; }
-  .sidebar .menue { display: flex !important; flex-direction: row !important; gap: 0.5rem !important; align-items: center !important; }
-  .sidebar .menue li { margin: 0 !important; padding: 0.35rem 0.6rem !important; }
-  .sidebar .menue a span { display: none !important; }
+  .sidebar {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    padding: 0.4rem 0.6rem !important;
+    overflow-x: auto !important;
+  }
 
-  .main-content { width: 100% !important; margin-left: 0 !important; }
-  .top-bar { padding: 0.6rem 0.75rem !important; height: auto !important; }
+  .sidebar .menue {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 0.5rem !important;
+    align-items: center !important;
+  }
 
-  .card, .trip-card { padding: 1rem !important; }
-  table { width: 100% !important; display: block !important; overflow-x: auto !important; }
+  .sidebar .menue li {
+    margin: 0 !important;
+    padding: 0.35rem 0.6rem !important;
+  }
 
-  button, .btn, .create-btn { padding: 0.7rem 1rem !important; min-height: 44px !important; }
+  .sidebar .menue a span {
+    display: none !important;
+  }
 
-  .form-row { grid-template-columns: 1fr !important; }
-  .row { flex-direction: column !important; gap: 0.5rem !important; }
+  .main-content {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  .top-bar {
+    padding: 0.6rem 0.75rem !important;
+    height: auto !important;
+  }
+
+  .card,
+  .trip-card {
+    padding: 1rem !important;
+  }
+
+  table {
+    width: 100% !important;
+    display: block !important;
+    overflow-x: auto !important;
+  }
+
+  button,
+  .btn,
+  .create-btn {
+    padding: 0.7rem 1rem !important;
+    min-height: 44px !important;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .row {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
 }
 
 /* ===== Full-width top-bar (no overflow) ===== */
