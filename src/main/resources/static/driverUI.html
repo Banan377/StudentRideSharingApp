@@ -149,12 +149,11 @@
     function toggleProfileDropdown() {
       document.getElementById('profile-dropdown').classList.toggle('hidden');
     }
+function showRatingPage() {
+  window.location.href = "ratingPage.html";
+}
 
-    function showRatingPage() {
-      document.getElementById('profile-dropdown').classList.add('hidden');
-      document.getElementById('rating-page').classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
+    
 
     function closePage() {
       document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
