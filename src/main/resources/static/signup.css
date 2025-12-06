@@ -1,0 +1,177 @@
+body {
+  background: #ccddea;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 340px;
+  margin: 50px auto;
+  background-color: #f9fbfb;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+}
+
+
+/* ===== Mobile-only safe overrides (max-width:768px) ===== */
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+  body { padding: 0; }
+
+  .container { width: 100% !important; max-width: 100% !important; margin: 20px auto !important; padding: 1rem !important; }
+  .form-box, .container { padding: 1rem !important; }
+  .row { flex-direction: column !important; gap: 0.5rem !important; }
+  button { padding: 0.8rem !important; min-height: 44px !important; }
+}
+h1 {
+  text-align: center;
+  color: #265262; 
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 16px;
+  color: #265262;
+  margin-top: 20px;
+}
+.input{
+
+}
+
+label {
+  display: block;
+  color: #020003;
+  font-weight: 500;
+  margin-top: 10px;
+}
+input[type="Email"]{
+  width: 100%;
+  padding: 7px;
+  border: 1px solid #487788;
+  border-radius: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+
+}
+
+input[type="text"],
+input[type="password"],
+input[type="file"],
+input[type="tel"] {
+  width: 100%;
+  padding: 7px;
+  border: 1px solid #487788;
+  border-radius: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+
+input:focus {
+  border-color: #265262;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  background-color: #487788;
+  color: white;
+  font-size: 26px;
+  font: bold;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #265262;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.field {
+  flex: 1;
+}
+
+.gender-row {
+  display: flex;
+  align-items: center; 
+  gap: 8px; 
+  margin-top: 10px;
+}
+
+.gender-row label {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin: 0;
+}
+
+.gender-row p {
+  margin: 0;
+  font-weight: 500;
+  color: #020003;
+  transform: translateY(1px); 
+}
+
+
+.driver-section {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 10px; 
+}
+
+.driver-section.show {
+  max-height: 300px; 
+  padding: 10px; 
+}
+
+.emergency-section {
+  background-color: #dcf1f9;
+  border: 1px solid #487788;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 15px;
+}
+
+.select .row{
+  display: fl;
+
+}
+
+#passwordHelp, #confirmHelp {
+    font-size: 0.5em;
+    margin-top: 5px;
+    line-height: 1.4;
+    transition: all 0.3s ease;
+}
+
+#passwordHelp br {
+    margin-bottom: 2px;
+}
+
+.driver-section {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease, padding 0.3s ease;
+    padding: 0 10px;
+}
+
+.driver-section.show {
+    max-height: 800px;
+    padding: 15px;
+    border: 1px solid #487788;
+    border-radius: 8px;
+    margin-top: 10px;
+    background-color: #f8fbfc;
+}

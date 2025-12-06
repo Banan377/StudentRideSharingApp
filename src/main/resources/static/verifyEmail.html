@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>التحقق من البريد الإلكتروني</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #ccddea;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #222;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 440px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 28px rgba(0, 0, 0, 0.08);
+      padding: 28px;
+      text-align: right;
+    }
+
+    h2 {
+      color: #265262;
+      font-size: 20px;
+      margin-bottom: 8px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    p.lead {
+      text-align: center;
+      color: #555;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      color: #265262;
+      font-weight: 500;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    input[type="email"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+      background: #fafafa;
+      direction: ltr;
+      text-align: left;
+    }
+
+    .error-msg,
+    .success-msg {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .error-msg {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .success-msg {
+      background: #e6f7e9;
+      color: #216b39;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      background: #265262;
+      color: #fff;
+      transition: background .18s ease;
+      margin-top: 14px;
+    }
+
+    .btn:hover {
+      background: #1e414d;
+    }
+    
+    /* ===== Mobile-only safe overrides (max-width:768px) ===== */
+    @media (max-width: 768px) {
+      html { font-size: 15px; }
+      body { padding: 0 0.5rem; height: auto; }
+
+      .card { padding: 1rem !important; max-width: 100% !important; box-shadow: none !important; }
+      h2 { font-size: 18px !important; }
+      .btn { padding: 0.8rem !important; min-height: 44px !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h2>التحقق من البريد الإلكتروني</h2>
+    <p class="lead">أدخل بريدك الجامعي لإرسال رمز التحقق.</p>
+
+    <form id="emailForm" novalidate>
+      <label for="email">البريد الإلكتروني الجامعي</label>
+      <input id="email" type="email" placeholder="name@sm.imamu.edu.sa" required>
+
+      <div id="error" class="error-msg"></div>
+
+      <button id="sendBtn" type="button" class="btn">أرسل رمز التحقق</button>
+      <p id="returnLink"></p>
+
+    </form>
+  </div>
+
+  <script>
+    const emailInput = document.getElementById('email');
+    const sendBtn = document.getElementById('sendBtn');
+    const errorDiv = document.getElementById('error');
+
+    sendBtn.addEventListener('click', async () => {
+      const email = emailInput.value.trim().toLowerCase();
+      sendBtn.disabled = true;
+      sendBtn.textContent = "جاري الإرسال...";
+      errorDiv.style.display = "none";
+
+      if (!email.endsWith("@sm.imamu.edu.sa")) {
+        errorDiv.textContent = " البريد غير صحيح، يجب أن ينتهي بـ @sm.imamu.edu.sa";
+        errorDiv.style.display = "block";
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/auth/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            otpType: "password_reset",
+            resetPasswordMode: true
+          })
+
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          errorDiv.textContent = result.message;
+          errorDiv.style.display = "block";
+          return;
+        }
+
+        localStorage.setItem("userEmail", email);
+        window.location.href = "otp.html";
+
+
+
+
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("resetPasswordMode", "true");
+
+        window.location.href = "otp.html";
+
+      } catch (err) {
+        errorDiv.textContent = "خطأ أثناء إرسال رمز التحقق";
+        errorDiv.style.display = "block";
+      }
+    });
+
+
+    const mode = localStorage.getItem("passwordFlow");
+
+
+    const title = document.querySelector("h2");
+    const lead = document.querySelector(".lead");
+    const returnLink = document.getElementById("returnLink");
+
+    if (mode === "forgot") {
+      title.textContent = "إعادة تعيين كلمة المرور";
+      lead.textContent = "أدخل بريدك لإرسال رمز استعادة كلمة المرور.";
+      returnLink.innerHTML = `
+    <div style="text-align:center;">
+      <a href="login.html" style="color:#265262; font-size:14px; font-weight:bold;">
+        العودة إلى تسجيل الدخول
+      </a>
+    </div>`;
+    }
+
+    else if (mode === "passengerSetting") {
+      title.textContent = "تأكيد البريد لتغيير كلمة المرور";
+      lead.textContent = "سنرسل رمز تأكيد لتعديل كلمة المرور من الإعدادات.";
+      returnLink.innerHTML = `
+    <div style="text-align:center;">
+      <a href="passengerSetting.html" style="color:#265262; font-size:14px; font-weight:bold;">
+        العودة إلى الإعدادات
+      </a>
+    </div>`;
+    }
+
+    else if (mode === "driverSetting") {
+      title.textContent = "تأكيد البريد لتغيير كلمة المرور";
+      lead.textContent = "سنرسل رمز تأكيد لتعديل كلمة المرور من الإعدادات.";
+      returnLink.innerHTML = `
+    <div style="text-align:center;">
+      <a href="driverSetting.html" style="color:#265262; font-size:14px; font-weight:bold;">
+        العودة إلى الإعدادات
+      </a>
+    </div>`;
+    }
+
+
+
+  </script>
+
+</body>
+
+</html>

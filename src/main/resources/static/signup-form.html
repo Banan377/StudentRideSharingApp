@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <title>إنشاء حساب</title>
+  <link rel="stylesheet" href="Signup.css">
+</head>
+
+<body>
+  <div class="container">
+    <form id="signupForm">
+      <h1>إنشاء حساب</h1>
+
+      <div class="field">
+        <label for="lastName">الايميل الجامعي:</label>
+        <input type="email" id="signupEmail" required placeholder="أدخل الإيميل الجامعي">
+
+      </div>
+      <div class="row">
+        <div class="field">
+
+          <label for="firstName">الاسم الأول:</label>
+          <input type="text" id="firstName" required>
+        </div>
+        <div class="field">
+          <label for="lastName">الاسم الأخير:</label>
+          <input type="text" id="lastName" required>
+        </div>
+      </div>
+
+      <label for="college">الكلية:</label>
+      <input type="text" id="college">
+
+      <div class="gender-row">
+        <p>الجنس:</p>
+        <label><input type="radio" id="male" name="gender" value="male"> ذكر</label>
+        <label><input type="radio" id="female" name="gender" value="female"> أنثى</label>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="password" place>كلمة المرور:</label>
+          <input type="password" id="password" required placeholder="••••••••">
+          <div id="passwordHelp" style="color:red; font-size:0.9em;"></div>
+
+        </div>
+        <div class="field">
+          <label for="confirmPassword">تأكيد كلمة المرور:</label>
+          <input type="password" id="confirmPassword" required placeholder="••••••••">
+          <div id="confirmHelp" style="color:red; font-size:0.9em;"></div>
+
+        </div>
+      </div>
+
+
+      <h2>بيانات الطوارئ</h2>
+      <div class="emergency-section">
+        <label for="emergency1">رقم الطوارئ (إجباري):</label>
+        <input type="tel" id="emergency1" required pattern="05[0-9]{8}" maxlength="10" placeholder="05xxxxxxxx">
+
+        <label for="emergency2">رقم إضافي (اختياري):</label>
+        <input type="tel" id="emergency2" pattern="05[0-9]{8}" maxlength="10" placeholder="05xxxxxxxx">
+      </div>
+
+      <label>
+        <input type="checkbox" id="isDriver"> أريد أن أكون سائقًا
+      </label>
+
+      <div class="driver-section" id="driverSection">
+        <h3>بيانات السائق</h3>
+
+        <div class="row">
+          <div class="field">
+            <label for="licenseNumber">رقم الرخصة</label>
+            <input type="text" id="licenseNumber" placeholder=" 123456789">
+          </div>
+          <div class="field">
+            <label for="carPlate">رقم اللوحة</label>
+            <input type="text" id="carPlate" placeholder=" أ ب ج 1234">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="carModel">موديل السيارة </label>
+            <input type="text" id="carModel" placeholder=" كامري 2023">
+          </div>
+          <div class="field">
+            <label for="carColor">لون السيارة</label>
+            <input type="text" id="carColor" placeholder=" أبيض">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="seatsAvailable">عدد المقاعد المتاحة</label>
+          <select id="seatsAvailable">
+            <option value="1">1 مقعد</option>
+            <option value="2">2 مقاعد</option>
+            <option value="3">3 مقاعد</option>
+            <option value="4" selected>4 مقاعد</option>
+            <option value="5">5 مقاعد</option>
+            <option value="6">6 مقاعد</option>
+            <option value="7">7 مقاعد</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="license">رخصة القيادة (صورة)</label>
+            <input type="file" id="license" accept="image/*">
+            <small style="color: #666;">سيتم المراجعة يدوياً من قبل الإدارة</small>
+          </div>
+          <div class="field">
+            <label for="registration">استمارة السيارة (صورة)</label>
+            <input type="file" id="registration" accept="image/*">
+            <small style="color: #666;">سيتم المراجعة يدوياً من قبل الإدارة</small>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit">إنشاء الحساب</button>
+    </form>
+  </div>
+
+  <script src="js/signupform.js"></script>
+
+</body>
+
+</html>

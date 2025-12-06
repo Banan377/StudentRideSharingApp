@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>OTP Verification</title>
+</head>
+
+<body class="otp-page">
+  <div class="container">
+    <div class="form-box">
+      <h1>اكتب كود التحقق</h1>
+
+      <form id="otpForm">
+        <div class="otp-input-field">
+          <input type="number" />
+          <input type="number" disabled />
+          <input type="number" disabled />
+          <input type="number" disabled />
+          <input type="number" disabled />
+          <input type="number" disabled />
+        </div>
+        <button type="submit" id="verifyBtn">ارسال</button>
+        <a id="resendLink" style="color: #444;; font-size:20px; font-weight: bold; margin-top:20px;">
+          إعادة إرسال الرمز
+        </a>
+        <div id="timerBox" style="color: #444;; font-size:20px; font-weight: bold; margin-top:20px;">
+          الوقت المتبقي: <span id="timer">02:00</span>
+        </div>
+
+        <p id="otpReturn" style="text-align:center; margin-top:20px;"></p>
+      </form>
+
+    </div>
+  </div>
+
+
+
+
+  <script src="js/otp.js"></script>
+</body>
+
+</html>

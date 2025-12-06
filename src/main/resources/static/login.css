@@ -1,0 +1,129 @@
+/* إعدادات عامة */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Tajawal', sans-serif;
+  direction: rtl;
+}
+
+body {
+  background: #ccddea;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* الصندوق الرئيسي */
+.login-container {
+  background-color: #f9fbfb;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px;
+}
+
+/* العنوان */
+.login-container h1 {
+  text-align: center;
+  color: #265262;
+  margin-bottom: 25px;
+  font-size: 28px;
+}
+
+/* التنسيقات للعناصر داخل الفورم */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+}
+
+input {
+  margin-bottom: 20px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border 0.3s;
+}
+
+input:focus {
+  border-color: #487788;
+}
+
+/* رابط "نسيت كلمة المرور" */
+.forgot-password {
+  text-align: left;
+  font-size: 14px;
+  color:#487788;
+  text-decoration: none;
+  margin-bottom: 20px;
+  transition: color 0.3s;
+}
+
+.forgot-password:hover {
+  color: #265262;
+}
+
+/* زر الدخول */
+button {
+  background-color: #487788;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color:#265262;
+}
+.signup-link {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+    color: #265262;
+}
+
+.signup-link a {
+    color: #487788;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+.input-error {
+  color: #d9534f;       
+  font-size: 14px;
+  margin-bottom: -8px;
+  padding-right: 2px;
+  font-weight: bold;
+  margin-top: 0%;
+}
+
+/* ===== Mobile-only safe overrides (max-width:768px) ===== */
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+  body { flex-direction: column !important; }
+
+  .login-container, .form-box, .container { width: 100% !important; max-width: 100% !important; padding: 1rem !important; }
+  img, .img-fluid { max-width: 100% !important; height: auto !important; }
+
+  .sidebar { position: relative !important; width: 100% !important; display: flex !important; flex-direction: row !important; padding: 0.4rem 0.6rem !important; overflow-x: auto !important; }
+  .sidebar .menue a span { display: none !important; }
+
+  form { gap: 0.6rem !important; }
+  input { padding: 12px !important; }
+  button { padding: 0.7rem 1rem !important; min-height: 44px !important; }
+}

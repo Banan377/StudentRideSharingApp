@@ -1,0 +1,213 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+
+}
+body {
+    background: #ccddea;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    background-color: #f9fbfb;
+    background: transparent;
+
+}
+
+.form-box {
+    width: 90%;
+    max-width: 400px;
+
+    background: rgb(252, 252, 252);
+    padding: 35px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+}
+
+/*sign up*/
+
+i {
+    color: black;
+}
+
+.form-box h1 {
+    font-size: 28px;
+    color: #265262;
+    margin-top: 25px;
+    margin-bottom: 20px;
+
+}
+
+.input-group{
+
+    margin: 15px 0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+
+
+}
+
+.input-group input {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    padding: 12px;
+
+}
+
+
+.input-group i {
+    margin-left: 20px;
+    color: #999;
+}
+
+.btn-field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+}
+
+.btn-field button {
+    width: 100%;
+    flex-basis: 48%;
+    background: #487788;
+    color: rgb(255, 255, 255);
+    height: 40px;
+    border-radius: 8px;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 16px;
+    padding: 12px;
+
+}
+
+.input-group {
+    height: auto;
+    margin-bottom: 10px;
+}
+
+button.disable {
+    background: #eaeaea;
+    color: #555;
+}
+
+
+/*otp*/
+:where(.otp-page .container, .otp-page form, .otp-input-field) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.otp-page .container h1 {
+    font-size: 1.75rem;
+    color: #265262;
+    margin-bottom: 25px;
+
+}
+
+form .otp-input-field {
+    flex-direction: row;
+    column-gap: 11px;
+}
+
+.otp-input-field input {
+    height: 45px;
+    width: 45px;
+    border-radius: 6px;
+    outline: none;
+    font-size: 1.125remS;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.otp-input-field input::-webkit-inner-spin-button,
+.otp-input-field input::-webkit-outer-spin-button {
+    display: none;
+}
+
+form button {
+    margin-top: 25px;
+    width: 100%;
+    height: 45px;
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    border: none;
+    padding: 9px 0;
+    cursor: pointer;
+    border-radius: 6px;
+    background: #487788;
+    transition: all 0.2s ease;
+}
+
+form button:hover {
+    background: #265262;
+}
+.back-link {
+    display: block; 
+    margin-top: 10px; 
+    text-align: center;
+    color:#265262; 
+    font-size:14px; 
+    font-weight: bold;
+}
+
+/* ===== Mobile-only safe overrides (max-width:768px) ===== */
+@media (max-width: 768px) {
+    html { font-size: 15px; }
+    body { flex-direction: column !important; }
+
+    .container, .form-box, .login-container, .main-content, .content-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    img, .img-fluid { max-width: 100% !important; height: auto !important; }
+
+    .sidebar { position: relative !important; width: 100% !important; display: flex !important; flex-direction: row !important; padding: 0.4rem 0.6rem !important; overflow-x: auto !important; }
+    .sidebar .menue { display: flex !important; flex-direction: row !important; gap: 0.5rem !important; }
+    .sidebar .menue a span { display: none !important; }
+
+    .top-bar { padding: 0.6rem 0.75rem !important; height: auto !important; }
+
+    form button { width: 100% !important; padding: 0.75rem !important; min-height: 44px !important; }
+    .form-row { grid-template-columns: 1fr !important; }
+    .row { flex-direction: column !important; }
+}
+
+/* ===== Fix: make top-bar span full viewport width while keeping sidebar intact ===== */
+.top-bar {
+    width: calc(100% + 110px);
+    margin-left: -110px;
+    box-sizing: border-box;
+}
+.sidebar:hover + .main-content .top-bar {
+    width: calc(100% + 240px);
+    margin-left: -240px;
+}
+@media (max-width: 768px) {
+    .top-bar { width: 100% !important; margin-left: 0 !important; }
+}
