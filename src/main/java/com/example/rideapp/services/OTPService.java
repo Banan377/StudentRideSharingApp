@@ -71,7 +71,7 @@ public class OTPService {
             msg.setText("رمز التحقق الخاص بك هو: " + otp
                     + "\nصالح لمدة " + OTP_EXP_MINUTES + " دقائق.");
 
-           // mailSender.send(msg);
+           mailSender.send(msg);
 
         } catch (Exception e) {
             System.out.println("Error sending email: " + e.getMessage());
