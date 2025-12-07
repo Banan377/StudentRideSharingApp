@@ -308,11 +308,16 @@
         const res = await fetch('/api/admin/stats');
         const stats = await res.json();
 
-        stat.pendingDrivers = stats.pendingDrivers;
+        document.getElementById('stat-pending').innerText = stats.pendingDrivers ?? 0;
+        document.getElementById('stat-approved').innerText = stats.approvedDrivers ?? 0;
         document.getElementById('stat-users').innerText = stats.totalUsers ?? 0;
         document.getElementById('stat-rides').innerText = stats.todayRides ?? 0;
-      } catch (e) { }
+
+      } catch (e) {
+        console.error("Error loading stats:", e);
+      }
     }
+
 
     async function loadPendingPreview() {
       try {
@@ -336,7 +341,7 @@
           cont.innerHTML += `
         <div class="preview-card">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h4>${driver.firstName} ${driver.lastName}</h4>
+<h4>${driver.name}</h4>
             <span class="preview-badge">بانتظار المراجعة</span>
           </div>
 
@@ -356,83 +361,10 @@
       }
     }
 
-
-
-async function loadLowRatingsAlert() {
-  try {
-    const res = await fetch("http://localhost:8083/api/ratings/low-ratings");
-    const data = await res.json();
-
-    if (data.success && data.count > 0) {
-
-      const grid = document.querySelector(".stats-grid");
-
-      const alertBox = document.createElement("div");
-      alertBox.className = "stat-card";
-      alertBox.style.background = "#ffe5e5";
-      alertBox.style.border = "2px solid #ff4d4d";
-      alertBox.style.boxShadow = "0 0 12px rgba(255,0,0,0.25)";
-
-      alertBox.innerHTML = `
-        <span class="stat-title" style="color:#b30000; font-weight:700;">
-     تنبيه تقييم منخفض
-        </span>
-
-        <span class="stat-number" style="color:#b30000;">
-          ${data.count}
-        </span>
-
-        <span class="stat-sub" style="color:#b30000;">
-          سائقين حصلوا على تقييم 2 أو أقل
-        </span>
-
-        <i class="fas fa-exclamation-triangle stat-icon" style="color:#b30000;"></i>
-      `;
-
-      grid.prepend(alertBox);
-    }
-  } catch (error) {
-    console.error("Error loading low ratings:", error);
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     loadDashboardStats();
     loadPendingPreview();
-    loadLowRatingsAlert();
-
   </script>
-
-
-
-
-
-
-
-
 
 </body>
 
 </html>
-
-

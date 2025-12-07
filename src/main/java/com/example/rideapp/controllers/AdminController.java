@@ -41,7 +41,7 @@ public class AdminController {
             return ResponseEntity.badRequest().body("Driver not found");
         return ResponseEntity.ok("Rejected");
     }
-  
+
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
         return ResponseEntity.ok(adminService.getAllUsers());
@@ -66,4 +66,10 @@ public class AdminController {
         }
         return ResponseEntity.ok("User deleted");
     }
+
+    @GetMapping("/stats")
+    public ResponseEntity<?> getStats() {
+        return ResponseEntity.ok(adminService.getDashboardStats());
+    }
+
 }

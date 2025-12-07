@@ -3,6 +3,7 @@ package com.example.rideapp.repositories;
 import com.example.rideapp.models.RideModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface RideRepository extends JpaRepository<RideModel, Long> {
@@ -19,5 +20,7 @@ public interface RideRepository extends JpaRepository<RideModel, Long> {
     List<RideModel> findByDriverEmailAndStatus(String driverEmail, String status);
 
     List<RideModel> findByDriverEmailAndStatusNot(String email, String status);
+
+    long countByDate(LocalDate date);
 
 }

@@ -64,7 +64,7 @@ public class OTPService {
     @Async
     public void sendOTPEmail(String email, String otp) {
         try {
-            System.out.println("OTP GENERATED = " + otp);
+            
             SimpleMailMessage msg = new SimpleMailMessage();
             msg.setTo(email);
             msg.setSubject("رمز التحقق");

@@ -1,7 +1,11 @@
 package com.example.rideapp.services;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +32,23 @@ public class AdminService {
     @Autowired
     private DriverRepository driverRepository;
 
-    public List<DriverModel> getPendingDrivers() {
-        return driverRepository.findByStatus("pending");
+    public List<Map<String, Object>> getPendingDrivers() {
+
+        List<DriverModel> drivers = driverRepository.findByStatus("pending");
+
+        return drivers.stream().map(driver -> {
+            Map<String, Object> map = new HashMap<>();
+
+            // نجيب بيانات المستخدم
+            UserModel user = userRepository.findByEmail(driver.getEmail()).orElse(null);
+
+            map.put("email", driver.getEmail());
+            map.put("name", user != null ? user.getName() : "غير معروف");
+            map.put("carModel", driver.getCarModel());
+            map.put("carColor", driver.getCarColor());
+
+            return map;
+        }).collect(Collectors.toList());
     }
 
     // تحديث حالة السائق
@@ -66,7 +85,6 @@ public class AdminService {
             return false;
         }
 
-        // احذفي كل الأشياء المرتبطة (حسب تصميمكم)
         bookingRepository.deleteByPassengerEmail(email);
         rideRepository.deleteByDriverEmail(email);
         driverRepository.deleteByEmail(email);
@@ -74,4 +92,22 @@ public class AdminService {
         userRepository.deleteById(email);
         return true;
     }
+
+    public Map<String, Object> getDashboardStats() {
+        Map<String, Object> stats = new HashMap<>();
+
+        long pendingDrivers = driverRepository.countByStatus("pending");
+        long approvedDrivers = driverRepository.countByStatus("approved");
+        long totalUsers = userRepository.count();
+
+        long todayRides = rideRepository.countByDate(LocalDate.now());
+
+        stats.put("pendingDrivers", pendingDrivers);
+        stats.put("approvedDrivers", approvedDrivers);
+        stats.put("totalUsers", totalUsers);
+        stats.put("todayRides", todayRides);
+
+        return stats;
+    }
+
 }

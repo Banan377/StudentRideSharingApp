@@ -17,5 +17,7 @@ public interface DriverRepository extends JpaRepository<DriverModel, String> {
     List<DriverModel> findByStatus(String status);
 
     void deleteByEmail(String email);
+    long countByStatus(String status);
+
 
 }

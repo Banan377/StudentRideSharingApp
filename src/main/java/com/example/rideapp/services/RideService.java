@@ -41,8 +41,19 @@ public class RideService {
 
     public boolean cancelRide(Long rideId) {
         return rideRepository.findById(rideId).map(ride -> {
+
+            // 1) إلغاء الرحلة
             ride.setStatus("CANCELLED");
             rideRepository.save(ride);
+
+            // 2) تحديث حالة جميع الحجوزات المرتبطة
+            List<BookingModel> bookings = bookingRepository.findByRide_RideId(rideId);
+
+            for (BookingModel booking : bookings) {
+                booking.setStatus("cancelled");
+                bookingRepository.save(booking);
+            }
+
             return true;
         }).orElse(false);
     }
@@ -76,7 +87,6 @@ public class RideService {
         rideRepository.save(ride);
     }
 
-    // إضافة الدالة الجديدة:
     public List<RideModel> getAllRides() {
         return rideRepository.findAll();
     }
@@ -125,7 +135,7 @@ public class RideService {
         List<BookingModel> bookings = bookingRepository.findByPassenger_Email(passengerEmail)
                 .stream()
                 .filter(b -> "accepted".equals(b.getStatus())) // الراكب كان راكب فعلاً
-                .filter(b -> b.getRide() != null) // حماية من null
+                .filter(b -> b.getRide() != null)
                 .filter(b -> "COMPLETED".equals(b.getRide().getStatus()))
                 .collect(Collectors.toList());
 
