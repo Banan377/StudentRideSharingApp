@@ -149,11 +149,12 @@
     function toggleProfileDropdown() {
       document.getElementById('profile-dropdown').classList.toggle('hidden');
     }
-function showRatingPage() {
-  window.location.href = "ratingPage.html";
-}
 
-    
+    function showRatingPage() {
+      document.getElementById('profile-dropdown').classList.add('hidden');
+      document.getElementById('rating-page').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
 
     function closePage() {
       document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
@@ -244,7 +245,7 @@ function showRatingPage() {
     function loadDriverRides() {
       const driverEmail = localStorage.getItem("userEmail");
 
-      fetch(`/api/rides/driver-rides?email=${driverEmail}`)
+      fetch(`http://localhost:8083/api/rides/driver-rides?email=${driverEmail}`)
         .then(res => res.json())
         .then(rides => {
 
@@ -318,7 +319,7 @@ function showRatingPage() {
                 <span class="value">${ride.seatsAvailable}/${ride.totalSeats}</span>
             </div>
         </div>
-            <button class="startRideBtn" onclick="startRide(${ride.rideId}, '${ride.destination}')">بدء الرحلة</button>
+            <button class="startRideBtn" onclick="startRide(${ride.rideId}, '${ride.destinationLatLng}')">بدء الرحلة</button>
 
     </div>
 <div class="passenger-box">
@@ -352,7 +353,7 @@ function showRatingPage() {
     function loadBookingRequests() {
       const driverEmail = localStorage.getItem("userEmail");
 
-      fetch(`/api/bookings/driver-requests?driverEmail=${driverEmail}`)
+      fetch(`http://localhost:8083/api/bookings/driver-requests?driverEmail=${driverEmail}`)
         .then(res => res.json())
         .then(requests => {
 
@@ -420,7 +421,7 @@ function showRatingPage() {
     }
 
     function respondToBooking(bookingId, status) {
-      fetch(`/api/bookings/respond?bookingId=${bookingId}&status=${status}`, {
+      fetch(`http://localhost:8083/api/bookings/respond?bookingId=${bookingId}&status=${status}`, {
         method: "POST"
       })
         .then(res => {
@@ -457,7 +458,7 @@ function showRatingPage() {
     });
 
     function loadAcceptedPassengers(rideId) {
-      fetch(`/api/bookings/accepted-passengers?rideId=${rideId}`)
+      fetch(`http://localhost:8083/api/bookings/accepted-passengers?rideId=${rideId}`)
         .then(res => res.json())
         .then(passengers => {
           const container = document.getElementById(`passengers-${rideId}`);
@@ -480,9 +481,17 @@ function showRatingPage() {
         });
     }
 
-    function startRide(rideId, destination) {
-      // ننتقل للصفحة مع تمرير المتغيرات في رابط URL
-      window.location.href = `driverCurrentRide.html?rideId=${rideId}&destination=${encodeURIComponent(destination)}`;
+    function startRide(rideId, destinationLatLng) {
+      fetch(`http://localhost:8083/api/rides/${rideId}/start`, {
+        method: "POST"
+      }).then(res => {
+        if (!res.ok) { alert("فشل بدء الرحلة"); return; }
+        // ننتقل للصفحة مع تمرير المتغيرات في رابط URL
+        window.location.href = `driverCurrentRide.html?rideId=${rideId}&destinationLatLng=${encodeURIComponent(destinationLatLng)}`;
+      }).catch(err => {
+        console.error("خطأ في بدء الرحلة:", err);
+        alert("فشل الاتصال بالخادم");
+      });
     }
 
 
@@ -498,7 +507,7 @@ function showRatingPage() {
     function cancelRide(rideId) {
       if (!confirm("هل أنت متأكد من إلغاء الرحلة؟ سيتم إعلام الركاب.")) return;
 
-      fetch(`/api/rides/${rideId}/cancel`, {
+      fetch(`http://localhost:8083/api/rides/${rideId}/cancel`, {
         method: "POST"
       })
         .then(res => {
@@ -519,7 +528,7 @@ function showRatingPage() {
     }
 
     function notifyPassengersRideCancelled(rideId) {
-      fetch(`/api/bookings/ride-cancelled?rideId=${rideId}`)
+      fetch(`http://localhost:8083/api/bookings/ride-cancelled?rideId=${rideId}`)
         .then(() => {
           console.log("تم إعلام الركاب!");
         });

@@ -19,7 +19,9 @@ public class RideModel {
     private double driverRating;
 
     private String startArea;
+    private String startLatLng;
     private String destination;
+    private String destinationLatLng;
     private LocalDate date;
     private LocalTime time;
     private int seatsAvailable;
@@ -30,9 +32,6 @@ public class RideModel {
     private String driverEmail;
     private int totalSeats; // عدد المقاعد الأصلي
     private boolean isEventRide;
-    @ManyToOne
-    @JoinColumn(name = "event_id")
-    private EventModel event;
 
     @Column(columnDefinition = "text")
     private String routePolyline; // encoded polyline
@@ -57,12 +56,28 @@ public class RideModel {
         this.startArea = startArea;
     }
 
+    public String getStartLatLng() {
+        return startLatLng;
+    }
+
+    public void setStartLatLng(String startLatLng) {
+        this.startLatLng = startLatLng;
+    }
+
     public String getDestination() {
         return destination;
     }
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public String getDestinationLatLng() {
+        return destinationLatLng;
+    }
+
+    public void setDestinationLatLng(String destinationLatLng) {
+        this.destinationLatLng = destinationLatLng;
     }
 
     public LocalDate getDate() {
@@ -168,12 +183,4 @@ public class RideModel {
     public void setDriverRating(double driverRating) {
         this.driverRating = driverRating;
     }
-    public EventModel getEvent() {
-    return event;
-}
-
-public void setEvent(EventModel event) {
-    this.event = event;
-}
-
 }

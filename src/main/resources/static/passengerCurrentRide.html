@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <title>الرحلة الحالية</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTsobbN2k1vl8cItFx8hPWd2w0UgXpgYs&callback=initMap"></script>
+
+  <style>
+    body { font-family: system-ui; margin: 0; }
+    #map { height: 70vh; width: 100%; }
+    .status { padding: 10px; font-size: 16px; }
+  </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="form-box">
+        <div id="map"></div>
+        <label>رقم الرحلة: <input id="rideId" value="1" /></label>
+        <div id="status" class="status"></div>
+    </div>
+</div>  
+        
+<script>
+
+const API_BASE = "http://localhost:8083/api";
+const urlParams = new URLSearchParams(window.location.search);
+const rideId  = urlParams.get("rideId");
+
+let map, driverMarker, destMarker, polyline;
+let destLat = null, destLng = null;
+let trackingInterval;
+
+//  تحميل معلومات الرحلة 
+async function loadRideInfo() {
+  const response = await fetch(`${API_BASE}/rides/${rideId}`);
+  const ride = await response.json();
+
+  // قراءة الوجهة
+  if (ride.destinationLatLng) {
+    const [lat, lng] = ride.destinationLatLng.split(",");
+    destLat = parseFloat(lat);
+    destLng = parseFloat(lng);
+  }
+
+  // إشعار بدء الرحلة
+  if (ride.status === "STARTED") {
+    document.getElementById("status").textContent = "بدأت الرحلة";
+  }
+}
+
+//الخريطة 
+function initMap() {
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 24.7136, lng: 46.6753 },
+    zoom: 13
+  });
+
+  polyline = new google.maps.Polyline({
+    path: [],
+    map: map,
+    strokeColor: "#0066FF",
+    strokeWeight: 4
+  });
+
+  loadRideInfo().then(() => {
+    if (destLat && destLng) {
+      destMarker = new google.maps.Marker({
+        position: { lat: destLat, lng: destLng },
+        map,
+        title: "الوجهة"
+      });
+    }
+
+    startTrackingDriver();
+  });
+}
+
+// تتبع السائق 
+function startTrackingDriver() {
+  trackingInterval = setInterval(async () => {
+    const res = await fetch(`${API_BASE}/rides/${rideId}/location`);
+    const loc = await res.json();
+
+    if (!loc || !loc.lat) return;
+
+    const pos = { lat: loc.lat, lng: loc.lng };
+
+    if (!driverMarker) {
+      driverMarker = new google.maps.Marker({
+        map,
+        position: pos,
+        title: "الموقع الحالي"
+      });
+      map.setCenter(pos);
+    } else {
+      driverMarker.setPosition(pos);
+    }
+
+    // رسم الطريق بين السائق والوجهة
+    if (destLat && destLng) {
+      polyline.setPath([ pos, { lat: destLat, lng: destLng } ]);
+    }
+
+  }, 3000);
+}
+
+</script>
+
+</body>
+</html>

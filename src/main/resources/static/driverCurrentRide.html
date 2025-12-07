@@ -6,33 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <title>الرحلات الحالية</title>
-  <script async src="https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY:}&callback=initMap"></script>
+  <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTsobbN2k1vl8cItFx8hPWd2w0UgXpgYs&callback=initMap"></script>
   
   <style>
-    body { font-family: system-ui, Arial; margin: 0; padding: 0; }
+    body { font-family: system-ui; margin: 0; padding: 0; }
     #map { height: 60vh; width: 100%; }
     .controls { padding: 12px; }
     .status { margin-top: 8px; color: #333; }
-    button { padding: 8px 12px; font-size: 14px; }
-    
-    /* ===== Mobile-only safe overrides (max-width:768px) ===== */
-    @media (max-width: 768px) {
-      #map { height: 40vh !important; }
-      .controls { padding: 10px !important; }
-      button { padding: 10px 12px !important; min-height: 44px !important; }
-    }
   </style>
 </head>
 
-
+<body>
   <div class="container">
     <div class="form-box">
-      <body>
   <div id="map"></div>
   <div class="controls">
     <label>رقم الرحلة: <input id="rideId" value="1" /></label>
     <div id="status" class="status"></div>
-    <button id="stopBtn" disabled>أوقف الإرسال</button>
   </div>
     </div>
   </div>
@@ -44,34 +34,58 @@
     
   const API_BASE = "http://localhost:8083/api";
   const urlParams = new URLSearchParams(window.location.search);
-  const rideId  = urlParams.get("rideId"); const destination = urlParams.get("destination");
-  let map, driverMarker, trackingInterval = null;
+  const rideId  = urlParams.get("rideId"); const destinationLatLng = urlParams.get("destinationLatLng");
+  let map, driverMarker, destMarker, trackingInterval = null, polyline = null;
+
 
   console.log("Current rideId:", rideId); document.getElementById("rideId").value = rideId;
-  console.log("Destination:", destination);
+  console.log("DestinationLatLng:", destinationLatLng);
 
-  const { destLat, destLng } = parseDestinationString(destination);
-
-  console.log(lat); // 21.485
-  console.log(lng); // 39.246
  
-function parseDestinationString(destinationStr) {
-
-    // تقسيم النص إلى lat و lng
-    const [latStr, lngStr] = destinationStr.split(",");
-
+function parseDestinationLatLngString(str) {
+ 
+  if (!str) return null;
+  const parts = str.split(",");
+  if (parts.length !== 2) return null;
     // تحويل النص إلى أعداد
-    return {
-        lat: parseFloat(latStr),
-        lng: parseFloat(lngStr)
-    };
-}  
+  return {
+      lat: parseFloat(parts[0]),
+      lng: parseFloat(parts[1])
+  };
+}
+
+ const dest = parseDestinationLatLngString(destinationLatLng);
+  let destLat = dest?.lat;
+  let destLng = dest?.lng;
+  if (destLat && destLng) {
+    console.log("Parsed destinationLatLng:", destLat, destLng);
+  } else {
+    console.warn("Invalid or missing destinationLatLng parameter");
+  }
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
   center: { lat: 24.7136, lng: 46.6753 },
   zoom: 12
   });
+
+      if (destLat && destLng) {
+      destMarker = new google.maps.Marker({
+        map,
+        position: { lat: destLat, lng: destLng },
+        title: "الوجهة"
+      });
+    }
+
+  polyline = new google.maps.Polyline({
+    path: [],
+    geodesic: true,
+    strokeColor: "#FF0000",
+    strokeOpacity: 1.0,
+    strokeWeight: 4,
+    map: map
+  });
+
 
   startTracking(); // يبدأ التتبع مباشرة عند تحميل الخريطة
 }
@@ -128,25 +142,37 @@ function startTracking() {
         driverMarker.setPosition(p);
       }
 
+      if (destLat && destLng) {
+        const routePath = [
+          { lat: lat, lng: lng },
+          { lat: destLat, lng: destLng }
+        ];
+        polyline.setPath(routePath);
+      }
+
+
       sendLocation(lat, lng);
 
     // تحقق من الوصول
-      const dist = getDistanceMeters(lat, lng, destLat, destLng);
-      if (dist <= 20) {   // 20 متر تقريبًا
-        stopTracking();
-        setStatus("تم الوصول إلى الوجهة — تم إيقاف التتبع");
+      if (destLat && destLng) {
+        const dist = getDistanceMeters(lat, lng, destLat, destLng);
+        if (dist <= 20) {   // 20 متر تقريبًا
+          stopTracking();
+          setStatus("تم الوصول إلى الوجهة — تم إيقاف التتبع");
+        }
       }
-
-      }, err => {
-          setStatus("فشل الحصول على الموقع");
-        }, { enableHighAccuracy:true});
-    }, 1000);  
+    }, err => {
+       setStatus("فشل الحصول على الموقع");
+          },{ enableHighAccuracy:true});
+      }, 3000);  
   }
 
   function stopTracking() {
     if (trackingInterval !== null) {
       clearInterval(trackingInterval);
-       trackingInterval = null;
+      trackingInterval = null;
+      setStatus("تم إيقاف التتبع");
+      window.location.href = `driverUI.html`;
     }
   }
 

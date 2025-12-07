@@ -24,8 +24,7 @@ public class EventModel {
     @Column(length = 500)
     private String description;
     
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<RideModel> rides = new ArrayList<>();
+    
 
     // Constructors
     public EventModel() {}
@@ -52,7 +51,5 @@ public class EventModel {
     
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
-    
-    public List<RideModel> getRides() { return rides; }
-    public void setRides(List<RideModel> rides) { this.rides = rides; }
+
 }

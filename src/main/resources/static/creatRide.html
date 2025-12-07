@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY:}&callback=initMap"
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTsobbN2k1vl8cItFx8hPWd2w0UgXpgYs&callback=initMap"
     async defer></script>
 
   <style>
@@ -100,15 +100,6 @@
     button:hover {
       background: #265262;
     }
-    
-    /* ===== Mobile-only safe overrides (max-width:768px) ===== */
-    @media (max-width: 768px) {
-      .form-box { padding: 1rem !important; max-width: 100% !important; box-shadow: none !important; }
-      .row { flex-direction: column !important; gap: 0.6rem !important; }
-      #map1, #map2 { width: 100% !important; height: 240px !important; }
-      iframe { height: 220px !important; }
-      button { padding: 0.8rem !important; min-height: 44px !important; }
-    }
   </style>
 </head>
 
@@ -120,7 +111,7 @@
         <a href="driverUI.html"><i class="fas fa-home"></i><span>الصفحة الرئيسية</span></a>
       </li>
       <li>
-        <a href="driverRidesHistory.html"><i class="fas fa-history"></i><span>سجل الرحلات</span></a>
+        <a href="driverRiedsHistory.html"><i class="fas fa-history"></i><span>سجل الرحلات</span></a>
       </li>
       <li>
         <a href="#"><i class="fas fa-bell"></i><span>الإشعارات</span></a>
@@ -141,11 +132,13 @@
             <div class="field">
               <label>نقطة الانطلاق</label>
               <div id="map1" style="width:450px;height:200px"></div>
+              <input type="text" id="startName" placeholder="نقطة الانطلاق" readonly style="margin-top:8px" />
             </div>
 
             <div class="field">
               <label>الوجهة</label>
               <div id="map2" style="width:450px;height:200px"></div>
+              <input type="text" id="destName" placeholder="اسم الوجهة" readonly style="margin-top:8px" />
             </div>
           </div>
 
@@ -181,11 +174,13 @@
       </div>
     </div>
   </div>
+
   <script>
-    let rideId = null; let startLat = null, startLng = null; let destLat = null, destLng = null; let startLocation = null; let destinationLocation = null; let distanceKm = 0; let durationText = "";
-    let map1, map2, marker1, marker2;
+    let rideId = null; let startLat = null, startLng = null; let destLat = null, destLng = null; let startLocation = null; let destinationLocation = null; let currentLocation = null; let destination = null; let distanceKm = 0; let durationText = "";
+    let map1, map2, marker1, marker2, geocoder;
 
     function initMap() {
+      geocoder = new google.maps.Geocoder();
       const defaultPos = { lat: 24.7136, lng: 46.6753 };
 
       map1 = new google.maps.Map(document.getElementById("map1"), {
@@ -228,17 +223,29 @@
 
         marker1 = new google.maps.Marker({
           position: { lat: startLat, lng: startLng },
-          map: map1,
-          label: "نقطة الانطلاق"
+          map: map1
         });
 
+        geocoder.geocode({ location: { lat: startLat, lng: startLng } }, (results, status) => {
+            if (status === "OK" && results[0]) {
+                let placeName = results[0].formatted_address;
+
+                document.getElementById("startName").value = placeName;
+
+              currentLocation = {
+                    name: placeName,
+                    lat: startLat,
+                    lng: startLng
+                };
+            }
+        });
+    });
+
+        /*startLocation = { lat: startLat, lng: startLng };
+        console.log("Start location:", startLat, startLng);*/
 
 
-        startLocation = { lat: startLat, lng: startLng };
-        console.log("Start location:", startLat, startLng);
-
-
-      });
+      
 
       map2.addListener("click", (event) => {
         destLat = event.latLng.lat();
@@ -248,18 +255,29 @@
 
         marker2 = new google.maps.Marker({
           position: { lat: destLat, lng: destLng },
-          map: map2,
-          label: "الوجهة"
+          map: map2
         });
 
-        destinationLocation = { lat: destLat, lng: destLng };
-        console.log("Destination:", destLat, destLng);
+        geocoder.geocode({ location: { lat: destLat, lng: destLng } }, (results, status) => {
+            if (status === "OK" && results[0]) {
+                let placeName = results[0].formatted_address;
 
+                document.getElementById("destName").value = placeName;
 
-      });
+                destination = {
+                    name: placeName,
+                    lat: destLat,
+                    lng: destLng
+                };
+            }
+        });
+    });
 
-    }
+        /*destinationLocation = { lat: destLat, lng: destLng };
+        console.log("Destination:", destLat, destLng);*/
+  }
 
+  
     function calculateDistance(startLat, startLng, destLat, destLng) {
       if (!startLat || !startLng || !destLat || !destLng) return;
 
@@ -345,20 +363,22 @@
       console.log("Distance:", distanceKm, "km");
 
       const ride = {
-        destination: destinationLocation.lat + "," + destinationLocation.lng,
+        destination:destination.name,
+        destinationLatLng: destination.lat + "," + destination.lng,
         date: document.getElementById("rideDate").value,
         time: document.getElementById("rideTime").value,
         seatsAvailable: document.getElementById("seats").value,
         genderPreference: document.getElementById("gender").value,
         status: "ACTIVE",
-        currentLocation: startLocation.lat + "," + startLocation.lng,
+        currentLocation:currentLocation.name,
+        startLatLng: currentLocation.lat + "," + currentLocation.lng,
         distance: distanceKm,
         driverEmail: localStorage.getItem("userEmail")
       };
 
 
 
-      fetch(`/api/rides/createRide?driverEmail=${encodeURIComponent(localStorage.getItem("userEmail"))}`, {
+      fetch(`http://localhost:8083/api/rides/createRide?driverEmail=${encodeURIComponent(localStorage.getItem("userEmail"))}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -374,13 +394,13 @@
           rideId = data.id;
           // إرسال نقطة الانطلاق
           return Promise.all([
-            fetch(`/api/rides/${rideId}/updateStartLocation`, {
+            fetch(`http://localhost:8083/api/rides/${rideId}/updateStartLocation`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ latitude: startLat, longitude: startLng })
             }),
             // إرسال الوجهة
-            fetch(`/api/rides/${rideId}/updateDestination`, {
+            fetch(`http://localhost:8083/api/rides/${rideId}/updateDestination`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ latitude: destLat, longitude: destLng })
@@ -407,7 +427,7 @@
         return;
       }
 
-      fetch(`/api/rides/${rideId}/sendStartLocation`, {
+      fetch(`http://localhost:8083/api/rides/${rideId}/sendStartLocation`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -432,7 +452,7 @@
         return;
       }
 
-      fetch(`/api/rides/${rideId}/sendDestination`, {
+      fetch(`http://localhost:8083/api/rides/${rideId}/sendDestination`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
