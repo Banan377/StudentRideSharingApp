@@ -125,15 +125,36 @@
       font-size: 14px;
       font-weight: 600;
     }
-    
+
     /* ===== Mobile-only safe overrides (max-width:768px) ===== */
     @media (max-width: 768px) {
-      .requests-wrapper { padding: 0.75rem !important; }
-      .request-card { padding: 12px !important; box-shadow: none !important; }
-      .request-body { grid-template-columns: 1fr !important; }
-      .request-actions { justify-content: center !important; gap: 0.6rem !important; }
-      .sidebar .menue a span { display: none !important; }
-      .btn-approve, .btn-reject { padding: 10px 12px !important; min-height: 44px !important; }
+      .requests-wrapper {
+        padding: 0.75rem !important;
+      }
+
+      .request-card {
+        padding: 12px !important;
+        box-shadow: none !important;
+      }
+
+      .request-body {
+        grid-template-columns: 1fr !important;
+      }
+
+      .request-actions {
+        justify-content: center !important;
+        gap: 0.6rem !important;
+      }
+
+      .sidebar .menue a span {
+        display: none !important;
+      }
+
+      .btn-approve,
+      .btn-reject {
+        padding: 10px 12px !important;
+        min-height: 44px !important;
+      }
     }
   </style>
 </head>
@@ -145,7 +166,8 @@
     <div class="logo"></div>
     <ul class="menue">
       <li><a href="adminDashboard.html"><i class="fas fa-chart-line"></i><span>لوحة التحكم</span></a></li>
-      <li class="active"><a href="adminPendingDrivers.html"><i class="fas fa-id-card"></i><span>طلبات السائقين</span></a></li>
+      <li class="active"><a href="adminPendingDrivers.html"><i class="fas fa-id-card"></i><span>طلبات
+            السائقين</span></a></li>
       <li><a href="adminUsers.html"><i class="fas fa-users"></i><span>إدارة المستخدمين</span></a></li>
       <li><a href="#"><i class="fas fa-school"></i><span>أنشطة الجامعة</span></a></li>
     </ul>
@@ -177,151 +199,13 @@
   </main>
 
   <script>
-    function toggleProfileDropdown() {
-      document.getElementById('profile-dropdown').classList.toggle('hidden');
-    }
 
-    document.addEventListener('click', function (event) {
-      const profile = document.querySelector('.profile-section');
-      if (!profile.contains(event.target)) {
-        document.getElementById('profile-dropdown').classList.add('hidden');
-      }
-    });
-
-     function logout() {
-      document.getElementById('profile-dropdown').classList.add('hidden');
-      const overlay = document.createElement('div');
-      overlay.className = 'logout-overlay';
-      overlay.id = 'logout-confirmation';
-
-      overlay.innerHTML = `
-      <div class="logout-modal">
-        <div class="logout-content">
-          <i class="fas fa-sign-out-alt logout-icon"></i>
-          <h3>تسجيل الخروج</h3>
-          <p>هل أنت متأكد؟</p>
-          <div class="logout-buttons">
-            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
-            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
-          </div>
-        </div>
-      </div>`;
-
-      document.body.appendChild(overlay);
-    }
-
-    function confirmLogout() {
-      localStorage.removeItem("currentUser");
-      localStorage.removeItem("userEmail");
-      localStorage.removeItem("resetPasswordMode");
-
-      const overlay = document.getElementById('logout-confirmation');
-      overlay.innerHTML = `
-      <div class="logout-modal">
-        <div class="logout-content success">
-          <i class="fas fa-check-circle success-icon"></i>
-          <h3>تم تسجيل الخروج</h3>
-          <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
-        </div>
-      </div>`;
-    }
-
-    function cancelLogout() {
-      const overlay = document.getElementById('logout-confirmation');
-      if (overlay) overlay.remove();
-    }
-
-    function closeLogoutSuccess() {
-      window.location.href = "login.html";
-    }
-
-    async function loadPendingDrivers() {
-      try {
-        const res = await fetch('/api/admin/pending-drivers');
-        const data = await res.json();
-
-        const container = document.getElementById('requestsContainer');
-        container.innerHTML = "";
-
-        if (!data || data.length === 0) {
-          container.innerHTML = `
-            <p style="text-align:center; color:#666; padding:20px;">
-              لا توجد طلبات سائقين معلّقة حالياً.
-            </p>
-          `;
-          return;
-        }
-
-        data.forEach(driver => {
-          container.innerHTML += `
-            <div class="request-card">
-              <div class="request-header">
-                <div>
-                  <div class="request-name">${driver.firstName || ''} ${driver.lastName || ''}</div>
-                  <div class="request-email"><i class="fas fa-envelope"></i> ${driver.email}</div>
-                </div>
-                <span class="badge-pending">
-                  <i class="fas fa-clock"></i> بانتظار المراجعة
-                </span>
-              </div>
-
-              <div class="request-body">
-                <div class="info-item">
-                  <div class="info-label">الكلية</div>
-                  <div class="info-value">${driver.college || 'غير محدد'}</div>
-                </div>
-                <div class="info-item">
-                  <div class="info-label">موديل السيارة</div>
-                  <div class="info-value">${driver.carModel || '-'}</div>
-                </div>
-                <div class="info-item">
-                  <div class="info-label">لون السيارة</div>
-                  <div class="info-value">${driver.carColor || '-'}</div>
-                </div>
-                <div class="info-item">
-                  <div class="info-label">رقم اللوحة</div>
-                  <div class="info-value">${driver.carPlate || '-'}</div>
-                </div>
-                <div class="info-item">
-                  <div class="info-label">المقاعد المتاحة</div>
-                  <div class="info-value">${driver.seatsAvailable ?? '-'}</div>
-                </div>
-              </div>
-
-              <div class="request-files">
-                <span><strong>الملفات:</strong></span>
-                <a class="file-link" href="${driver.licenseUrl}" target="_blank">رخصة القيادة</a>
-                <a class="file-link" href="${driver.registrationUrl}" target="_blank">استمارة السيارة</a>
-              </div>
-
-              <div class="request-actions">
-                <button class="btn-approve" onclick="approveDriver('${driver.email}')">موافقة</button>
-                <button class="btn-reject" onclick="rejectDriver('${driver.email}')">رفض</button>
-              </div>
-            </div>
-          `;
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    async function approveDriver(email) {
-      if (!confirm("هل تريد الموافقة على هذا الطلب؟")) return;
-      await fetch(`/api/admin/approve?email=${encodeURIComponent(email)}`, { method: 'PUT' });
-      alert("تمت الموافقة بنجاح");
-      loadPendingDrivers();
-    }
-
-    async function rejectDriver(email) {
-      if (!confirm("هل تريد رفض هذا الطلب؟")) return;
-      await fetch(`/api/admin/reject?email=${encodeURIComponent(email)}`, { method: 'PUT' });
-      alert("تم رفض الطلب");
-      loadPendingDrivers();
-    }
-
-    loadPendingDrivers();
   </script>
+  <script src="js/logout.js"></script>
+  <script src="js/adminPendingDrivers.js"></script>
+
+
 
 </body>
+
 </html>

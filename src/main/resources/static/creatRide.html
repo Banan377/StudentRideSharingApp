@@ -9,8 +9,18 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTsobbN2k1vl8cItFx8hPWd2w0UgXpgYs&callback=initMap"
-    async defer></script>
+  <script>
+    fetch('/api/google/maps-key')
+      .then(res => res.text())
+      .then(key => {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&callback=initMap`;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+      });
+  </script>
+
 
   <style>
     .container-form {
@@ -227,25 +237,25 @@
         });
 
         geocoder.geocode({ location: { lat: startLat, lng: startLng } }, (results, status) => {
-            if (status === "OK" && results[0]) {
-                let placeName = results[0].formatted_address;
+          if (status === "OK" && results[0]) {
+            let placeName = results[0].formatted_address;
 
-                document.getElementById("startName").value = placeName;
+            document.getElementById("startName").value = placeName;
 
-              currentLocation = {
-                    name: placeName,
-                    lat: startLat,
-                    lng: startLng
-                };
-            }
+            currentLocation = {
+              name: placeName,
+              lat: startLat,
+              lng: startLng
+            };
+          }
         });
-    });
+      });
 
-        /*startLocation = { lat: startLat, lng: startLng };
-        console.log("Start location:", startLat, startLng);*/
+      /*startLocation = { lat: startLat, lng: startLng };
+      console.log("Start location:", startLat, startLng);*/
 
 
-      
+
 
       map2.addListener("click", (event) => {
         destLat = event.latLng.lat();
@@ -259,25 +269,25 @@
         });
 
         geocoder.geocode({ location: { lat: destLat, lng: destLng } }, (results, status) => {
-            if (status === "OK" && results[0]) {
-                let placeName = results[0].formatted_address;
+          if (status === "OK" && results[0]) {
+            let placeName = results[0].formatted_address;
 
-                document.getElementById("destName").value = placeName;
+            document.getElementById("destName").value = placeName;
 
-                destination = {
-                    name: placeName,
-                    lat: destLat,
-                    lng: destLng
-                };
-            }
+            destination = {
+              name: placeName,
+              lat: destLat,
+              lng: destLng
+            };
+          }
         });
-    });
+      });
 
-        /*destinationLocation = { lat: destLat, lng: destLng };
-        console.log("Destination:", destLat, destLng);*/
-  }
+      /*destinationLocation = { lat: destLat, lng: destLng };
+      console.log("Destination:", destLat, destLng);*/
+    }
 
-  
+
     function calculateDistance(startLat, startLng, destLat, destLng) {
       if (!startLat || !startLng || !destLat || !destLng) return;
 
@@ -363,14 +373,14 @@
       console.log("Distance:", distanceKm, "km");
 
       const ride = {
-        destination:destination.name,
+        destination: destination.name,
         destinationLatLng: destination.lat + "," + destination.lng,
         date: document.getElementById("rideDate").value,
         time: document.getElementById("rideTime").value,
         seatsAvailable: document.getElementById("seats").value,
         genderPreference: document.getElementById("gender").value,
         status: "ACTIVE",
-        currentLocation:currentLocation.name,
+        currentLocation: currentLocation.name,
         startLatLng: currentLocation.lat + "," + currentLocation.lng,
         distance: distanceKm,
         driverEmail: localStorage.getItem("userEmail")

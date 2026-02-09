@@ -1,3 +1,4 @@
+/* ===== BASE STYLES ===== */
 * {
     margin: 0;
     padding: 0;
@@ -8,12 +9,14 @@
 }
 
 body {
-  display: flex;
-  background: #ccddea;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
+    display: flex;
+    background: #ccddea;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
 }
+
+/* ===== SIDEBAR ===== */
 .sidebar {
     position: sticky;
     top: 0;
@@ -81,6 +84,7 @@ body {
     font-size: 16px;
 }
 
+/* ===== MAIN CONTENT ===== */
 .main-content {
     flex: 1;
     display: flex;
@@ -90,144 +94,24 @@ body {
     overflow-y: auto;
 }
 
-.container {
+/* ===== TOP BAR ===== */
+.top-bar {
     width: 100%;
     height: 70px;
     background: #f9fbfb;
     display: flex;
     align-items: center;
-    z-index: 100;
-}
-
-
-button {
-    width: 100%;
-    background: #487788;
-    color: white;
-    border: none;
-    padding: 8px;
-    border-radius: 8px;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s ease-in-out;
-
-}
-
-button:hover {
-    background: #265262;
-}
-
-.button:focus,
-.button:active {
-    color: white;
-    outline: none;
-}
-
-
-.create-btn {
-    width: 80%;
-    background: #487788;
-    color: white;
-    padding: 10px;
-    border-radius: 10px;
-    font-size: 17px;
-    font-weight: bold;
-    transition: background 0.2s ease-in-out;
-    margin-right: 0.4rem;
-    margin-top: 1.21rem;
-}
-
-.create-btn:hover {
-    background: #265262;
-}
-
-.create-btn:focus,
-.create-btn:active {
-    color: white;
-    outline: none;
-}
-
-
-.container-form {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #f9fbfb;
-    padding-top: 20px;
-    width: 100%;
-}
-
-.form-box {
-    background: #ffffff;
-    padding: 35px 45px;
-    border-radius: 12px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
-    width: 100%;
-    max-width: 520px;
-    text-align: center;
-}
-
-.form-box h2 {
-    margin-bottom: 20px;
-    color: #265262;
-    font-size: 18px;
-    align-items: center;
-    font-size: 20pt;
-    font-weight: bold;
-}
-
-.form-box label {
-    display: block;
-    margin-bottom: 5px;
-    text-align: right;
-    color: #333;
-    font-weight: 100;
-}
-
-.form-box input,
-.form-box select {
-    width: 100%;
-    padding: 10px 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 15px;
-
-}
-
-input[type="date"],
-input[type="time"],
-input[type="number"] {
-    direction: ltr !important;
-    text-align: right;
-    font-family: "Poppins", sans-serif;
-}
-
-.row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-    flex-wrap: wrap;
-}
-
-.row .field {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-
-
-.header {
-    display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    width: 100%;
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    flex-shrink: 0;
 }
 
+/* ===== PROFILE SECTION ===== */
 .profile-section {
     position: relative;
 }
@@ -262,7 +146,6 @@ input[type="number"] {
     bottom: 6px;
     right: 6px;
 }
-
 
 .profile-btn:hover {
     background: #85828258;
@@ -308,11 +191,77 @@ input[type="number"] {
     background: #f5f5f5;
 }
 
-
+/* ===== UTILITY CLASSES ===== */
 .hidden {
     display: none !important;
 }
 
+/* ===== BUTTONS ===== */
+button {
+    width: 100%;
+    background: #487788;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+button:hover {
+    background: #265262;
+}
+
+button:focus,
+button:active {
+    color: white;
+    outline: none;
+}
+
+.create-btn {
+    width: 80%;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 17px;
+    margin-right: 0.4rem;
+    margin-top: 1.21rem;
+}
+
+.back-btn {
+    background: #265262;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-top: auto;
+}
+
+.back-btn:hover {
+    background: #e0e0e0;
+}
+
+.card-book-btn {
+    width: 100%;
+    padding: 12px;
+    background: #487788;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0;
+    text-align: center;
+}
+
+.card-book-btn:hover {
+    background: #265262;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(38, 82, 98, 0.3);
+}
+
+/* ===== FULL PAGE OVERLAY (for ratings, etc.) ===== */
 .full-page {
     position: fixed;
     top: 0;
@@ -326,10 +275,6 @@ input[type="number"] {
     align-items: center;
 }
 
-.full-page.hidden {
-    display: none !important;
-}
-
 .page-header {
     display: flex;
     flex-direction: column-reverse;
@@ -340,23 +285,8 @@ input[type="number"] {
     padding-bottom: 15px;
 }
 
-.back-btn {
-    background: #265262;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.2s ease-in-out;
-    width: 100%;
-    margin-top: auto;
-}
-
-.back-btn:hover {
-    background: #e0e0e0;
-}
-
-.rating-history,
-.settings-form {
+/* ===== RATING SECTION ===== */
+.rating-history {
     text-align: center;
 }
 
@@ -491,6 +421,324 @@ input[type="number"] {
     color: #999;
 }
 
+/* ===== EVENT CARDS ===== */
+.trips-section {
+    padding: 24px;
+    width: 100%;
+    background: transparent;
+    min-height: calc(100vh - 70px);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 1200px;
+    width: 100%;
+    padding: 10px;
+}
+
+.trip-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.24s, box-shadow 0.24s;
+    border: 1px solid #ebebeb;
+    height: auto;
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.trip-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.card-header h3 {
+    color: #265262;
+    font-size: 18px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.driver-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0;
+}
+
+.driver-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #487788;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.trip-info {
+    margin-bottom: 14px;
+}
+
+.eventDescription-row {
+    display: grid;
+    gap: 12px;
+    margin-top: 30px;
+    margin-bottom: 17px;
+}
+
+.eventDescription-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.eventDescription-item i {
+    color: #487788;
+    margin-top: 2px;
+    font-size: 14px;
+    padding: 10px;
+}
+
+.eventDescription-item .label {
+    color: #666;
+    font-size: 11px;
+    display: block;
+    margin: 4px;
+}
+
+.eventDescription-item .value {
+    color: #333;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.eventDetails-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 8px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.detail-item .label {
+    color: #666;
+    font-size: 10px;
+}
+
+.detail-item .value {
+    color: #333;
+    font-weight: 600;
+    font-size: 11px;
+}
+
+.eventCard-bottom {
+    border-top: 1px solid #f0f0f0;
+    padding-top: 28px;
+    margin-bottom: 23px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+    html { 
+        font-size: 15px; 
+    }
+    
+    body {
+        flex-direction: column !important;
+        width: 100% !important;
+        height: 100vh !important;
+        overflow: hidden !important;
+    }
+
+    .main-content {
+        width: 0 !important;
+        height: 100vh !important;
+        overflow-y: auto !important;
+        flex: 1 !important;
+    }
+
+    .sidebar {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        display: flex !important;
+        flex-direction: row !important;
+        padding: 0.4rem 0.6rem !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+    }
+
+    .sidebar .menue {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 0.5rem !important;
+        height: auto !important;
+    }
+
+    .sidebar .menue a span { 
+        display: none !important; 
+    }
+
+    .top-bar {
+        height: 60px !important;
+        padding: 0 12px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .trips-section {
+        padding: 16px !important;
+        width: 100% !important;
+        margin-top: 0 !important;
+        min-height: auto !important;
+        display: block !important;
+    }
+
+    .events-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+
+    .trip-card {
+        min-height: auto !important;
+        height: auto !important;
+        padding: 16px !important;
+        border-radius: 8px !important;
+    }
+
+    .card-header {
+        margin-bottom: 10px !important;
+        padding-bottom: 8px !important;
+    }
+
+    .card-header h3 {
+        font-size: 16px !important;
+    }
+
+    .trip-info {
+        margin-bottom: 12px !important;
+    }
+
+    .eventCard-bottom {
+        margin-top: 12px !important;
+    }
+
+    .create-btn { 
+        width: auto !important; 
+        padding: 0.7rem 1rem !important; 
+    }
+
+    .card-book-btn { 
+        width: 100% !important; 
+    }
+}
+
+
+.container-form {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f9fbfb;
+    padding-top: 20px;
+    width: 100%;
+}
+
+.form-box {
+    background: #ffffff;
+    padding: 35px 45px;
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 520px;
+    text-align: center;
+}
+
+.form-box h2 {
+    margin-bottom: 20px;
+    color: #265262;
+    align-items: center;
+    font-size: 20pt;
+    font-weight: bold;
+}
+
+.form-box label {
+    display: block;
+    margin-bottom: 5px;
+    text-align: right;
+    color: #333;
+    font-weight: 100;
+}
+
+.form-box input,
+.form-box select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="number"] {
+    direction: ltr !important;
+    text-align: right;
+    font-family: "Poppins", sans-serif;
+}
+
+.row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.row .field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -565,7 +813,6 @@ textarea {
         transform: translateY(-50px);
         opacity: 0;
     }
-
     to {
         transform: translateY(0);
         opacity: 1;
@@ -667,305 +914,6 @@ textarea {
     background: #218838;
 }
 
-/* تنسيقات بطاقات أنشطة الجامعة */
-.eventDescription-row {
-    display: grid;
-    gap: 12px;
-    margin-top: 30px;
-    margin-bottom: 17px;
-}
-
-.eventDescription-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 8px;
-}
-
-.eventDescription-item i {
-    color: #487788;
-    margin-top: 2px;
-    font-size: 14px;
-    padding: 10px;
-}
-
-.eventDescription-item .label {
-    color: #666;
-    font-size: 11px;
-    display: block;
-    margin: 4px;
-}
-
-.eventDescription-item .value {
-    color: #333;
-    font-weight: 600;
-    font-size: 12px;
-}
-
-.eventDetails-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-}
-
-.eventCard-bottom {
-    border-top: 1px solid #f0f0f0;
-    padding-top: 28px;
-    margin-bottom: 23px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.events-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    max-width: 1200px;
-    width: 100%;
-    padding: 10px;
-}
-
-.trips-section {
-    padding: 24px;
-    width: 100%;
-    background: transparent;
-    min-height: calc(100vh - 70px);
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-}
-
-.trip-card {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    transition: transform 0.24s, box-shadow 0.24s;
-    border: 1px solid #ebebeb;
-    height: auto;
-    min-height: 360px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.trip-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-}
-
-.driver-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 0;
-}
-
-.driver-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: #487788;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 18px;
-    flex-shrink: 0;
-}
-
-.trip-info {
-    margin-bottom: 14px;
-}
-
-.card-book-btn {
-    width: 100%;
-    padding: 12px;
-    background: #487788;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 0;
+.settings-form {
     text-align: center;
-}
-
-.card-book-btn:hover {
-    background: #265262;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(38, 82, 98, 0.3);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.card-header h3 {
-    color: #265262;
-    font-size: 18px;
-    margin: 0;
-    font-weight: bold;
-}
-
-.detail-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    padding: 8px;
-    background: #f8f9fa;
-    border-radius: 6px;
-    text-align: center;
-}
-
-.detail-item .label {
-    color: #666;
-    font-size: 10px;
-}
-
-.detail-item .value {
-    color: #333;
-    font-weight: 600;
-    font-size: 11px;
-}
-
-/* ===== Mobile-only safe overrides (max-width:768px) ===== */
-@media (max-width: 768px) {
-    html { font-size: 15px; }
-    body { flex-direction: column !important; }
-
-    .container, .form-box, .main-content, .content-wrapper, .card { width: 100% !important; max-width: 100% !important; padding-left: 1rem !important; padding-right: 1rem !important; }
-    img, .img-fluid { max-width: 100% !important; height: auto !important; }
-
-    .sidebar { position: relative !important; width: 100% !important; display: flex !important; flex-direction: row !important; padding: 0.4rem 0.6rem !important; overflow-x: auto !important; }
-    .sidebar .menue { display: flex !important; flex-direction: row !important; gap: 0.5rem !important; }
-    .sidebar .menue a span { display: none !important; }
-
-    .card { padding: 1rem !important; }
-    .card-book-btn { width: 100% !important; }
-    .create-btn { width: auto !important; padding: 0.7rem 1rem !important; }
-}
-
-/* ===== Full-width top-bar (no overflow) ===== */
-.top-bar {
-    width: 100%;
-    height: 70px;
-    background: #f9fbfb;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    box-sizing: border-box;
-    flex-shrink: 0;
-}
-
-@media (max-width: 768px) {
-  body {
-    width: 100% !important;
-    height: 100vh !important;
-    overflow: hidden !important;
-  }
-
-  .main-content {
-    width: 0 !important;
-    height: 100vh !important;
-    overflow-y: auto !important;
-    flex: 1 !important;
-  }
-
-  .sidebar {
-    position: relative !important;
-    width: 100% !important;
-    height: auto !important;
-    display: flex !important;
-    flex-direction: row !important;
-    padding: 0.4rem 0.6rem !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-  }
-
-  .sidebar .menue {
-    display: flex !important;
-    flex-direction: row !important;
-    gap: 0.5rem !important;
-    height: auto !important;
-  }
-
-  .sidebar .menue a span { display: none !important; }
-
-  .top-bar {
-    height: 60px !important;
-    padding: 0 12px !important;
-    flex-shrink: 0 !important;
-  }
-
-  .trips-section {
-    padding: 16px !important;
-    width: 100% !important;
-    margin-top: 0 !important;
-    min-height: auto !important;
-    display: block !important;
-  }
-
-  .events-grid {
-    grid-template-columns: 1fr !important;
-    gap: 16px !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 0 !important;
-  }
-
-  .trip-card {
-    min-height: auto !important;
-    height: auto !important;
-    aspect-ratio: auto !important;
-    padding: 16px !important;
-    border-radius: 8px !important;
-  }
-
-  .card-header {
-    margin-bottom: 10px !important;
-    padding-bottom: 8px !important;
-  }
-
-  .card-header h3 {
-    font-size: 16px !important;
-  }
-
-  .trip-info {
-    margin-bottom: 12px !important;
-  }
-
-  .eventCard-bottom {
-    margin-top: 12px !important;
-  }
-}
-
-/* Desktop: 2 columns for trip cards */
-@media (min-width: 769px) {
-  .events-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Mobile: 1 column for trip cards */
-@media (max-width: 768px) {
-  .events-grid {
-    grid-template-columns: 1fr;
-  }
 }

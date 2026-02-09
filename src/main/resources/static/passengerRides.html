@@ -60,751 +60,182 @@
 
     <div class="container">
 
-    <!-- صفحة التقييم -->
-    <div id="rating-page" class="full-page hidden">
-      <div class="container-form">
-        <div class="form-box">
-          <div class="page-header">
-            <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
-            <h2>سجل التقييمات</h2>
-          </div>
+      <!-- صفحة التقييم -->
+      <div id="rating-page" class="full-page hidden">
+        <div class="container-form">
+          <div class="form-box">
+            <div class="page-header">
+              <button onclick="closePage()" class="back-btn"><i class="fas fa-arrow-right"></i></button>
+              <h2>سجل التقييمات</h2>
+            </div>
 
-          <div class="rating-history">
-            <div class="rating-summary">
-              <div class="average-rating">
-                <span class="rating-number">0.0</span>
-                <div class="stars-display">
-                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <div class="rating-history">
+              <div class="rating-summary">
+                <div class="average-rating">
+                  <span class="rating-number">0.0</span>
+                  <div class="stars-display">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                  </div>
+                  <span class="total-reviews">(0 تقييم)</span>
+                  <p>ستظهر تقييماتك هنا بعد إكمال الرحلات</p>
                 </div>
-                <span class="total-reviews">(0 تقييم)</span>
-                <p>ستظهر تقييماتك هنا بعد إكمال الرحلات</p>
+              </div>
+
+              <div class="reviews-list">
+                <div class="no-reviews">
+                  <i class="fas fa-star"></i>
+                  <p>لا توجد تقييمات بعد</p>
+                  <span>ستظهر تقييمات الركاب هنا بعد إكمال الرحلات</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="logout-overlay hidden" id="driverCheckModal">
+        <div class="logout-modal">
+          <div class="logout-content">
+            <i class="fas fa-id-card logout-icon"></i>
+            <h3>التسجيل كسائق</h3>
+            <p id="driverCheckMessage">هل ترغب في التسجيل كسائق؟</p>
+            <div class="logout-buttons">
+              <button id="confirmYesBtn" class="confirm-logout-btn">نعم</button>
+              <button onclick="closeDriverCheckModal()" class="cancel-logout-btn">لا</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="logout-overlay hidden" id="confirmedDriverModal">
+        <div class="logout-modal">
+          <div class="logout-content">
+            <i class="fas fa-car logout-icon"></i>
+            <h3>سائق موثق</h3>
+            <p>هل تريد التبديل إلى واجهة السائق؟</p>
+            <div class="logout-buttons">
+              <button onclick="goToDriverUI()" class="confirm-logout-btn">نعم</button>
+              <button onclick="closeConfirmedDriverModal()" class="cancel-logout-btn">لا</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- حالة الطلب تحت المعالجة -->
+      <div class="logout-overlay hidden" id="pendingDriverModal">
+        <div class="logout-modal">
+          <div class="logout-content">
+            <i class="fas fa-clock logout-icon"></i>
+            <h3>طلب تحت المعالجة</h3>
+            <p> تم إرسال طلبك كسائق ويجري الآن التحقق من البيانات.<br>سيتم إشعارك فور الموافقة.</p>
+            <div class="logout-buttons">
+              <button onclick="closePendingDriverModal()" class="confirm-logout-btn">موافق</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- التسجيل كسائق -->
+      <div class="upload-modal hidden" id="uploadModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>طلب أن تصبح سائقاً</h2>
+            <button class="close-btn" onclick="closeUploadModal()">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <div class="requirements">
+            <h4><i class="fas fa-info-circle"></i> المتطلبات المطلوبة:</h4>
+            <ul>
+              <li>رخصة قيادة سارية</li>
+              <li>JPG / PNG / PDF</li>
+            </ul>
+          </div>
+
+          <form id="uploadForm">
+            <!-- البيانات المطلوبة -->
+            <div class="form-section">
+              <h4>معلومات السائق والمركبة</h4>
+
+              <div class="form-group">
+                <label>رقم رخصة القيادة *</label>
+                <input type="text" id="licenseNumber" required>
+              </div>
+
+              <div class="form-group">
+                <label>موديل السيارة *</label>
+                <input type="text" id="carModel" required>
+              </div>
+
+              <div class="form-group">
+                <label>لون السيارة *</label>
+                <input type="text" id="carColor" required>
+              </div>
+
+              <div class="form-group">
+                <label>رقم لوحة السيارة *</label>
+                <input type="text" id="plateNumber" required>
+              </div>
+
+              <div class="form-group">
+                <label>عدد المقاعد المتاحة *</label>
+                <input type="number" id="availableSeats" min="1" max="10" required>
               </div>
             </div>
 
-            <div class="reviews-list">
-              <div class="no-reviews">
-                <i class="fas fa-star"></i>
-                <p>لا توجد تقييمات بعد</p>
-                <span>ستظهر تقييمات الركاب هنا بعد إكمال الرحلات</span>
-              </div>
+            <!-- قسم رفع الملفات -->
+            <div class="upload-section">
+              <label>رخصة القيادة (صورة) *</label>
+              <input type="file" id="licenseUpload" accept=".jpg,.jpeg,.png,.pdf" required>
+            </div>
+            <div class="upload-section">
+              <label>استمارة القيادة (صورة) *</label>
+              <input type="file" id="licenseUpload" accept=".jpg,.jpeg,.png,.pdf" required>
             </div>
 
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-paper-plane"></i> إرسال الطلب
+            </button>
+          </form>
+
+        </div>
+
+      </div>
+      <div id="emergencyPopup" class="logout-overlay hidden">
+        <div class="logout-modal" style="max-width:400px;">
+          <div class="logout-content">
+            <i class="fas fa-exclamation-triangle logout-icon" style="color:#d90429;"></i>
+            <h3>بلاغ طوارئ</h3>
+            <p>هل أنت متأكد أنك تريد إرسال بلاغ طوارئ؟</p>
+
+            <div class="logout-buttons">
+              <button id="confirmEmergency" class="confirm-logout-btn">إرسال البلاغ</button>
+              <button onclick="closeEmergencyPopup()" class="cancel-logout-btn">إلغاء</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-
-
-    <div class="logout-overlay hidden" id="driverCheckModal">
-      <div class="logout-modal">
-        <div class="logout-content">
-          <i class="fas fa-id-card logout-icon"></i>
-          <h3>التسجيل كسائق</h3>
-          <p id="driverCheckMessage">هل ترغب في التسجيل كسائق؟</p>
-          <div class="logout-buttons">
-            <button id="confirmYesBtn" class="confirm-logout-btn">نعم</button>
-            <button onclick="closeDriverCheckModal()" class="cancel-logout-btn">لا</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="logout-overlay hidden" id="confirmedDriverModal">
-      <div class="logout-modal">
-        <div class="logout-content">
-          <i class="fas fa-car logout-icon"></i>
-          <h3>سائق موثق</h3>
-          <p>هل تريد التبديل إلى واجهة السائق؟</p>
-          <div class="logout-buttons">
-            <button onclick="goToDriverUI()" class="confirm-logout-btn">نعم</button>
-            <button onclick="closeConfirmedDriverModal()" class="cancel-logout-btn">لا</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- حالة الطلب تحت المعالجة -->
-    <div class="logout-overlay hidden" id="pendingDriverModal">
-      <div class="logout-modal">
-        <div class="logout-content">
-          <i class="fas fa-clock logout-icon"></i>
-          <h3>طلب تحت المعالجة</h3>
-          <p> تم إرسال طلبك كسائق ويجري الآن التحقق من البيانات.<br>سيتم إشعارك فور الموافقة.</p>
-          <div class="logout-buttons">
-            <button onclick="closePendingDriverModal()" class="confirm-logout-btn">موافق</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- التسجيل كسائق -->
-    <div class="upload-modal hidden" id="uploadModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>طلب أن تصبح سائقاً</h2>
-          <button class="close-btn" onclick="closeUploadModal()">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-
-        <div class="requirements">
-          <h4><i class="fas fa-info-circle"></i> المتطلبات المطلوبة:</h4>
-          <ul>
-            <li>رخصة قيادة سارية</li>
-            <li>JPG / PNG / PDF</li>
-          </ul>
-        </div>
-
-        <form id="uploadForm">
-          <!-- البيانات المطلوبة -->
-          <div class="form-section">
-            <h4>معلومات السائق والمركبة</h4>
-
-            <div class="form-group">
-              <label>رقم رخصة القيادة *</label>
-              <input type="text" id="licenseNumber" required>
-            </div>
-
-            <div class="form-group">
-              <label>موديل السيارة *</label>
-              <input type="text" id="carModel" required>
-            </div>
-
-            <div class="form-group">
-              <label>لون السيارة *</label>
-              <input type="text" id="carColor" required>
-            </div>
-
-            <div class="form-group">
-              <label>رقم لوحة السيارة *</label>
-              <input type="text" id="plateNumber" required>
-            </div>
-
-            <div class="form-group">
-              <label>عدد المقاعد المتاحة *</label>
-              <input type="number" id="availableSeats" min="1" max="10" required>
-            </div>
-          </div>
-
-          <!-- قسم رفع الملفات -->
-          <div class="upload-section">
-            <label>رخصة القيادة (صورة) *</label>
-            <input type="file" id="licenseUpload" accept=".jpg,.jpeg,.png,.pdf" required>
-          </div>
-          <div class="upload-section">
-            <label>استمارة القيادة (صورة) *</label>
-            <input type="file" id="licenseUpload" accept=".jpg,.jpeg,.png,.pdf" required>
-          </div>
-
-          <button type="submit" class="submit-btn">
-            <i class="fas fa-paper-plane"></i> إرسال الطلب
-          </button>
-        </form>
-
-      </div>
-
-    </div>
-    <div id="emergencyPopup" class="logout-overlay hidden">
-      <div class="logout-modal" style="max-width:400px;">
-        <div class="logout-content">
-          <i class="fas fa-exclamation-triangle logout-icon" style="color:#d90429;"></i>
-          <h3>بلاغ طوارئ</h3>
-          <p>هل أنت متأكد أنك تريد إرسال بلاغ طوارئ؟</p>
-
-          <div class="logout-buttons">
-            <button id="confirmEmergency" class="confirm-logout-btn">إرسال البلاغ</button>
-            <button onclick="closeEmergencyPopup()" class="cancel-logout-btn">إلغاء</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <section id="myBookings" class="trips-section">
-      <div class="trips-grid" id="passenger-bookings"></div>
-    </section>
+      <section id="myBookings" class="trips-section">
+        <div class="trips-grid" id="passenger-bookings"></div>
+      </section>
 
 
   </main>
+  <div id="driver-modal-root"></div>
 
-  <script>
-    function toggleProfileDropdown() {
-      document.getElementById('profile-dropdown').classList.toggle('hidden');
-    }
 
-    document.addEventListener('click', function (event) {
-      const profile = document.querySelector('.profile-section');
-      if (!profile.contains(event.target)) {
-        document.getElementById('profile-dropdown').classList.add('hidden');
-      }
-    });
-
-    function showRatingPage() {
-      document.getElementById('rating-page').classList.remove('hidden');
-    }
-
-    function closePage() {
-      document.querySelectorAll('.full-page').forEach(p => p.classList.add('hidden'));
-    }
-
-    function logout() {
-      document.getElementById('profile-dropdown').classList.add('hidden');
-      const overlay = document.createElement('div');
-      overlay.className = 'logout-overlay';
-      overlay.id = 'logout-confirmation';
-
-      overlay.innerHTML = `
-      <div class="logout-modal">
-        <div class="logout-content">
-          <i class="fas fa-sign-out-alt logout-icon"></i>
-          <h3>تسجيل الخروج</h3>
-          <p>هل أنت متأكد؟</p>
-          <div class="logout-buttons">
-            <button onclick="confirmLogout()" class="confirm-logout-btn">نعم</button>
-            <button onclick="cancelLogout()" class="cancel-logout-btn">إلغاء</button>
-          </div>
-        </div>
-      </div>`;
-
-      document.body.appendChild(overlay);
-    }
-
-    function confirmLogout() {
-      localStorage.removeItem("currentUser");
-      localStorage.removeItem("userEmail");
-      localStorage.removeItem("resetPasswordMode");
-
-      const overlay = document.getElementById('logout-confirmation');
-      overlay.innerHTML = `
-      <div class="logout-modal">
-        <div class="logout-content success">
-          <i class="fas fa-check-circle success-icon"></i>
-          <h3>تم تسجيل الخروج</h3>
-          <button onclick="closeLogoutSuccess()" class="success-btn">موافق</button>
-        </div>
-      </div>`;
-    }
-
-    function cancelLogout() {
-      const overlay = document.getElementById('logout-confirmation');
-      if (overlay) overlay.remove();
-    }
-
-    function closeLogoutSuccess() {
-      window.location.href = "login.html";
-    }
-
-    function showPendingDriverModal() {
-      document.getElementById('pendingDriverModal').classList.remove('hidden');
-    }
-
-    function closePendingDriverModal() {
-      document.getElementById('pendingDriverModal').classList.add('hidden');
-    }
-
-    async function switchRole() {
-      const email = localStorage.getItem("userEmail");
-
-      if (!email) {
-        alert("يجب تسجيل الدخول أولاً");
-        window.location.href = "login.html";
-        return;
-      }
-
-      try {
-        console.log(" التحقق من حالة السائق لـ:", email);
-
-        const response = await fetch(`/api/switch/checkDriverStatus?email=${encodeURIComponent(email)}`);
-
-        if (!response.ok) {
-          throw new Error('فشل في التحقق من حالة السائق');
-        }
-
-        const result = await response.json();
-        console.log(" نتيجة التحقق:", result);
-
-        if (result.status === "verified_driver") {
-          console.log(" سائق موثق");
-          showConfirmedDriverModal();
-
-        } else if (result.status === "pending_driver") {
-          console.log("طلب تحت المعالجة");
-          showPendingDriverModal();
-        } else if (result.status === "not_driver") {
-          console.log(" غير مسجل كسائق");
-          showDriverCheckModal(
-            "هل ترغب في التسجيل كسائق؟",
-            () => openDriverRegistrationForm()
-          );
-
-        } else if (result.status === "rejected_driver") {
-          alert("عذرًا، تم رفض طلبك كسائق. يمكنك المحاولة مجددًا.");
-        }
-        else {
-          alert("حدث خطأ أثناء التحقق من حالتك كسائق.");
-        }
-
-
-      } catch (error) {
-        console.error('Error in switchRole:', error);
-        alert("حدث خطأ في النظام. يرجى المحاولة مرة أخرى.");
-      }
-    }
-
-
-
-    async function checkDriverStatus(email) {
-      try {
-        const response = await fetch(`/api/switch/checkDriverStatus?email=${encodeURIComponent(email)}`);
-
-        if (!response.ok) {
-          throw new Error('فشل في التحقق من حالة السائق');
-        }
-
-        const result = await response.json();
-        return result.status;
-
-      } catch (error) {
-        console.error('Error checking driver status:', error);
-        return "no_driver_data";
-      }
-    }
-
-    async function registerDriver(driverData) {
-      try {
-        const response = await fetch('/api/switch/registerDriver', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(driverData)
-        });
-
-        if (!response.ok) throw new Error('Registration failed');
-        return await response.json();
-      } catch (error) {
-        console.error('Error registering driver:', error);
-        return { success: false };
-      }
-    }
-
-    function showDriverCheckModal(message, onConfirm) {
-      const modal = document.getElementById('driverCheckModal');
-      const messageElement = document.getElementById('driverCheckMessage');
-      const confirmBtn = document.getElementById('confirmYesBtn');
-
-      messageElement.textContent = message;
-      confirmBtn.onclick = onConfirm;
-
-      modal.classList.remove('hidden');
-    }
-
-    function closeDriverCheckModal() {
-      document.getElementById('driverCheckModal').classList.add('hidden');
-    }
-
-    function openDriverRegistrationForm() {
-      closeDriverCheckModal();
-      document.getElementById("uploadModal").classList.remove("hidden");
-    }
-
-    function closeUploadModal() {
-      document.getElementById("uploadModal").classList.add("hidden");
-    }
-
-    document.getElementById('uploadForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
-
-      const email = localStorage.getItem("userEmail");
-      if (!email) {
-        alert("يجب تسجيل الدخول أولاً");
-        return;
-      }
-
-      const driverData = {
-        email: email,
-        licenseNumber: document.getElementById('licenseNumber').value,
-        carModel: document.getElementById('carModel').value,
-        carColor: document.getElementById('carColor').value,
-        plateNumber: document.getElementById('plateNumber').value,
-        availableSeats: parseInt(document.getElementById('availableSeats').value),
-        licenseFile: document.getElementById('licenseUpload').files[0]?.name || '' // اسم الملف فقط
-      };
-
-      // التحقق من صحة البيانات
-      if (!validateDriverData(driverData)) {
-        return;
-      }
-
-      // إرسال البيانات للتسجيل
-      const result = await registerDriver(driverData);
-
-      if (result.success) {
-        //  بعد التسجيل الناجح - الانتقال لواجهة السائق
-        alert("تم ارسال الطلب بنجاح، انتظر 48 ساعة ");
-        window.location.href = "passengerRides.html";
-      } else {
-        alert("حدث خطأ في التسجيل: " + (result.message || "يرجى المحاولة مرة أخرى."));
-      }
-    });
-
-    // التحقق من صحة البيانات
-    function validateDriverData(data) {
-      if (!data.licenseNumber.trim()) {
-        alert("يرجى إدخال رقم رخصة القيادة");
-        return false;
-      }
-
-      if (!data.carModel.trim()) {
-        alert("يرجى إدخال موديل السيارة");
-        return false;
-      }
-
-      if (!data.carColor.trim()) {
-        alert("يرجى إدخال لون السيارة");
-        return false;
-      }
-
-      if (!data.plateNumber.trim()) {
-        alert("يرجى إدخال رقم لوحة السيارة");
-        return false;
-      }
-
-      if (!data.availableSeats || data.availableSeats < 1) {
-        alert("يرجى إدخال عدد مقاعد صحيح");
-        return false;
-      }
-
-      const licenseFile = document.getElementById('licenseUpload').files[0];
-      if (!licenseFile) {
-        alert("يرجى رفع صورة رخصة القيادة");
-        return false;
-      }
-
-      return true;
-    }
-    function showConfirmedDriverModal() {
-      document.getElementById('confirmedDriverModal').classList.remove('hidden');
-    }
-
-    function closeConfirmedDriverModal() {
-      document.getElementById('confirmedDriverModal').classList.add('hidden');
-    }
-
-    function goToDriverUI() {
-      window.location.href = "driverUI.html";
-    }
-
-    //  زر "احجز الآن" يفتح صفحة الحجز
-    document.querySelector('.booking-btn').addEventListener('click', function () {
-      window.location.href = "bookingPage.html";
-    });
-    window.addEventListener("DOMContentLoaded", () => {
-      loadPassengerBookings();
-    });
-
-    function loadPassengerBookings() {
-      const passengerEmail = localStorage.getItem("userEmail");
-
-      fetch(`/api/passenger/my-bookings?passengerEmail=${encodeURIComponent(passengerEmail)}`)
-        .then(res => res.json())
-        .then(bookings => {
-          checkEmergencyVisibility(bookings);
-
-          const container = document.getElementById("passenger-bookings");
-          container.innerHTML = "";
-
-          if (!Array.isArray(bookings) || bookings.length === 0) {
-            container.innerHTML = `<p style="text-align:center; padding:20px;">لا توجد رحلات</p>`;
-            return;
-          }
-
-          bookings.forEach(booking => {
-            if (booking.status === "rejected") {
-              return;  
-            }
-
-
-            let statusColor = "";
-            let statusText = "";
-
-            if (booking.status === "pending") {
-              statusColor = "pending";
-              statusText = "قيد الانتظار";
-            } else if (booking.status === "accepted") {
-              statusColor = "accepted";
-              statusText = "تم القبول";
-            } else if (booking.status === "rejected") {
-              statusColor = "rejected";
-              statusText = "تم الرفض";
-            }
-
-            const card = `
-
-                <article class="trip-card">
-
-                    <div>
-                        <div class="card-header">
-                            <h3>رحلتك</h3>
-<button class="chat-icon" 
-    onclick="openPassengerChat(${booking.ride.rideId}, '${booking.status}')">
-    <i class="fas fa-comment"></i>
-</button>                         </div>
-
-                        <div class="trip-info">
-
-                            <div class="location-row">
-                                <div class="location-item">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <div>
-                                        <span class="label">نقطة الانطلاق:</span>
-                                        <span class="value">${booking.ride.currentLocation}</span>
-                                    </div>
-                                </div>
-
-                                <div class="location-item">
-                                    <i class="fas fa-flag"></i>
-                                    <div>
-                                        <span class="label">نقطة الوصول:</span>
-                                        <span class="value">${booking.ride.destination}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="details-row">
-                                <div class="detail-item">
-                                    <i class="fas fa-calendar"></i>
-                                    <div>
-                                        <span class="label">اليوم:</span>
-                                        <span class="value">${booking.ride.date}</span>
-                                    </div>
-                                </div>
-
-                                <div class="detail-item">
-                                    <i class="fas fa-clock"></i>
-                                    <div>
-                                        <span class="label">الوقت:</span>
-                                        <span class="value">${booking.ride.time}</span>
-                                    </div>
-                                </div>
-
-                                <div class="detail-item">
-                                    <i class="fas fa-users"></i>
-                                    <div>
-                                        <span class="label">الحالة:</span>
-                                        <span class="value ${statusColor}">${statusText}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="driver-section">
-                        <div class="driver-info">
-                            <div class="driver-avatar"><i class="fas fa-user"></i></div>
-                            <div class="driver-details">
-<div class="driver-name">
-   ${booking.ride.driverName || booking.ride.driver?.name || booking.ride.driverEmail}
-</div>                                <div class="driver-rating">
-                                    <div class="stars">★ ★ ★ ★ ★</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-
-                </article>
-                `;
-
-            container.innerHTML += card;
-          });
-        });
-    }
-
-    function getPassengerGender() {
-      const email = localStorage.getItem("userEmail");
-
-      return fetch(`/api/user/gender?email=${email}`)
-        .then(res => res.text())
-        .then(g => g.trim().toLowerCase());
-    }
-
-    function loadAvailableRides() {
-      const passengerEmail = localStorage.getItem("userEmail");
-
-      fetch(`/api/rides/available?passengerEmail=${passengerEmail}`)
-        .then(res => res.json())
-        .then(async rides => {
-
-          const container = document.getElementById("rides-container");
-          container.innerHTML = "";
-
-          if (rides.length === 0) {
-            container.innerHTML = `<p style="text-align:center; padding:20px;">لا توجد رحلات متاحة</p>`;
-            return;
-          }
-
-          rides.forEach(ride => {
-
-            let seatLabel = ride.seatsAvailable === 0
-              ? `<span style="color:red;">لا توجد مقاعد متاحة</span>`
-              : `${ride.seatsAvailable} / ${ride.totalSeats}`;
-
-            const card = `
-                <div class="ride-card">
-                    <p><b>نقطة الانطلاق:</b> ${ride.currentLocation}</p>
-                    <p><b>الوجهة:</b> ${ride.destination}</p>
-                    <p><b>اليوم:</b> ${ride.date}</p>
-                    <p><b>الوقت:</b> ${ride.time}</p>
-                    <p><b>المقاعد المتاحة:</b> ${seatLabel}</p>
-
-                    <button class="book-btn"
-                        data-ride-id="${ride.rideId}"
-                        data-gender-pref="${ride.genderPreference}">
-                        حجز
-                    </button>
-                </div>
-                `;
-
-            container.innerHTML += card;
-          });
-
-          // =============  إضافة الحدث بعد إنشاء الكروت =============
-          document.querySelectorAll(".book-btn").forEach(btn => {
-            btn.addEventListener("click", async () => {
-
-              const rideId = btn.getAttribute("data-ride-id");
-              const rideGenderPref = btn.getAttribute("data-gender-pref").toLowerCase();
-
-              const passengerGender = await getPassengerGender();
-
-              // ===== شروط الجندر =====
-              if (rideGenderPref === "male" && passengerGender !== "male") {
-                alert("هذه الرحلة مخصصة للرجال فقط.");
-                return;
-              }
-
-              if (rideGenderPref === "female" && passengerGender !== "female") {
-                alert("هذه الرحلة مخصصة للنساء فقط.");
-                return;
-              }
-
-              // ===== إذا كله تمام، نرسل طلب الحجز =====
-              bookRide(rideId);
-            });
-          });
-        });
-    }
-
-    function bookRide(rideId) {
-      const passengerEmail = localStorage.getItem("userEmail");
-
-      fetch(`/api/bookings/request?rideId=${rideId}&passengerEmail=${passengerEmail}`, {
-        method: "POST"
-      })
-        .then(res => {
-          if (res.ok) {
-            alert("تم إرسال طلب الحجز!");
-            loadAvailableRides();
-          } else {
-            alert("لا يوجد مقاعد متاحة!");
-          }
-        });
-    }
-
-    let selectedRideId = null;
-
-    function openEmergencyPopup(rideId) {
-      selectedRideId = rideId;
-      document.getElementById("emergencyPopup").classList.remove("hidden");
-    }
-
-    function closeEmergencyPopup() {
-      document.getElementById("emergencyPopup").classList.add("hidden");
-      selectedRideId = null;
-    }
-    function openEmergencyPopupGlobal() {
-      document.getElementById("emergencyPopup").classList.remove("hidden");
-    }
-
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const btn = document.getElementById("confirmEmergency");
-
-      if (btn) {
-        btn.onclick = () => {
-          const userEmail = localStorage.getItem("userEmail");
-
-          fetch(`/api/safety/trigger?userId=${userEmail}&message=Emergency`, {
-            method: "POST"
-          })
-
-            .then(res => {
-              if (res.ok) {
-                alert(" تم إرسال بلاغ الطوارئ بنجاح!");
-              } else {
-                alert(" حدث خطأ أثناء إرسال البلاغ");
-              }
-
-              closeEmergencyPopup();
-            });
-        };
-      }
-    });
-
-
-    function checkEmergencyVisibility(bookings) {
-      const emergencyBar = document.getElementById("global-emergency");
-
-      let hasActiveRide = false;
-
-      const nowDate = new Date();
-      const today = nowDate.toISOString().split("T")[0];
-      const currentTime = nowDate.toTimeString().split(":").slice(0, 2).join(":");
-
-      bookings.forEach(b => {
-        if (b.status === "accepted") {
-          const rideDate = b.ride.date;
-          const rideTime = b.ride.time;
-
-          if (rideDate === today && rideTime <= currentTime) {
-            hasActiveRide = true;
-          }
-        }
-      });
-
-      if (hasActiveRide) {
-        emergencyBar.style.display = "block";
-      } else {
-        emergencyBar.style.display = "none";
-      }
-    }
-
-
-
-
-    function openPassengerChat(rideId, bookingStatus) {
-
-      if (bookingStatus !== "accepted") {
-        alert("لا يمكن بدء المحادثة الا بعد قبول الرحلة ");
-        return;
-      }
-
-      // حفظ رقم الرحلة
-      localStorage.setItem('currentRideId', rideId);
-      localStorage.setItem('currentUserId', 'PASSENGER_' + localStorage.getItem("userEmail"));
-
-      window.location.href = 'chat.html';
-    }
-
-
-
-
-
-  </script>
+  <script src="js/logout.js"></script>
+  <script src="js/switchRole.js"></script>
+  <script src="js/drivermodel.js"></script>
+  <script src="js/passengerRides.js"></script>
 
 
 </body>

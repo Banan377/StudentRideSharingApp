@@ -14,7 +14,6 @@ public class ProfileService {
     @Autowired
     private UserRepository userRepository;
 
-    // دالة جلب بيانات المستخدم
     public UserModel getUserProfile(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }

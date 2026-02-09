@@ -9,23 +9,26 @@ import java.util.Map;
 
 @Service
 public class MapService {
- @Value("${google.maps.api-key:}")
+  @Value("${google.maps.api-key}")
+
   private String apiKey;
 
   private final RestTemplate restTemplate = new RestTemplate();
 
   public MapRoute getRoute(double fromLat, double fromLng, double toLat, double toLng) {
     String url = UriComponentsBuilder.fromUriString("https://maps.googleapis.com/maps/api/directions/json")
-      .queryParam("origin", fromLat + "," + fromLng)
-      .queryParam("destination", toLat + "," + toLng)
-      .queryParam("key", apiKey)
-      .queryParam("mode", "driving")
-      .toUriString();
+        .queryParam("origin", fromLat + "," + fromLng)
+        .queryParam("destination", toLat + "," + toLng)
+        .queryParam("key", apiKey)
+        .queryParam("mode", "driving")
+        .toUriString();
     ResponseEntity<Map> resp = restTemplate.getForEntity(url, Map.class);
     Map body = resp.getBody();
-    if (body == null) return null;
+    if (body == null)
+      return null;
     var routes = (java.util.List) body.get("routes");
-    if (routes == null || routes.isEmpty()) return null;
+    if (routes == null || routes.isEmpty())
+      return null;
     Map firstRoute = (Map) routes.get(0);
     Map overview = (Map) firstRoute.get("overview_polyline");
     String polyline = overview == null ? null : (String) overview.get("points");
@@ -40,8 +43,18 @@ public class MapService {
   public static class MapRoute {
     private String polyline;
     private int distanceMeters;
-    public MapRoute(String polyline, int distanceMeters) { this.polyline = polyline; this.distanceMeters = distanceMeters; }
-    public String getPolyline() { return polyline; }
-    public int getDistanceMeters() { return distanceMeters; }
+
+    public MapRoute(String polyline, int distanceMeters) {
+      this.polyline = polyline;
+      this.distanceMeters = distanceMeters;
+    }
+
+    public String getPolyline() {
+      return polyline;
+    }
+
+    public int getDistanceMeters() {
+      return distanceMeters;
+    }
   }
 }

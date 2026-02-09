@@ -86,7 +86,6 @@ public class profileController {
                 return ResponseEntity.badRequest().body("لا توجد بيانات سائق للتحديث");
             }
 
-            // تحديث البيانات باستخدام الـ Service الموجود
             DriverModel updatedDriver = new DriverModel();
             updatedDriver.setEmail(email);
             updatedDriver.setCarModel(updateRequest.getCarModel());
@@ -139,7 +138,6 @@ public class profileController {
         private String carColor;
         private int seatsAvailable;
 
-        // Getters and Setters
         public String getLicenseNumber() {
             return licenseNumber;
         }
