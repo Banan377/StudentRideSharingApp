@@ -32,7 +32,6 @@ public class AuthController {
         String otpType = request.get("otpType");
         boolean isResetPassword = Boolean.parseBoolean(request.getOrDefault("resetPasswordMode", "false"));
 
-        // التحقق من وجود الإيميل في قاعدة الطلاب
         if (!studentRepository.existsByEmail(email)) {
             return ResponseEntity.badRequest()
                     .body(Map.of("message", "الإيميل غير مسجل في قاعدة بيانات الطلاب"));
