@@ -139,9 +139,9 @@ function loadAvailableRides() {
 function sendBookingRequest(rideId, cardElement) {
     const passengerEmail = localStorage.getItem("userEmail");
 
-    fetch(`/api/bookings/request?passengerEmail=${encodeURIComponent(passengerEmail)}&rideId=${rideId}`, {
-        method: "POST"
-    })
+   fetch(`http://localhost:8080/api/bookings/request?passengerEmail=${encodeURIComponent(passengerEmail)}&rideId=${rideId}`, {
+    method: "POST"
+})
         .then(async res => {
             if (res.ok) {
                 alert("تم إرسال طلب الحجز للسائق!");
