@@ -4,11 +4,10 @@ on:
   push:
     branches:
       - master
-      
+
   pull_request:
     branches:
       - master
-     
 
 jobs:
   build-and-test:
@@ -28,4 +27,4 @@ jobs:
         run: chmod +x mvnw
 
       - name: Run Functional and Non-Functional Tests
-        run: run: ./mvnw -Dtest=SwitchRoleServiceTest,SwitchRolePerformanceTest test
+        run: ./mvnw test -Dtest=com.example.rideapp.services.SwitchRoleServiceTest,com.example.rideapp.services.SwitchRolePerformanceTest
